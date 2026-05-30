@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RAYMOND-PROMAX — 运维工程师</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Sora:wght@300;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e12;--bg-soft:#10161c;--fg:#e6edf3;--muted:#7d8b97;
+    --accent:#2dd4bf;--accent-dim:rgba(45,212,191,.12);--line:rgba(125,139,151,.16);
+    --mono:'Space Mono',monospace;--sans:'Sora',sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-weight:300;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+  body::before{content:"";position:fixed;inset:0;z-index:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,#000 30%,transparent 75%);opacity:.5;}
+  .glow{position:fixed;top:-20%;left:50%;transform:translateX(-50%);width:700px;height:700px;z-index:0;pointer-events:none;background:radial-gradient(circle,var(--accent-dim),transparent 60%);filter:blur(40px);}
+  .wrap{position:relative;z-index:1;max-width:880px;margin:0 auto;padding:0 28px}
+  nav{display:flex;justify-content:space-between;align-items:center;padding:32px 0;font-family:var(--mono);font-size:13px;}
+  nav .logo{color:var(--accent);font-weight:700;letter-spacing:.05em}
+  nav .links a{color:var(--muted);text-decoration:none;margin-left:24px;transition:color .25s}
+  nav .links a:hover{color:var(--fg)}
+  header{padding:90px 0 70px}
+  .tag{font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:.18em;text-transform:uppercase;display:inline-flex;align-items:center;gap:8px;margin-bottom:24px;}
+  .tag::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent);animation:pulse 2s infinite}
+  @keyframes pulse{50%{opacity:.35}}
+  h1{font-size:clamp(42px,8vw,82px);font-weight:700;line-height:1.02;letter-spacing:-.02em;margin-bottom:24px;}
+  h1 .accent{color:var(--accent)}
+  header p{font-size:clamp(16px,2.4vw,19px);color:var(--muted);max-width:540px}
+  .cta{display:flex;gap:14px;margin-top:38px;flex-wrap:wrap}
+  .btn{font-family:var(--mono);font-size:13px;text-decoration:none;padding:13px 22px;border-radius:2px;transition:all .25s;letter-spacing:.03em;}
+  .btn-primary{background:var(--accent);color:var(--bg);font-weight:700}
+  .btn-primary:hover{box-shadow:0 0 24px var(--accent-dim);transform:translateY(-2px)}
+  .btn-ghost{border:1px solid var(--line);color:var(--fg)}
+  .btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+  section{padding:54px 0;border-top:1px solid var(--line)}
+  .sec-label{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.14em;margin-bottom:30px;text-transform:uppercase}
+  .sec-label span{color:var(--accent)}
+  .about{font-size:18px;color:var(--fg);font-weight:300;max-width:660px}
+  .about strong{color:var(--accent);font-weight:500}
+  .stack{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px}
+  .chip{font-family:var(--mono);font-size:12px;color:var(--muted);border:1px solid var(--line);padding:6px 13px;border-radius:2px;transition:all .25s}
+  .chip:hover{color:var(--accent);border-color:var(--accent)}
+  .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:8px}
+  .metric{border:1px solid var(--line);border-radius:3px;padding:20px 18px;transition:border-color .25s}
+  .metric:hover{border-color:var(--accent)}
+  .metric .num{font-family:var(--mono);font-size:30px;color:var(--accent);font-weight:700;line-height:1}
+  .metric .lab{font-size:12px;color:var(--muted);margin-top:10px;letter-spacing:.03em}
+  .proj{display:grid;grid-template-columns:auto 1fr auto;gap:20px;align-items:center;padding:22px 0;border-bottom:1px solid var(--line);text-decoration:none;color:inherit;transition:padding .3s;}
+  .proj:hover{padding-left:14px}
+  .proj:hover .p-name{color:var(--accent)}
+  .proj:hover .arrow{color:var(--accent);transform:translateX(4px)}
+  .p-num{font-family:var(--mono);font-size:13px;color:var(--muted)}
+  .p-name{font-size:21px;font-weight:500;transition:color .25s}
+  .p-desc{font-size:14px;color:var(--muted);margin-top:3px}
+  .arrow{font-family:var(--mono);color:var(--muted);transition:all .25s;font-size:18px}
+  .ai-badge{font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--accent);border:1px solid var(--accent);border-radius:2px;padding:2px 6px;margin-left:10px;vertical-align:middle;display:inline-block}
+  .aiops{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:4px}
+  .ai-card{border:1px solid var(--line);border-radius:4px;padding:24px 22px;position:relative;overflow:hidden;transition:border-color .3s,transform .3s}
+  .ai-card:hover{border-color:var(--accent);transform:translateY(-3px)}
+  .ai-card::after{content:"";position:absolute;top:-30px;right:-30px;width:90px;height:90px;background:radial-gradient(circle,var(--accent-dim),transparent 70%);opacity:0;transition:opacity .3s}
+  .ai-card:hover::after{opacity:1}
+  .ai-card .ic{font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:.1em;margin-bottom:14px}
+  .ai-card h3{font-size:18px;font-weight:500;margin-bottom:8px}
+  .ai-card p{font-size:14px;color:var(--muted)}
+  @media(max-width:620px){.aiops{grid-template-columns:1fr}}
+  .contact-grid{display:flex;flex-wrap:wrap;gap:16px}
+  .clink{font-family:var(--mono);font-size:14px;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:8px;transition:color .25s;}
+  .clink:hover{color:var(--accent)}
+  .clink::before{content:"↗";color:var(--accent)}
+  footer{padding:46px 0;border-top:1px solid var(--line);font-family:var(--mono);font-size:12px;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.in{opacity:1;transform:none}
+  @media(max-width:620px){.metrics{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:560px){.proj{grid-template-columns:auto 1fr;gap:14px}.arrow{display:none}nav .links{display:none}}
+</style>
+</head>
+<body>
+<div class="glow"></div>
+<div class="wrap">
+  <nav>
+    <span class="logo">~/raymond-promax</span>
+    <span class="links"><a href="#about">about</a><a href="#work">work</a><a href="#contact">contact</a></span>
+  </nav>
+  <header>
+    <span class="tag">System Operational · 99.99%</span>
+    <h1>让系统<span class="accent">稳定</span><br>运转的人</h1>
+    <p>运维工程师 / SRE。专注高可用架构、自动化运维与可观测性，把基础设施做成可靠、可复制、可自愈的系统。</p>
+    <div class="cta">
+      <a href="#work" class="btn btn-primary">查看项目 →</a>
+      <a href="#contact" class="btn btn-ghost">联系我</a>
+    </div>
+  </header>
+  <section id="about" class="reveal">
+    <div class="sec-label"><span>01</span> / 关于</div>
+    <p class="about">我是 Raymond，一名运维工程师。日常工作围绕<strong>稳定性、自动化与效率</strong>展开——从 CI/CD 流水线到容器编排，从监控告警到故障应急。我相信好的运维是让系统"安静地运转"，把救火变成预防。</p>
+    <div class="stack">
+      <span class="chip">Linux</span><span class="chip">Kubernetes</span><span class="chip">Docker</span>
+      <span class="chip">Terraform</span><span class="chip">Ansible</span><span class="chip">Prometheus</span>
+      <span class="chip">Grafana</span><span class="chip">CI/CD</span><span class="chip">Shell / Python</span>
+      <span class="chip">AWS / 阿里云</span><span class="chip">Nginx</span><span class="chip">ELK</span>
+      <span class="chip">AIOps</span><span class="chip">LLM / RAG</span><span class="chip">Ollama</span>
+    </div>
+  </section>
+  <section class="reveal">
+    <div class="sec-label"><span>02</span> / 数据</div>
+    <div class="metrics">
+      <div class="metric"><div class="num">99.99%</div><div class="lab">服务可用性 SLA</div></div>
+      <div class="metric"><div class="num">200+</div><div class="lab">管理节点规模</div></div>
+      <div class="metric"><div class="num">&lt;5min</div><div class="lab">故障平均响应</div></div>
+      <div class="metric"><div class="num">90%</div><div class="lab">运维任务自动化</div></div>
+    </div>
+  </section>
+  <section class="reveal">
+    <div class="sec-label"><span>03</span> / AIOps 探索</div>
+    <div class="aiops">
+      <div class="ai-card">
+        <div class="ic">[ 智能告警 ]</div>
+        <h3>告警降噪与根因分析</h3>
+        <p>用机器学习对海量告警做聚类去重，自动定位根因，告警量下降 70%。</p>
+      </div>
+      <div class="ai-card">
+        <div class="ic">[ ChatOps ]</div>
+        <h3>运维问答机器人</h3>
+        <p>基于 LLM + RAG 接入内部知识库与文档，IM 里一句话查日志、查 SOP、查值班。</p>
+      </div>
+      <div class="ai-card">
+        <div class="ic">[ 预测 ]</div>
+        <h3>容量与异常预测</h3>
+        <p>对资源使用做时序预测，提前预警磁盘 / 内存瓶颈，把故障扼杀在发生前。</p>
+      </div>
+      <div class="ai-card">
+        <div class="ic">[ 自动化 ]</div>
+        <h3>AI 辅助故障自愈</h3>
+        <p>结合预案与大模型决策，常见故障自动执行修复动作，MTTR 显著缩短。</p>
+      </div>
+    </div>
+  </section>
+  <section id="work" class="reveal">
+    <div class="sec-label"><span>04</span> / 精选项目</div>
+    <a href="#" class="proj"><span class="p-num">001</span><span><div class="p-name">智能运维平台<span class="ai-badge">AI</span></div><div class="p-desc">集成告警降噪、根因分析与故障预测的一体化 AIOps 平台</div></span><span class="arrow">→</span></a>
+    <a href="#" class="proj"><span class="p-num">002</span><span><div class="p-name">运维知识库 Copilot<span class="ai-badge">AI</span></div><div class="p-desc">本地化 LLM + RAG 私有部署，秒级检索文档与历史工单</div></span><span class="arrow">→</span></a>
+    <a href="#" class="proj"><span class="p-num">003</span><span><div class="p-name">K8s 集群迁移</div><div class="p-desc">将单体服务平滑迁移至容器化平台，零停机</div></span><span class="arrow">→</span></a>
+    <a href="#" class="proj"><span class="p-num">004</span><span><div class="p-name">监控告警体系</div><div class="p-desc">基于 Prometheus + Grafana 构建全链路可观测性</div></span><span class="arrow">→</span></a>
+    <a href="#" class="proj"><span class="p-num">005</span><span><div class="p-name">CI/CD 自动化</div><div class="p-desc">从代码提交到生产部署的全流程流水线</div></span><span class="arrow">→</span></a>
+    <a href="#" class="proj"><span class="p-num">006</span><span><div class="p-name">基础设施即代码</div><div class="p-desc">用 Terraform + Ansible 实现环境一键重建</div></span><span class="arrow">→</span></a>
+  </section>
+  <section id="contact" class="reveal">
+    <div class="sec-label"><span>05</span> / 联系</div>
+    <p class="about" style="margin-bottom:26px">有合作、招聘或技术交流？随时找我。</p>
+    <div class="contact-grid">
+      <a href="mailto:raymond@example.com" class="clink">Email</a>
+      <a href="https://github.com" class="clink">GitHub</a>
+      <a href="#" class="clink">博客 / Blog</a>
+      <a href="#" class="clink">微信 / WeChat</a>
+    </div>
+  </section>
+  <footer><span>© 2026 RAYMOND-PROMAX</span><span>Built with care · Hosted on GitHub Pages</span></footer>
+</div>
+<script>
+  const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
