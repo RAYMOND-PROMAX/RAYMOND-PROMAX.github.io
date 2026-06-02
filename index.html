@@ -22,6 +22,8 @@
   nav{display:flex;justify-content:space-between;align-items:center;padding:32px 0;font-family:var(--mono);font-size:13px;}
   nav .logo{color:var(--accent);font-weight:700;letter-spacing:.05em}
   nav .links a{color:var(--muted);text-decoration:none;margin-left:24px;transition:color .25s}
+  .lang-toggle{margin-left:24px;background:transparent;border:1px solid var(--line);color:var(--muted);font-family:var(--mono);font-size:12px;padding:4px 10px;border-radius:2px;cursor:pointer;transition:all .25s;letter-spacing:.05em}
+  .lang-toggle:hover{border-color:var(--accent);color:var(--accent)}
   nav .links a:hover{color:var(--fg)}
   header{padding:90px 0 70px}
   .tag{font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:.18em;text-transform:uppercase;display:inline-flex;align-items:center;gap:8px;margin-bottom:24px;}
@@ -84,20 +86,25 @@
 <div class="wrap">
   <nav>
     <span class="logo">~/raymond-promax</span>
-    <span class="links"><a href="#about">about</a><a href="#work">work</a><a href="#contact">contact</a></span>
+    <span class="links">
+      <a href="#about" data-zh="关于" data-en="About">关于</a>
+      <a href="#work" data-zh="项目" data-en="Work">项目</a>
+      <a href="#contact" data-zh="联系" data-en="Contact">联系</a>
+      <button id="langToggle" class="lang-toggle" aria-label="switch language">EN</button>
+    </span>
   </nav>
   <header>
     <span class="tag">System Operational · 99.99%</span>
-    <h1>让系统<span class="accent">稳定</span><br>运转的人</h1>
-    <p>运维工程师 / SRE。专注高可用架构、自动化运维与可观测性，把基础设施做成可靠、可复制、可自愈的系统。</p>
+    <h1 data-zh-html="让系统<span class=&quot;accent&quot;>稳定</span><br>运转的人" data-en-html="Keeping systems<br><span class=&quot;accent&quot;>resilient</span> & alive">让系统<span class="accent">稳定</span><br>运转的人</h1>
+    <p data-zh="运维工程师 / SRE。专注高可用架构、自动化运维与可观测性，把基础设施做成可靠、可复制、可自愈的系统。" data-en="Ops Engineer / SRE. Focused on high-availability architecture, automation, and observability — building infrastructure that is reliable, reproducible, and self-healing.">运维工程师 / SRE。专注高可用架构、自动化运维与可观测性，把基础设施做成可靠、可复制、可自愈的系统。</p>
     <div class="cta">
-      <a href="#work" class="btn btn-primary">查看项目 →</a>
-      <a href="#contact" class="btn btn-ghost">联系我</a>
+      <a href="#work" class="btn btn-primary" data-zh="查看项目 →" data-en="View Work →">查看项目 →</a>
+      <a href="#contact" class="btn btn-ghost" data-zh="联系我" data-en="Get in Touch">联系我</a>
     </div>
   </header>
   <section id="about" class="reveal">
-    <div class="sec-label"><span>01</span> / 关于</div>
-    <p class="about">我是 Raymond，一名运维工程师。日常工作围绕<strong>稳定性、自动化与效率</strong>展开——从 CI/CD 流水线到容器编排，从监控告警到故障应急。我相信好的运维是让系统"安静地运转"，把救火变成预防。</p>
+    <div class="sec-label"><span>01</span> / <span data-zh="关于" data-en="About">关于</span></div>
+    <p class="about" data-zh-html="我是 Raymond，一名运维工程师。日常工作围绕<strong>稳定性、自动化与效率</strong>展开——从 CI/CD 流水线到容器编排，从监控告警到故障应急。我相信好的运维是让系统&quot;安静地运转&quot;，把救火变成预防。" data-en-html="I'm Raymond, an operations engineer. My work revolves around <strong>stability, automation, and efficiency</strong> — from CI/CD pipelines to container orchestration, from monitoring to incident response. I believe good ops keeps systems quietly running, turning firefighting into prevention.">我是 Raymond，一名运维工程师。日常工作围绕<strong>稳定性、自动化与效率</strong>展开——从 CI/CD 流水线到容器编排，从监控告警到故障应急。我相信好的运维是让系统"安静地运转"，把救火变成预防。</p>
     <div class="stack">
       <span class="chip">Linux</span><span class="chip">Kubernetes</span><span class="chip">Docker</span>
       <span class="chip">Terraform</span><span class="chip">Ansible</span><span class="chip">Prometheus</span>
@@ -107,60 +114,81 @@
     </div>
   </section>
   <section class="reveal">
-    <div class="sec-label"><span>02</span> / 数据</div>
+    <div class="sec-label"><span>02</span> / <span data-zh="数据" data-en="By the Numbers">数据</span></div>
     <div class="metrics">
-      <div class="metric"><div class="num">99.99%</div><div class="lab">服务可用性 SLA</div></div>
-      <div class="metric"><div class="num">200+</div><div class="lab">管理节点规模</div></div>
-      <div class="metric"><div class="num">&lt;5min</div><div class="lab">故障平均响应</div></div>
-      <div class="metric"><div class="num">90%</div><div class="lab">运维任务自动化</div></div>
+      <div class="metric"><div class="num">99.99%</div><div class="lab" data-zh="服务可用性 SLA" data-en="Service Availability SLA">服务可用性 SLA</div></div>
+      <div class="metric"><div class="num">200+</div><div class="lab" data-zh="管理节点规模" data-en="Nodes Managed">管理节点规模</div></div>
+      <div class="metric"><div class="num">&lt;5min</div><div class="lab" data-zh="故障平均响应" data-en="Mean Time to Respond">故障平均响应</div></div>
+      <div class="metric"><div class="num">90%</div><div class="lab" data-zh="运维任务自动化" data-en="Ops Automated">运维任务自动化</div></div>
     </div>
   </section>
   <section class="reveal">
-    <div class="sec-label"><span>03</span> / AIOps 探索</div>
+    <div class="sec-label"><span>03</span> / <span data-zh="AIOps 探索" data-en="AIOps Exploration">AIOps 探索</span></div>
     <div class="aiops">
       <div class="ai-card">
-        <div class="ic">[ 智能告警 ]</div>
-        <h3>告警降噪与根因分析</h3>
-        <p>用机器学习对海量告警做聚类去重，自动定位根因，告警量下降 70%。</p>
+        <div class="ic">[ <span data-zh="智能告警" data-en="Smart Alerting">智能告警</span> ]</div>
+        <h3 data-zh="告警降噪与根因分析" data-en="Alert Noise Reduction & RCA">告警降噪与根因分析</h3>
+        <p data-zh="用机器学习对海量告警做聚类去重，自动定位根因，告警量下降 70%。" data-en="ML-based clustering and dedup on massive alert streams, with automated root-cause localization — alert volume down 70%.">用机器学习对海量告警做聚类去重，自动定位根因，告警量下降 70%。</p>
       </div>
       <div class="ai-card">
         <div class="ic">[ ChatOps ]</div>
-        <h3>运维问答机器人</h3>
-        <p>基于 LLM + RAG 接入内部知识库与文档，IM 里一句话查日志、查 SOP、查值班。</p>
+        <h3 data-zh="运维问答机器人" data-en="Ops Q&A Bot">运维问答机器人</h3>
+        <p data-zh="基于 LLM + RAG 接入内部知识库与文档，IM 里一句话查日志、查 SOP、查值班。" data-en="LLM + RAG over internal knowledge bases and docs — query logs, SOPs, and on-call rotations from chat in one line.">基于 LLM + RAG 接入内部知识库与文档，IM 里一句话查日志、查 SOP、查值班。</p>
       </div>
       <div class="ai-card">
-        <div class="ic">[ 预测 ]</div>
-        <h3>容量与异常预测</h3>
-        <p>对资源使用做时序预测，提前预警磁盘 / 内存瓶颈，把故障扼杀在发生前。</p>
+        <div class="ic">[ <span data-zh="预测" data-en="Forecast">预测</span> ]</div>
+        <h3 data-zh="容量与异常预测" data-en="Capacity & Anomaly Forecasting">容量与异常预测</h3>
+        <p data-zh="对资源使用做时序预测，提前预警磁盘 / 内存瓶颈，把故障扼杀在发生前。" data-en="Time-series forecasting on resource usage, surfacing disk/memory bottlenecks early — stopping failures before they happen.">对资源使用做时序预测，提前预警磁盘 / 内存瓶颈，把故障扼杀在发生前。</p>
       </div>
       <div class="ai-card">
-        <div class="ic">[ 自动化 ]</div>
-        <h3>AI 辅助故障自愈</h3>
-        <p>结合预案与大模型决策，常见故障自动执行修复动作，MTTR 显著缩短。</p>
+        <div class="ic">[ <span data-zh="自动化" data-en="Automation">自动化</span> ]</div>
+        <h3 data-zh="AI 辅助故障自愈" data-en="AI-Assisted Self-Healing">AI 辅助故障自愈</h3>
+        <p data-zh="结合预案与大模型决策，常见故障自动执行修复动作，MTTR 显著缩短。" data-en="Combining runbooks with LLM decisioning, common faults trigger automated remediation — significantly reducing MTTR.">结合预案与大模型决策，常见故障自动执行修复动作，MTTR 显著缩短。</p>
       </div>
     </div>
   </section>
   <section id="work" class="reveal">
-    <div class="sec-label"><span>04</span> / 精选项目</div>
-    <a href="projects/project-1.html" class="proj"><span class="p-num">001</span><span><div class="p-name">智能运维平台<span class="ai-badge">AI</span></div><div class="p-desc">集成告警降噪、根因分析与故障预测的一体化 AIOps 平台</div></span><span class="arrow">→</span></a>
-    <a href="projects/project-2.html" class="proj"><span class="p-num">002</span><span><div class="p-name">运维知识库 Copilot<span class="ai-badge">AI</span></div><div class="p-desc">本地化 LLM + RAG 私有部署，秒级检索文档与历史工单</div></span><span class="arrow">→</span></a>
-    <a href="projects/project-3.html" class="proj"><span class="p-num">003</span><span><div class="p-name">K8s 集群迁移</div><div class="p-desc">将单体服务平滑迁移至容器化平台，零停机</div></span><span class="arrow">→</span></a>
-    <a href="projects/project-4.html" class="proj"><span class="p-num">004</span><span><div class="p-name">监控告警体系</div><div class="p-desc">基于 Prometheus + Grafana 构建全链路可观测性</div></span><span class="arrow">→</span></a>
-    <a href="projects/project-5.html" class="proj"><span class="p-num">005</span><span><div class="p-name">CI/CD 自动化</div><div class="p-desc">从代码提交到生产部署的全流程流水线</div></span><span class="arrow">→</span></a>
-    <a href="projects/project-6.html" class="proj"><span class="p-num">006</span><span><div class="p-name">基础设施即代码</div><div class="p-desc">用 Terraform + Ansible 实现环境一键重建</div></span><span class="arrow">→</span></a>
+    <div class="sec-label"><span>04</span> / <span data-zh="精选项目" data-en="Selected Work">精选项目</span></div>
+    <a href="projects/project-1.html" class="proj"><span class="p-num">001</span><span><div class="p-name"><span data-zh="智能运维平台" data-en="Intelligent Ops Platform">智能运维平台</span><span class="ai-badge">AI</span></div><div class="p-desc" data-zh="集成告警降噪、根因分析与故障预测的一体化 AIOps 平台" data-en="An integrated AIOps platform unifying alert reduction, RCA, and failure prediction">集成告警降噪、根因分析与故障预测的一体化 AIOps 平台</div></span><span class="arrow">→</span></a>
+    <a href="projects/project-2.html" class="proj"><span class="p-num">002</span><span><div class="p-name"><span data-zh="运维知识库 Copilot" data-en="Ops Knowledge Copilot">运维知识库 Copilot</span><span class="ai-badge">AI</span></div><div class="p-desc" data-zh="本地化 LLM + RAG 私有部署，秒级检索文档与历史工单" data-en="On-prem LLM + RAG deployment, retrieving docs and past tickets in seconds">本地化 LLM + RAG 私有部署，秒级检索文档与历史工单</div></span><span class="arrow">→</span></a>
+    <a href="projects/project-3.html" class="proj"><span class="p-num">003</span><span><div class="p-name"><span data-zh="K8s 集群迁移" data-en="K8s Cluster Migration">K8s 集群迁移</span></div><div class="p-desc" data-zh="将单体服务平滑迁移至容器化平台，零停机" data-en="Smoothly migrated monolithic services to a containerized platform, zero downtime">将单体服务平滑迁移至容器化平台，零停机</div></span><span class="arrow">→</span></a>
+    <a href="projects/project-4.html" class="proj"><span class="p-num">004</span><span><div class="p-name"><span data-zh="监控告警体系" data-en="Monitoring & Alerting">监控告警体系</span></div><div class="p-desc" data-zh="基于 Prometheus + Grafana 构建全链路可观测性" data-en="Full-stack observability built on Prometheus + Grafana">基于 Prometheus + Grafana 构建全链路可观测性</div></span><span class="arrow">→</span></a>
+    <a href="projects/project-5.html" class="proj"><span class="p-num">005</span><span><div class="p-name"><span data-zh="CI/CD 自动化" data-en="CI/CD Automation">CI/CD 自动化</span></div><div class="p-desc" data-zh="从代码提交到生产部署的全流程流水线" data-en="End-to-end pipeline from commit to production deployment">从代码提交到生产部署的全流程流水线</div></span><span class="arrow">→</span></a>
+    <a href="projects/project-6.html" class="proj"><span class="p-num">006</span><span><div class="p-name"><span data-zh="基础设施即代码" data-en="Infrastructure as Code">基础设施即代码</span></div><div class="p-desc" data-zh="用 Terraform + Ansible 实现环境一键重建" data-en="One-click environment rebuilds with Terraform + Ansible">用 Terraform + Ansible 实现环境一键重建</div></span><span class="arrow">→</span></a>
   </section>
   <section id="contact" class="reveal">
-    <div class="sec-label"><span>05</span> / 联系</div>
-    <p class="about" style="margin-bottom:26px">有合作、招聘或技术交流？随时找我。</p>
+    <div class="sec-label"><span>05</span> / <span data-zh="联系" data-en="Contact">联系</span></div>
+    <p class="about" style="margin-bottom:26px" data-zh="有合作、招聘或技术交流？随时找我。" data-en="Collaboration, hiring, or just talking tech? Reach out anytime.">有合作、招聘或技术交流？随时找我。</p>
     <div class="contact-grid">
       <a href="mailto:raymond@example.com" class="clink">Email</a>
       <a href="https://github.com" class="clink">GitHub</a>
-      <a href="#" class="clink">博客 / Blog</a>
-      <a href="#" class="clink">微信 / WeChat</a>
+      <a href="#" class="clink" data-zh="博客 / Blog" data-en="Blog">博客 / Blog</a>
+      <a href="#" class="clink" data-zh="微信 / WeChat" data-en="WeChat">微信 / WeChat</a>
     </div>
   </section>
-  <footer><span>© 2026 RAYMOND-PROMAX</span><span>Built with care · Hosted on GitHub Pages</span></footer>
+  <footer><span>© 2026 RAYMOND-PROMAX</span><span data-zh="用心打造 · 部署于 GitHub Pages" data-en="Built with care · Hosted on GitHub Pages">Built with care · Hosted on GitHub Pages</span></footer>
 </div>
+<script>
+  /* 双语切换 */
+  (function(){
+    const btn=document.getElementById('langToggle');
+    let lang='zh';
+    function apply(){
+      document.querySelectorAll('[data-en]').forEach(el=>{
+        const v=el.getAttribute('data-'+lang);
+        if(v!==null) el.textContent=v;
+      });
+      document.querySelectorAll('[data-en-html]').forEach(el=>{
+        const v=el.getAttribute('data-'+lang+'-html');
+        if(v!==null) el.innerHTML=v;
+      });
+      document.documentElement.lang = (lang==='zh'?'zh':'en');
+      btn.textContent = (lang==='zh'?'EN':'中');
+    }
+    btn.addEventListener('click',()=>{ lang=(lang==='zh'?'en':'zh'); apply(); });
+    apply();
+  })();
+</script>
 <script>
   const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
   document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
@@ -264,11 +292,12 @@
   }
  
   buildSchedule();
+  let jumpSide=0;        // 0=左, 1=右；每次跃迁后翻转
   let start=null;
   function frame(ts){
     if(start===null)start=ts;
     let t=ts-start;
-    if(t>=CYCLE){ start=ts; t=0; buildSchedule(); }   // 新循环重新随机
+    if(t>=CYCLE){ start=ts; t=0; buildSchedule(); jumpSide^=1; }   // 新循环：重新随机 + 左右跃迁
     const tg=ts*0.001;
     ctx.clearRect(0,0,W,H);
  
@@ -294,133 +323,142 @@
     if(t>=ripple && t<=ripple+FLASH){
       flash=Math.sin(((t-ripple)/FLASH)*Math.PI);
     }
- 
-    // 远处空间站（死星风格原创造型）+ 星环：金色扩散到达时点亮
+    // 远处重型巡洋舰（原创造型）+ 跃迁：金色波扩散时缩为光点，跃迁到另一侧，闪烁后显现
     (function(){
-      const er=Math.min(W,H)*0.30;             // 球半径
-      const ex=W*0.84, ey=H*0.80;              // 偏右下，露出约2/3
-      const tilt=-0.42;
-      const ringRx=er*1.95, ringRy=er*0.5;
- 
-      const ringDelay=180;
-      let ringGlow=0;
-      if(t>=ripple+ringDelay && t<=ripple+ringDelay+FLASH){
-        ringGlow=Math.sin(((t-(ripple+ringDelay))/FLASH)*Math.PI);
-      }
       const A=v=>'rgba('+ACCENT+','+v+')';
-      // 球面投影：把球面坐标(经lon,纬lat)映射到屏幕，并返回是否可见(朝向正面)
-      // 光源方向（左上）
-      const L={x:-0.5,y:-0.6,z:0.62};
+      const scale=Math.min(W,H)*0.13;             // 舰体尺度
+      const yPos=H*0.74;                           // 下方
+      const leftX=W*0.50, rightX=W*0.86;           // 在右下区域内左右跃迁
  
-      // —— 星环 远侧（球后）——
-      ctx.save();ctx.translate(ex,ey);ctx.rotate(tilt);
-      ctx.beginPath();ctx.ellipse(0,0,ringRx,ringRy,0,Math.PI,0,true);
-      ctx.strokeStyle=A(0.07+ringGlow*0.55);ctx.lineWidth=2+ringGlow*3;ctx.stroke();
-      ctx.beginPath();ctx.ellipse(0,0,ringRx*0.85,ringRy*0.85,0,Math.PI,0,true);
-      ctx.strokeStyle=A(0.04+ringGlow*0.35);ctx.lineWidth=1.5+ringGlow*2;ctx.stroke();
-      ctx.restore();
+      // 跃迁阶段：在金色波 FLASH 窗口内完成
+      // 起点侧 = jumpSide（本循环停留侧），终点侧 = 另一侧
+      const fromX = jumpSide? rightX : leftX;
+      const toX   = jumpSide? leftX  : rightX;
  
-      // —— 灰色金属球体（带光照明暗）——
-      const body=ctx.createRadialGradient(ex+L.x*er*0.7,ey+L.y*er*0.7,er*0.05,ex,ey,er);
-      body.addColorStop(0,'rgba(96,104,114,0.75)');
-      body.addColorStop(0.5,'rgba(58,64,72,0.66)');
-      body.addColorStop(0.85,'rgba(30,35,42,0.6)');
-      body.addColorStop(1,'rgba(14,18,24,0.55)');
-      ctx.beginPath();ctx.arc(ex,ey,er,0,6.29);ctx.fillStyle=body;ctx.fill();
+      const jStart = ripple+120;                   // 开始收缩
+      const jShrink= 280;                          // 收缩为光点
+      const jTravel= 360;                          // 光点横移
+      const jBlink = 220;                          // 到达后闪烁
+      const jGrow  = 320;                          // 重新显现
+      const jEnd   = jStart+jShrink+jTravel+jBlink+jGrow;
  
-      ctx.save();
-      ctx.beginPath();ctx.arc(ex,ey,er,0,6.29);ctx.clip();
- 
-      // —— 球面方格板块纹理（经纬网格，随曲面收束）——
-      ctx.lineWidth=1;
-      const GL='rgba(150,160,172,0.07)';
-      // 纬线（横向弧）
-      for(let lat=-75;lat<=75;lat+=15){
-        const rad=lat*Math.PI/180;
-        const yy=ey-Math.sin(rad)*er;
-        const rx=Math.cos(rad)*er;
-        ctx.beginPath();ctx.ellipse(ex,yy,rx,rx*0.16,0,0,Math.PI*2);
-        ctx.strokeStyle=GL;ctx.stroke();
-      }
-      // 经线（纵向，做透视椭圆）
-      for(let lon=-90;lon<=90;lon+=15){
-        const rad=lon*Math.PI/180;
-        const rx=Math.abs(Math.sin(rad))*er;
-        ctx.beginPath();ctx.ellipse(ex,ey,rx,er,0,0,Math.PI*2);
-        ctx.strokeStyle=GL;ctx.stroke();
+      // 计算当前飞船位置、缩放、光点强度
+      let shipX=fromX, shipScale=1, pointGlow=0, shipAlpha=1;
+      if(t<jStart){
+        shipX=fromX; shipScale=1; shipAlpha=1;
+      } else if(t<jStart+jShrink){
+        const k=(t-jStart)/jShrink;
+        shipX=fromX; shipScale=1-easeOut(k)*0.96; shipAlpha=1; pointGlow=easeOut(k);
+      } else if(t<jStart+jShrink+jTravel){
+        const k=(t-(jStart+jShrink))/jTravel;
+        shipX=fromX+(toX-fromX)*easeInOut(k); shipScale=0.04; shipAlpha=0; pointGlow=1;
+      } else if(t<jStart+jShrink+jTravel+jBlink){
+        const k=(t-(jStart+jShrink+jTravel))/jBlink;
+        shipX=toX; shipScale=0.04; shipAlpha=0;
+        pointGlow=0.5+0.5*Math.cos(k*Math.PI*6);  // 快速闪烁
+      } else if(t<jEnd){
+        const k=(t-(jStart+jShrink+jTravel+jBlink))/jGrow;
+        shipX=toX; shipScale=0.04+easeOut(k)*0.96; shipAlpha=easeOut(k); pointGlow=1-k;
+      } else {
+        shipX=toX; shipScale=1; shipAlpha=1;       // 已显现在新侧
       }
  
-      // —— 赤道沟槽（死星标志：横贯球体、上下唇明暗）——
-      const tY=ey+er*0.06;
-      const tH=er*0.05;
-      ctx.fillStyle='rgba(6,8,12,0.55)';
-      ctx.fillRect(ex-er,tY-tH,er*2,tH*2);
-      ctx.strokeStyle='rgba(170,180,190,0.16)';ctx.lineWidth=1.2;
-      ctx.beginPath();ctx.moveTo(ex-er,tY-tH);ctx.lineTo(ex+er,tY-tH);ctx.stroke(); // 上唇高光
-      ctx.strokeStyle='rgba(0,0,0,0.3)';
-      ctx.beginPath();ctx.moveTo(ex-er,tY+tH);ctx.lineTo(ex+er,tY+tH);ctx.stroke(); // 下唇暗线
- 
-      // —— 超级激光炮盘（上半偏左，凹陷大盘 + 偏心聚焦镜）——
-      const dx=ex-er*0.40, dy=ey-er*0.42, dr=er*0.34;   // 盘较大，识别度关键
-      // 透视：盘是球面上的圆，略压扁
-      ctx.save();
-      ctx.translate(dx,dy);ctx.scale(1,0.9);ctx.rotate(-0.15);
-      // 外圈凹陷阴影环
-      const dishOuter=ctx.createRadialGradient(0,0,dr*0.4,0,0,dr);
-      dishOuter.addColorStop(0,'rgba(20,24,30,0.0)');
-      dishOuter.addColorStop(0.78,'rgba(10,12,16,0.55)');   // 凹陷阴影
-      dishOuter.addColorStop(0.92,'rgba(120,130,142,0.22)'); // 凹陷边缘高光
-      dishOuter.addColorStop(1,'rgba(40,46,54,0.0)');
-      ctx.beginPath();ctx.arc(0,0,dr,0,6.29);ctx.fillStyle=dishOuter;ctx.fill();
-      // 盘缘描边
-      ctx.beginPath();ctx.arc(0,0,dr,0,6.29);
-      ctx.strokeStyle='rgba(170,180,190,0.2)';ctx.lineWidth=1.4;ctx.stroke();
-      // 盘内同心圈（机械细节）
-      for(const rr of [0.78,0.6,0.42]){
-        ctx.beginPath();ctx.arc(0,0,dr*rr,0,6.29);
-        ctx.strokeStyle='rgba(150,160,172,0.12)';ctx.lineWidth=1;ctx.stroke();
+      // 跃迁拖痕（光点横移时拉一条光带）
+      if(t>=jStart+jShrink && t<jStart+jShrink+jTravel){
+        const k=(t-(jStart+jShrink))/jTravel;
+        const hx=fromX+(toX-fromX)*easeInOut(k);
+        const trailFrom=fromX+(toX-fromX)*easeInOut(Math.max(0,k-0.5));
+        const g=ctx.createLinearGradient(trailFrom,yPos,hx,yPos);
+        g.addColorStop(0,A(0)); g.addColorStop(1,A(0.5));
+        ctx.strokeStyle=g;ctx.lineWidth=2;
+        ctx.beginPath();ctx.moveTo(trailFrom,yPos);ctx.lineTo(hx,yPos);ctx.stroke();
       }
-      // 盘内辐射分隔线
-      for(let a=0;a<12;a++){
-        const ang=a/12*6.28;
-        ctx.beginPath();
-        ctx.moveTo(Math.cos(ang)*dr*0.42,Math.sin(ang)*dr*0.42);
-        ctx.lineTo(Math.cos(ang)*dr*0.86,Math.sin(ang)*dr*0.86);
-        ctx.strokeStyle='rgba(150,160,172,0.08)';ctx.stroke();
+ 
+      // 光点（收缩/跃迁/显现期间的能量核心）
+      if(pointGlow>0.01){
+        const pr=(6+pointGlow*10);
+        const pg=ctx.createRadialGradient(shipX,yPos,0,shipX,yPos,pr);
+        pg.addColorStop(0,'rgba('+WHITE+','+pointGlow+')');
+        pg.addColorStop(0.4,A(pointGlow*0.8));
+        pg.addColorStop(1,A(0));
+        ctx.beginPath();ctx.arc(shipX,yPos,pr,0,6.29);ctx.fillStyle=pg;ctx.fill();
+        // 十字光芒
+        ctx.strokeStyle='rgba('+WHITE+','+(pointGlow*0.7)+')';ctx.lineWidth=1;
+        ctx.beginPath();ctx.moveTo(shipX-pr*1.6,yPos);ctx.lineTo(shipX+pr*1.6,yPos);
+        ctx.moveTo(shipX,yPos-pr*1.6);ctx.lineTo(shipX,yPos+pr*1.6);ctx.stroke();
       }
-      // 偏心聚焦镜（死星的盘不在正中、镜在盘内偏上）—— 关键识别点
-      const lx=-dr*0.16, ly=-dr*0.18, lr=dr*0.3;
-      const lens=ctx.createRadialGradient(lx,ly,0,lx,ly,lr);
-      lens.addColorStop(0,A(0.3+ringGlow*0.7));
-      lens.addColorStop(0.6,A(0.08+ringGlow*0.3));
-      lens.addColorStop(1,A(0));
-      ctx.beginPath();ctx.arc(lx,ly,lr,0,6.29);ctx.fillStyle=lens;ctx.fill();
-      ctx.beginPath();ctx.arc(lx,ly,lr*0.55,0,6.29);
-      ctx.fillStyle=A(0.25+ringGlow*0.6);ctx.fill();
-      ctx.beginPath();ctx.arc(lx,ly,lr,0,6.29);
-      ctx.strokeStyle='rgba(160,170,182,0.18)';ctx.lineWidth=1;ctx.stroke();
-      ctx.restore();
  
-      ctx.restore(); // 结束球内裁剪
+      // —— 星球 + 星环（跃迁主体；金色波到达时星环点亮）——
+      if(shipAlpha>0.02){
+        const er=scale*1.1;                       // 星球半径
+        const ex=shipX, ey=yPos;
+        const tilt=-0.42;
+        const ringRx=er*1.95, ringRy=er*0.5;
+        ctx.save();
+        ctx.globalAlpha=shipAlpha;
+        // 跃迁缩放：以星球中心为锚点整体缩放
+        ctx.translate(ex,ey);ctx.scale(shipScale,shipScale);ctx.translate(-ex,-ey);
  
-      // 边缘高光环
-      const rim=ctx.createRadialGradient(ex,ey,er*0.94,ex,ey,er*1.05);
-      rim.addColorStop(0,A(0));
-      rim.addColorStop(0.5,'rgba(150,160,172,'+(0.10+ringGlow*0.3)+')');
-      rim.addColorStop(1,A(0));
-      ctx.beginPath();ctx.arc(ex,ey,er*1.05,0,6.29);ctx.fillStyle=rim;ctx.fill();
+        // 星环亮度：金色波到达时点亮（仅静止显现时可见）
+        const ringDelay=180;
+        let ringGlow=0;
+        if(t>=ripple+ringDelay && t<=ripple+ringDelay+FLASH){
+          ringGlow=Math.sin(((t-(ripple+ringDelay))/FLASH)*Math.PI);
+        }
+        const L={x:-0.5,y:-0.55,z:0.66};
  
-      // —— 星环 近侧（球前）——
-      ctx.save();ctx.translate(ex,ey);ctx.rotate(tilt);
-      ctx.beginPath();ctx.ellipse(0,0,ringRx,ringRy,0,0,Math.PI,true);
-      ctx.strokeStyle=A(0.10+ringGlow*0.65);ctx.lineWidth=2.5+ringGlow*4;ctx.stroke();
-      ctx.beginPath();ctx.ellipse(0,0,ringRx*0.85,ringRy*0.85,0,0,Math.PI,true);
-      ctx.strokeStyle=A(0.06+ringGlow*0.4);ctx.lineWidth=1.8+ringGlow*2.5;ctx.stroke();
-      if(ringGlow>0.02){
-        ctx.beginPath();ctx.ellipse(0,0,ringRx,ringRy,0,0,6.29);
-        ctx.strokeStyle='rgba('+WHITE+','+(ringGlow*0.25)+')';ctx.lineWidth=1;ctx.stroke();
+        // 星环 远侧（球后）
+        ctx.save();ctx.translate(ex,ey);ctx.rotate(tilt);
+        ctx.beginPath();ctx.ellipse(0,0,ringRx,ringRy,0,Math.PI,0,true);
+        ctx.strokeStyle=A(0.08+ringGlow*0.55);ctx.lineWidth=2+ringGlow*3;ctx.stroke();
+        ctx.beginPath();ctx.ellipse(0,0,ringRx*0.85,ringRy*0.85,0,Math.PI,0,true);
+        ctx.strokeStyle=A(0.05+ringGlow*0.35);ctx.lineWidth=1.5+ringGlow*2;ctx.stroke();
+        ctx.restore();
+ 
+        // 球体（带光照明暗 + 大气弧光）
+        const body=ctx.createRadialGradient(ex+L.x*er*0.7,ey+L.y*er*0.7,er*0.05,ex,ey,er);
+        body.addColorStop(0,'rgba(72,110,120,0.7)');
+        body.addColorStop(0.5,'rgba(34,58,68,0.62)');
+        body.addColorStop(0.85,'rgba(18,30,38,0.58)');
+        body.addColorStop(1,'rgba(10,16,22,0.52)');
+        ctx.beginPath();ctx.arc(ex,ey,er,0,6.29);ctx.fillStyle=body;ctx.fill();
+ 
+        // 球面纹理（经纬带）
+        ctx.save();ctx.beginPath();ctx.arc(ex,ey,er,0,6.29);ctx.clip();
+        ctx.lineWidth=1;const GL='rgba(120,170,180,0.06)';
+        for(let lat=-60;lat<=60;lat+=20){
+          const rad=lat*Math.PI/180;const yy=ey-Math.sin(rad)*er;const rx=Math.cos(rad)*er;
+          ctx.beginPath();ctx.ellipse(ex,yy,rx,rx*0.18,0,0,6.29);ctx.strokeStyle=GL;ctx.stroke();
+        }
+        // 几抹云带高光（受光侧）
+        const lit=ctx.createLinearGradient(ex-er,ey-er,ex+er*0.3,ey+er*0.3);
+        lit.addColorStop(0,A(0.12+ringGlow*0.2));
+        lit.addColorStop(0.5,A(0));
+        ctx.fillStyle=lit;ctx.fillRect(ex-er,ey-er,er*2,er*2);
+        ctx.restore();
+ 
+        // 大气弧光（金色波随之增亮）
+        const rim=ctx.createRadialGradient(ex,ey,er*0.93,ex,ey,er*1.08);
+        rim.addColorStop(0,A(0));
+        rim.addColorStop(0.5,A(0.12+ringGlow*0.35));
+        rim.addColorStop(1,A(0));
+        ctx.beginPath();ctx.arc(ex,ey,er*1.08,0,6.29);ctx.fillStyle=rim;ctx.fill();
+ 
+        // 星环 近侧（球前）
+        ctx.save();ctx.translate(ex,ey);ctx.rotate(tilt);
+        ctx.beginPath();ctx.ellipse(0,0,ringRx,ringRy,0,0,Math.PI,true);
+        ctx.strokeStyle=A(0.11+ringGlow*0.65);ctx.lineWidth=2.5+ringGlow*4;ctx.stroke();
+        ctx.beginPath();ctx.ellipse(0,0,ringRx*0.85,ringRy*0.85,0,0,Math.PI,true);
+        ctx.strokeStyle=A(0.07+ringGlow*0.4);ctx.lineWidth=1.8+ringGlow*2.5;ctx.stroke();
+        if(ringGlow>0.02){
+          ctx.beginPath();ctx.ellipse(0,0,ringRx,ringRy,0,0,6.29);
+          ctx.strokeStyle='rgba('+WHITE+','+(ringGlow*0.25)+')';ctx.lineWidth=1;ctx.stroke();
+        }
+        ctx.restore();
+ 
+        ctx.restore();
+        ctx.globalAlpha=1;
       }
-      ctx.restore();
     })();
  
     // 光束当前所在段（依据 SCHED 的 arrive 时刻）
@@ -561,3 +599,4 @@
 </script>
 </body>
 </html>
+ 
