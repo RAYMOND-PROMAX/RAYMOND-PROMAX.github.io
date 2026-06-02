@@ -193,7 +193,7 @@
  
   // 时间参数（毫秒）
   const HOP=560;                                  // 光束飞过一段
-  const PING_GAP=420;                             // 双ping节点：红→金之间的间隔
+  const PING_GAP=560;                             // 双ping节点：红→二次ping束飞回→金 的间隔
   const HOLD=1100;                                // 全部点亮后停留
   const FLASH=900;                                // 金色扩散闪光
   const FADE=750;                                 // 熄灭
@@ -232,8 +232,28 @@
     canvas.style.width=W+'px';canvas.style.height=H+'px';
     ctx.setTransform(DPR,0,0,DPR,0,0);
     bgStars=[];
-    const n=Math.round(W*H/11000);
-    for(let i=0;i<n;i++)bgStars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1+.3,ph:Math.random()*6.28,sp:.4+Math.random()*1.2});
+    // 近景星：更密、可闪烁、偶有亮星
+    const n=Math.round(W*H/3000);
+    for(let i=0;i<n;i++){
+      const bright=Math.random()<0.12;           // 约12%是稍亮的星
+      bgStars.push({
+        x:Math.random()*W,y:Math.random()*H,
+        r:bright?(Math.random()*1.3+1):(Math.random()*0.9+.3),
+        ph:Math.random()*6.28,sp:.3+Math.random()*1.4,
+        base:bright?0.35:0.12, amp:bright?0.5:0.32,
+        far:false
+      });
+    }
+    // 远景星：极小极暗、几乎不闪，铺出星尘感
+    const nf=Math.round(W*H/1600);
+    for(let i=0;i<nf;i++){
+      bgStars.push({
+        x:Math.random()*W,y:Math.random()*H,
+        r:Math.random()*0.6+.2,
+        ph:Math.random()*6.28,sp:.15+Math.random()*.5,
+        base:0.05, amp:0.12, far:true
+      });
+    }
   }
   const px=s=>s.x*W, py=s=>s.y*H;
   const easeOut=t=>1-Math.pow(1-t,3);
@@ -252,23 +272,156 @@
     const tg=ts*0.001;
     ctx.clearRect(0,0,W,H);
  
-    // 背景碎星
+    // 背景碎星（近景闪烁 + 远景星尘）
     for(const b of bgStars){
       const tw=(Math.sin(tg*b.sp+b.ph)+1)/2;
+      const a=b.base+tw*b.amp;
       ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,6.29);
-      ctx.fillStyle='rgba('+WHITE+','+(0.1+tw*0.3)+')';ctx.fill();
+      ctx.fillStyle='rgba('+WHITE+','+a+')';ctx.fill();
+      // 较亮的近景星偶尔泛一点光晕
+      if(!b.far && b.r>1){
+        ctx.beginPath();ctx.arc(b.x,b.y,b.r*2.4,0,6.29);
+        ctx.fillStyle='rgba('+WHITE+','+(a*0.12)+')';ctx.fill();
+      }
     }
  
-    // 阶段亮度 / 熄灭
+    // 阶段亮度 / 熄灭（提前计算，供地球星环使用）
     let globalFade=1;
     if(t>ripple+FLASH){
       globalFade=1-easeOut(Math.min(1,(t-(ripple+FLASH))/FADE));
     }
-    // 末尾整体增亮（配合金色扩散）
     let flash=0;
     if(t>=ripple && t<=ripple+FLASH){
       flash=Math.sin(((t-ripple)/FLASH)*Math.PI);
     }
+ 
+    // 远处空间站（死星风格原创造型）+ 星环：金色扩散到达时点亮
+    (function(){
+      const er=Math.min(W,H)*0.30;             // 球半径
+      const ex=W*0.84, ey=H*0.80;              // 偏右下，露出约2/3
+      const tilt=-0.42;
+      const ringRx=er*1.95, ringRy=er*0.5;
+ 
+      const ringDelay=180;
+      let ringGlow=0;
+      if(t>=ripple+ringDelay && t<=ripple+ringDelay+FLASH){
+        ringGlow=Math.sin(((t-(ripple+ringDelay))/FLASH)*Math.PI);
+      }
+      const A=v=>'rgba('+ACCENT+','+v+')';
+      // 球面投影：把球面坐标(经lon,纬lat)映射到屏幕，并返回是否可见(朝向正面)
+      // 光源方向（左上）
+      const L={x:-0.5,y:-0.6,z:0.62};
+ 
+      // —— 星环 远侧（球后）——
+      ctx.save();ctx.translate(ex,ey);ctx.rotate(tilt);
+      ctx.beginPath();ctx.ellipse(0,0,ringRx,ringRy,0,Math.PI,0,true);
+      ctx.strokeStyle=A(0.07+ringGlow*0.55);ctx.lineWidth=2+ringGlow*3;ctx.stroke();
+      ctx.beginPath();ctx.ellipse(0,0,ringRx*0.85,ringRy*0.85,0,Math.PI,0,true);
+      ctx.strokeStyle=A(0.04+ringGlow*0.35);ctx.lineWidth=1.5+ringGlow*2;ctx.stroke();
+      ctx.restore();
+ 
+      // —— 灰色金属球体（带光照明暗）——
+      const body=ctx.createRadialGradient(ex+L.x*er*0.7,ey+L.y*er*0.7,er*0.05,ex,ey,er);
+      body.addColorStop(0,'rgba(96,104,114,0.75)');
+      body.addColorStop(0.5,'rgba(58,64,72,0.66)');
+      body.addColorStop(0.85,'rgba(30,35,42,0.6)');
+      body.addColorStop(1,'rgba(14,18,24,0.55)');
+      ctx.beginPath();ctx.arc(ex,ey,er,0,6.29);ctx.fillStyle=body;ctx.fill();
+ 
+      ctx.save();
+      ctx.beginPath();ctx.arc(ex,ey,er,0,6.29);ctx.clip();
+ 
+      // —— 球面方格板块纹理（经纬网格，随曲面收束）——
+      ctx.lineWidth=1;
+      const GL='rgba(150,160,172,0.07)';
+      // 纬线（横向弧）
+      for(let lat=-75;lat<=75;lat+=15){
+        const rad=lat*Math.PI/180;
+        const yy=ey-Math.sin(rad)*er;
+        const rx=Math.cos(rad)*er;
+        ctx.beginPath();ctx.ellipse(ex,yy,rx,rx*0.16,0,0,Math.PI*2);
+        ctx.strokeStyle=GL;ctx.stroke();
+      }
+      // 经线（纵向，做透视椭圆）
+      for(let lon=-90;lon<=90;lon+=15){
+        const rad=lon*Math.PI/180;
+        const rx=Math.abs(Math.sin(rad))*er;
+        ctx.beginPath();ctx.ellipse(ex,ey,rx,er,0,0,Math.PI*2);
+        ctx.strokeStyle=GL;ctx.stroke();
+      }
+ 
+      // —— 赤道沟槽（死星标志：横贯球体、上下唇明暗）——
+      const tY=ey+er*0.06;
+      const tH=er*0.05;
+      ctx.fillStyle='rgba(6,8,12,0.55)';
+      ctx.fillRect(ex-er,tY-tH,er*2,tH*2);
+      ctx.strokeStyle='rgba(170,180,190,0.16)';ctx.lineWidth=1.2;
+      ctx.beginPath();ctx.moveTo(ex-er,tY-tH);ctx.lineTo(ex+er,tY-tH);ctx.stroke(); // 上唇高光
+      ctx.strokeStyle='rgba(0,0,0,0.3)';
+      ctx.beginPath();ctx.moveTo(ex-er,tY+tH);ctx.lineTo(ex+er,tY+tH);ctx.stroke(); // 下唇暗线
+ 
+      // —— 超级激光炮盘（上半偏左，凹陷大盘 + 偏心聚焦镜）——
+      const dx=ex-er*0.40, dy=ey-er*0.42, dr=er*0.34;   // 盘较大，识别度关键
+      // 透视：盘是球面上的圆，略压扁
+      ctx.save();
+      ctx.translate(dx,dy);ctx.scale(1,0.9);ctx.rotate(-0.15);
+      // 外圈凹陷阴影环
+      const dishOuter=ctx.createRadialGradient(0,0,dr*0.4,0,0,dr);
+      dishOuter.addColorStop(0,'rgba(20,24,30,0.0)');
+      dishOuter.addColorStop(0.78,'rgba(10,12,16,0.55)');   // 凹陷阴影
+      dishOuter.addColorStop(0.92,'rgba(120,130,142,0.22)'); // 凹陷边缘高光
+      dishOuter.addColorStop(1,'rgba(40,46,54,0.0)');
+      ctx.beginPath();ctx.arc(0,0,dr,0,6.29);ctx.fillStyle=dishOuter;ctx.fill();
+      // 盘缘描边
+      ctx.beginPath();ctx.arc(0,0,dr,0,6.29);
+      ctx.strokeStyle='rgba(170,180,190,0.2)';ctx.lineWidth=1.4;ctx.stroke();
+      // 盘内同心圈（机械细节）
+      for(const rr of [0.78,0.6,0.42]){
+        ctx.beginPath();ctx.arc(0,0,dr*rr,0,6.29);
+        ctx.strokeStyle='rgba(150,160,172,0.12)';ctx.lineWidth=1;ctx.stroke();
+      }
+      // 盘内辐射分隔线
+      for(let a=0;a<12;a++){
+        const ang=a/12*6.28;
+        ctx.beginPath();
+        ctx.moveTo(Math.cos(ang)*dr*0.42,Math.sin(ang)*dr*0.42);
+        ctx.lineTo(Math.cos(ang)*dr*0.86,Math.sin(ang)*dr*0.86);
+        ctx.strokeStyle='rgba(150,160,172,0.08)';ctx.stroke();
+      }
+      // 偏心聚焦镜（死星的盘不在正中、镜在盘内偏上）—— 关键识别点
+      const lx=-dr*0.16, ly=-dr*0.18, lr=dr*0.3;
+      const lens=ctx.createRadialGradient(lx,ly,0,lx,ly,lr);
+      lens.addColorStop(0,A(0.3+ringGlow*0.7));
+      lens.addColorStop(0.6,A(0.08+ringGlow*0.3));
+      lens.addColorStop(1,A(0));
+      ctx.beginPath();ctx.arc(lx,ly,lr,0,6.29);ctx.fillStyle=lens;ctx.fill();
+      ctx.beginPath();ctx.arc(lx,ly,lr*0.55,0,6.29);
+      ctx.fillStyle=A(0.25+ringGlow*0.6);ctx.fill();
+      ctx.beginPath();ctx.arc(lx,ly,lr,0,6.29);
+      ctx.strokeStyle='rgba(160,170,182,0.18)';ctx.lineWidth=1;ctx.stroke();
+      ctx.restore();
+ 
+      ctx.restore(); // 结束球内裁剪
+ 
+      // 边缘高光环
+      const rim=ctx.createRadialGradient(ex,ey,er*0.94,ex,ey,er*1.05);
+      rim.addColorStop(0,A(0));
+      rim.addColorStop(0.5,'rgba(150,160,172,'+(0.10+ringGlow*0.3)+')');
+      rim.addColorStop(1,A(0));
+      ctx.beginPath();ctx.arc(ex,ey,er*1.05,0,6.29);ctx.fillStyle=rim;ctx.fill();
+ 
+      // —— 星环 近侧（球前）——
+      ctx.save();ctx.translate(ex,ey);ctx.rotate(tilt);
+      ctx.beginPath();ctx.ellipse(0,0,ringRx,ringRy,0,0,Math.PI,true);
+      ctx.strokeStyle=A(0.10+ringGlow*0.65);ctx.lineWidth=2.5+ringGlow*4;ctx.stroke();
+      ctx.beginPath();ctx.ellipse(0,0,ringRx*0.85,ringRy*0.85,0,0,Math.PI,true);
+      ctx.strokeStyle=A(0.06+ringGlow*0.4);ctx.lineWidth=1.8+ringGlow*2.5;ctx.stroke();
+      if(ringGlow>0.02){
+        ctx.beginPath();ctx.ellipse(0,0,ringRx,ringRy,0,0,6.29);
+        ctx.strokeStyle='rgba('+WHITE+','+(ringGlow*0.25)+')';ctx.lineWidth=1;ctx.stroke();
+      }
+      ctx.restore();
+    })();
  
     // 光束当前所在段（依据 SCHED 的 arrive 时刻）
     let segIdx=-1, segT=0;
@@ -313,6 +466,31 @@
       ctx.beginPath();ctx.moveTo(sx,sy);ctx.lineTo(hx,hy);ctx.stroke();
       ctx.beginPath();ctx.arc(hx,hy,2.8,0,6.29);ctx.fillStyle='rgba('+WHITE+',1)';ctx.fill();
       ctx.beginPath();ctx.arc(hx,hy,7,0,6.29);ctx.fillStyle='rgba('+ACCENT+',0.25)';ctx.fill();
+    }
+ 
+    // 双ping节点的二次 ping：从上一颗星再射出一道光束
+    if(t<TRAVEL){
+      for(let k=1;k<SCHED.length;k++){
+        const cur=SCHED[k];
+        if(!cur.twice) continue;
+        // 在 arrive..goldAt 窗口内，光束从上一颗星飞向当前节点
+        if(t>=cur.arrive && t<cur.goldAt){
+          const prev=STARS[PATH[k-1]], here=STARS[cur.star];
+          const ax=px(prev),ay=py(prev),tx=px(here),ty=py(here);
+          const e=easeInOut((t-cur.arrive)/(cur.goldAt-cur.arrive));
+          const hx=ax+(tx-ax)*e, hy=ay+(ty-ay)*e;
+          const e2=Math.max(0,e-0.16);
+          const sx=ax+(tx-ax)*e2, sy=ay+(ty-ay)*e2;
+          // 二次 ping 光束用暖白偏金（确认成功的探测）
+          const g=ctx.createLinearGradient(sx,sy,hx,hy);
+          g.addColorStop(0,'rgba('+ACCENT+',0)');
+          g.addColorStop(1,'rgba('+WHITE+',0.95)');
+          ctx.strokeStyle=g;ctx.lineWidth=2.2;
+          ctx.beginPath();ctx.moveTo(sx,sy);ctx.lineTo(hx,hy);ctx.stroke();
+          ctx.beginPath();ctx.arc(hx,hy,2.4,0,6.29);ctx.fillStyle='rgba('+WHITE+',1)';ctx.fill();
+          ctx.beginPath();ctx.arc(hx,hy,6,0,6.29);ctx.fillStyle='rgba('+ACCENT+',0.22)';ctx.fill();
+        }
+      }
     }
  
     // 星点：被 ping 后先红(双ping节点)→转金
@@ -383,4 +561,3 @@
 </script>
 </body>
 </html>
- 
