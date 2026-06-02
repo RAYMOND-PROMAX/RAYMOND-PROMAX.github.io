@@ -16,7 +16,7 @@
   *{margin:0;padding:0;box-sizing:border-box}
   html{scroll-behavior:smooth}
   body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-weight:300;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
-  body::before{content:"";position:fixed;inset:0;z-index:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,#000 30%,transparent 75%);opacity:.5;}
+  #starchart{position:fixed;inset:0;z-index:0;width:100%;height:100%;pointer-events:none;opacity:.9;}
   .glow{position:fixed;top:-20%;left:50%;transform:translateX(-50%);width:700px;height:700px;z-index:0;pointer-events:none;background:radial-gradient(circle,var(--accent-dim),transparent 60%);filter:blur(40px);}
   .wrap{position:relative;z-index:1;max-width:880px;margin:0 auto;padding:0 28px}
   nav{display:flex;justify-content:space-between;align-items:center;padding:32px 0;font-family:var(--mono);font-size:13px;}
@@ -79,6 +79,7 @@
 </style>
 </head>
 <body>
+<canvas id="starchart"></canvas>
 <div class="glow"></div>
 <div class="wrap">
   <nav>
@@ -141,12 +142,12 @@
   </section>
   <section id="work" class="reveal">
     <div class="sec-label"><span>04</span> / 精选项目</div>
-    <a href="#" class="proj"><span class="p-num">001</span><span><div class="p-name">智能运维平台<span class="ai-badge">AI</span></div><div class="p-desc">集成告警降噪、根因分析与故障预测的一体化 AIOps 平台</div></span><span class="arrow">→</span></a>
-    <a href="#" class="proj"><span class="p-num">002</span><span><div class="p-name">运维知识库 Copilot<span class="ai-badge">AI</span></div><div class="p-desc">本地化 LLM + RAG 私有部署，秒级检索文档与历史工单</div></span><span class="arrow">→</span></a>
-    <a href="#" class="proj"><span class="p-num">003</span><span><div class="p-name">K8s 集群迁移</div><div class="p-desc">将单体服务平滑迁移至容器化平台，零停机</div></span><span class="arrow">→</span></a>
-    <a href="#" class="proj"><span class="p-num">004</span><span><div class="p-name">监控告警体系</div><div class="p-desc">基于 Prometheus + Grafana 构建全链路可观测性</div></span><span class="arrow">→</span></a>
-    <a href="#" class="proj"><span class="p-num">005</span><span><div class="p-name">CI/CD 自动化</div><div class="p-desc">从代码提交到生产部署的全流程流水线</div></span><span class="arrow">→</span></a>
-    <a href="#" class="proj"><span class="p-num">006</span><span><div class="p-name">基础设施即代码</div><div class="p-desc">用 Terraform + Ansible 实现环境一键重建</div></span><span class="arrow">→</span></a>
+    <a href="projects/project-1.html" class="proj"><span class="p-num">001</span><span><div class="p-name">智能运维平台<span class="ai-badge">AI</span></div><div class="p-desc">集成告警降噪、根因分析与故障预测的一体化 AIOps 平台</div></span><span class="arrow">→</span></a>
+    <a href="projects/project-2.html" class="proj"><span class="p-num">002</span><span><div class="p-name">运维知识库 Copilot<span class="ai-badge">AI</span></div><div class="p-desc">本地化 LLM + RAG 私有部署，秒级检索文档与历史工单</div></span><span class="arrow">→</span></a>
+    <a href="projects/project-3.html" class="proj"><span class="p-num">003</span><span><div class="p-name">K8s 集群迁移</div><div class="p-desc">将单体服务平滑迁移至容器化平台，零停机</div></span><span class="arrow">→</span></a>
+    <a href="projects/project-4.html" class="proj"><span class="p-num">004</span><span><div class="p-name">监控告警体系</div><div class="p-desc">基于 Prometheus + Grafana 构建全链路可观测性</div></span><span class="arrow">→</span></a>
+    <a href="projects/project-5.html" class="proj"><span class="p-num">005</span><span><div class="p-name">CI/CD 自动化</div><div class="p-desc">从代码提交到生产部署的全流程流水线</div></span><span class="arrow">→</span></a>
+    <a href="projects/project-6.html" class="proj"><span class="p-num">006</span><span><div class="p-name">基础设施即代码</div><div class="p-desc">用 Terraform + Ansible 实现环境一键重建</div></span><span class="arrow">→</span></a>
   </section>
   <section id="contact" class="reveal">
     <div class="sec-label"><span>05</span> / 联系</div>
@@ -164,5 +165,222 @@
   const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
   document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 </script>
+<script>
+/* ===== 星图：逐颗点亮 → 连线 → 闪光 → 循环 ===== */
+(function(){
+  const canvas=document.getElementById('starchart');
+  const ctx=canvas.getContext('2d');
+  const ACCENT='184,134,11';      // 暗金色 (dark goldenrod)
+  const WHITE='245,222,160';       // 星核 暖金白
+  let W,H,DPR,bgStars=[];
+ 
+  /* 北斗七星：按真实相对位置布点，铺开显示
+     连线顺序 天枢→天璇→天玑→天权→玉衡→开阳→摇光 */
+  const STARS=[
+    {x:.18,y:.24,m:1.4},  //0 天枢 Dubhe（勺口上）
+    {x:.24,y:.46,m:1.2},  //1 天璇 Merak（勺口下）
+    {x:.40,y:.49,m:1.1},  //2 天玑 Phecda
+    {x:.45,y:.30,m:1.0},  //3 天权 Megrez（最暗）
+    {x:.60,y:.23,m:1.3},  //4 玉衡 Alioth（柄起）
+    {x:.74,y:.26,m:1.2},  //5 开阳 Mizar
+    {x:.86,y:.16,m:1.4}   //6 摇光 Alkaid（柄端）
+  ];
+  // 飞射路径：沿北斗顺序，每颗星经过一次
+  const PATH=[0,1,2,3,4,5,6];
+  const SEGMENTS=PATH.length-1;
+ 
+  const RED='225,72,72';                          // ping 失败/待确认（红）
+ 
+  // 时间参数（毫秒）
+  const HOP=560;                                  // 光束飞过一段
+  const PING_GAP=420;                             // 双ping节点：红→金之间的间隔
+  const HOLD=1100;                                // 全部点亮后停留
+  const FLASH=900;                                // 金色扩散闪光
+  const FADE=750;                                 // 熄灭
+ 
+  // 每个循环随机挑选需要"ping 两次"的节点（2~3个，不含起点）
+  let SCHED=[], TRAVEL=0, CYCLE=0, ripple=0;
+  function buildSchedule(){
+    const candidates=[1,2,3,4,5,6];
+    // 洗牌取 2~3 个
+    for(let i=candidates.length-1;i>0;i--){const j=(Math.random()*(i+1))|0;[candidates[i],candidates[j]]=[candidates[j],candidates[i]];}
+    const dbl=new Set(candidates.slice(0,2+((Math.random()*2)|0)));
+    SCHED=[];
+    let t=0;
+    for(let k=0;k<PATH.length;k++){
+      const star=PATH[k];
+      const arrive=t;                              // 光束抵达该星的时刻
+      const twice=dbl.has(star);
+      // 抵达后：单ping立即转金；双ping先红，PING_GAP后再转金
+      const goldAt=arrive+(twice?PING_GAP:0);
+      SCHED.push({star,seg:k-1,arrive,goldAt,twice});
+      // 前往下一颗星前，双ping节点要多停 PING_GAP
+      t=arrive+(twice?PING_GAP:0)+(k<SEGMENTS?HOP:0);
+    }
+    TRAVEL=SCHED[SCHED.length-1].goldAt+200;        // 末星转金后稍留
+    CYCLE=TRAVEL+HOLD+FLASH+FADE;
+    ripple=TRAVEL+HOLD;                             // 金色扩散起始时刻
+  }
+ 
+  // 星 -> 其调度项
+  const schedOf=i=>SCHED.find(s=>s.star===i);
+ 
+  function rebuild(){
+    DPR=Math.min(window.devicePixelRatio||1,2);
+    W=window.innerWidth;H=window.innerHeight;
+    canvas.width=W*DPR;canvas.height=H*DPR;
+    canvas.style.width=W+'px';canvas.style.height=H+'px';
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    bgStars=[];
+    const n=Math.round(W*H/11000);
+    for(let i=0;i<n;i++)bgStars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1+.3,ph:Math.random()*6.28,sp:.4+Math.random()*1.2});
+  }
+  const px=s=>s.x*W, py=s=>s.y*H;
+  const easeOut=t=>1-Math.pow(1-t,3);
+  const easeInOut=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+  function mix(c1,c2,k){
+    const a=c1.split(',').map(Number),b=c2.split(',').map(Number);
+    return a.map((v,j)=>Math.round(v+(b[j]-v)*k)).join(',');
+  }
+ 
+  buildSchedule();
+  let start=null;
+  function frame(ts){
+    if(start===null)start=ts;
+    let t=ts-start;
+    if(t>=CYCLE){ start=ts; t=0; buildSchedule(); }   // 新循环重新随机
+    const tg=ts*0.001;
+    ctx.clearRect(0,0,W,H);
+ 
+    // 背景碎星
+    for(const b of bgStars){
+      const tw=(Math.sin(tg*b.sp+b.ph)+1)/2;
+      ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,6.29);
+      ctx.fillStyle='rgba('+WHITE+','+(0.1+tw*0.3)+')';ctx.fill();
+    }
+ 
+    // 阶段亮度 / 熄灭
+    let globalFade=1;
+    if(t>ripple+FLASH){
+      globalFade=1-easeOut(Math.min(1,(t-(ripple+FLASH))/FADE));
+    }
+    // 末尾整体增亮（配合金色扩散）
+    let flash=0;
+    if(t>=ripple && t<=ripple+FLASH){
+      flash=Math.sin(((t-ripple)/FLASH)*Math.PI);
+    }
+ 
+    // 光束当前所在段（依据 SCHED 的 arrive 时刻）
+    let segIdx=-1, segT=0;
+    if(t<TRAVEL){
+      for(let k=0;k<SEGMENTS;k++){
+        const from=SCHED[k], to=SCHED[k+1];
+        // 段 k：从 from 离开(其 goldAt) 飞到 to.arrive
+        const depart=from.goldAt, land=to.arrive;
+        if(t>=depart && t<land){ segIdx=k; segT=(t-depart)/(land-depart); break; }
+        if(t<SCHED[0].goldAt){ segIdx=-1; break; }    // 还在起点 ping
+      }
+      if(segIdx<0 && t>=SCHED[SEGMENTS].arrive) segIdx=SEGMENTS; // 已抵末星
+    }
+ 
+    // 已连好的段 + 当前飞行段
+    ctx.lineWidth=1.2;
+    for(let k=0;k<SEGMENTS;k++){
+      const A=STARS[PATH[k]],B=STARS[PATH[k+1]];
+      const ax=px(A),ay=py(A),tx=px(B),ty=py(B);
+      let grow;
+      if(t>=TRAVEL) grow=1;
+      else if(segIdx>k || segIdx===SEGMENTS) grow=1;
+      else if(segIdx===k) grow=easeInOut(Math.min(1,Math.max(0,segT)));
+      else continue;
+      const bx=ax+(tx-ax)*grow, by=ay+(ty-ay)*grow;
+      ctx.strokeStyle='rgba('+ACCENT+','+((0.30+flash*0.5)*globalFade)+')';
+      ctx.beginPath();ctx.moveTo(ax,ay);ctx.lineTo(bx,by);ctx.stroke();
+    }
+ 
+    // 飞行光束头部
+    if(t<TRAVEL && segIdx>=0 && segIdx<SEGMENTS){
+      const A=STARS[PATH[segIdx]],B=STARS[PATH[segIdx+1]];
+      const ax=px(A),ay=py(A),tx=px(B),ty=py(B);
+      const e=easeInOut(Math.min(1,Math.max(0,segT)));
+      const hx=ax+(tx-ax)*e, hy=ay+(ty-ay)*e;
+      const e2=easeInOut(Math.max(0,Math.min(1,segT)-0.12));
+      const sx=ax+(tx-ax)*e2, sy=ay+(ty-ay)*e2;
+      const g=ctx.createLinearGradient(sx,sy,hx,hy);
+      g.addColorStop(0,'rgba('+ACCENT+',0)');
+      g.addColorStop(1,'rgba('+WHITE+',0.95)');
+      ctx.strokeStyle=g;ctx.lineWidth=2.4;
+      ctx.beginPath();ctx.moveTo(sx,sy);ctx.lineTo(hx,hy);ctx.stroke();
+      ctx.beginPath();ctx.arc(hx,hy,2.8,0,6.29);ctx.fillStyle='rgba('+WHITE+',1)';ctx.fill();
+      ctx.beginPath();ctx.arc(hx,hy,7,0,6.29);ctx.fillStyle='rgba('+ACCENT+',0.25)';ctx.fill();
+    }
+ 
+    // 星点：被 ping 后先红(双ping节点)→转金
+    for(let i=0;i<STARS.length;i++){
+      const sc=schedOf(i); if(!sc)continue;
+      if(t<sc.arrive) continue;
+      const since=t-sc.arrive;
+      const p=Math.min(1,since/300);
+      const s=STARS[i];const x=px(s),y=py(s);
+      const tw=(Math.sin(tg*1.8+i)+1)/2;
+      const lit=p*globalFade;
+      const mag=s.m||1;
+ 
+      // 颜色：goldAt 之前红，之后渐变到金
+      let col;
+      if(t<sc.goldAt) col=RED;
+      else col=mix(RED,ACCENT,Math.min(1,(t-sc.goldAt)/300));
+ 
+      const baseR=(1.6+lit*1.4)*mag;
+      const glowR=(7+tw*5+flash*14)*lit*mag;
+      const a1=(0.4+tw*0.3+flash*0.6)*lit;
+      const rg=ctx.createRadialGradient(x,y,0,x,y,Math.max(.1,glowR));
+      rg.addColorStop(0,'rgba('+col+','+a1+')');
+      rg.addColorStop(1,'rgba('+col+',0)');
+      ctx.beginPath();ctx.arc(x,y,Math.max(.1,glowR),0,6.29);ctx.fillStyle=rg;ctx.fill();
+      const core=(t<sc.goldAt)?'255,200,200':WHITE;
+      ctx.beginPath();ctx.arc(x,y,baseR,0,6.29);
+      ctx.fillStyle='rgba('+core+','+((0.8+flash*0.2)*lit)+')';ctx.fill();
+ 
+      // ping 扩散环：抵达瞬间红环；双ping节点在 goldAt 再来个金环
+      const rings=[{at:sc.arrive,c:sc.twice?RED:ACCENT}];
+      if(sc.twice) rings.push({at:sc.goldAt,c:ACCENT});
+      for(const rg2 of rings){
+        const rs=t-rg2.at;
+        if(rs>=0 && rs<320){
+          const r=rs/320;
+          ctx.beginPath();ctx.arc(x,y,3+r*20*mag,0,6.29);
+          ctx.strokeStyle='rgba('+rg2.c+','+(0.6*(1-r))+')';ctx.lineWidth=1.5;ctx.stroke();
+        }
+      }
+    }
+ 
+    // 终局金色扩散波（从星图中心向外）
+    if(t>=ripple && t<ripple+FLASH){
+      const r=(t-ripple)/FLASH;
+      const cx=W*0.5, cy=H*0.32;
+      const maxR=Math.hypot(W,H)*0.6;
+      for(let w=0;w<2;w++){
+        const rr=easeOut(Math.min(1,r*1.3-w*0.18))*maxR;
+        if(rr<=0)continue;
+        ctx.beginPath();ctx.arc(cx,cy,rr,0,6.29);
+        ctx.strokeStyle='rgba('+ACCENT+','+(0.5*(1-r)*(1-w*0.4))+')';
+        ctx.lineWidth=2.5-w;ctx.stroke();
+      }
+      // 中心金色光晕
+      const gg=ctx.createRadialGradient(cx,cy,0,cx,cy,maxR*0.5);
+      gg.addColorStop(0,'rgba('+ACCENT+','+(0.18*flash)+')');
+      gg.addColorStop(1,'rgba('+ACCENT+',0)');
+      ctx.beginPath();ctx.arc(cx,cy,maxR*0.5,0,6.29);ctx.fillStyle=gg;ctx.fill();
+    }
+ 
+    requestAnimationFrame(frame);
+  }
+  rebuild();
+  window.addEventListener('resize',rebuild);
+  requestAnimationFrame(frame);
+})();
+</script>
 </body>
 </html>
+ 
