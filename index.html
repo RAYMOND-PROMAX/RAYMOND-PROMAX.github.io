@@ -1,3 +1,6 @@
+
+raw
+Index · HTML
 <!DOCTYPE html>
 <html lang="zh">
 <head>
@@ -59,6 +62,38 @@
   .p-name{font-size:21px;font-weight:500;transition:color .25s}
   .p-desc{font-size:14px;color:var(--muted);margin-top:3px}
   .arrow{font-family:var(--mono);color:var(--muted);transition:all .25s;font-size:18px}
+  .star-name{font-family:var(--mono);font-size:18px;font-weight:700;letter-spacing:.1em;color:var(--muted);opacity:.75;transition:color .25s,opacity .25s;align-self:center;white-space:nowrap}
+  .w-item.active .star-name{color:var(--accent);opacity:1}
+  /* —— 项目轮盘 —— */
+  .wheel{position:relative;height:300px;margin-top:10px;perspective:900px;overflow:hidden;cursor:grab;user-select:none}
+  .wheel.dragging{cursor:grabbing}
+  .wheel-track{position:absolute;inset:0;transform-style:preserve-3d}
+  .w-item{position:absolute;left:0;right:0;top:50%;display:grid;grid-template-columns:auto 1fr auto auto;gap:18px;align-items:center;padding:14px 16px;text-decoration:none;color:inherit;border:1px solid transparent;border-radius:6px;transition:transform .45s cubic-bezier(.22,.61,.36,1),opacity .45s,border-color .3s,background .3s;will-change:transform,opacity}
+  .w-item.active{border-color:var(--line);background:rgba(45,212,191,.04)}
+  .w-item.active .p-name{color:var(--accent)}
+  .w-item.active .arrow{color:var(--accent)}
+  .wheel-nav{display:flex;align-items:center;gap:14px;margin-top:18px;font-family:var(--mono);font-size:12px;color:var(--muted)}
+  .wheel-nav button{background:transparent;border:1px solid var(--line);color:var(--muted);width:34px;height:34px;border-radius:50%;cursor:pointer;transition:all .25s;font-size:14px}
+  .wheel-nav button:hover{border-color:var(--accent);color:var(--accent)}
+  .wheel-dots{display:flex;gap:8px;margin-left:6px}
+  .wheel-dots i{width:7px;height:7px;border-radius:50%;background:var(--line);transition:all .3s;cursor:pointer;display:inline-block}
+  .wheel-dots i.on{background:var(--accent);transform:scale(1.25)}
+  .wheel-count{margin-left:auto;letter-spacing:.1em}
+  /* —— 轮盘 + 目录 两栏布局 —— */
+  .work-layout{display:grid;grid-template-columns:3fr 1fr;gap:36px;align-items:start;margin-top:10px}
+  .proj-index{border-left:1px solid var(--line);padding-left:24px}
+  .proj-index .pi-title{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;margin-bottom:14px}
+  .pi-item{display:flex;align-items:baseline;gap:12px;padding:9px 0;cursor:pointer;border-bottom:1px solid var(--line);transition:padding .25s,color .25s}
+  .pi-item:last-child{border-bottom:none}
+  .pi-item:hover{padding-left:6px}
+  .pi-star{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--muted);min-width:28px;transition:color .25s}
+  .pi-name{font-size:13px;color:var(--fg);transition:color .25s;line-height:1.35}
+  .pi-item.on .pi-star,.pi-item.on .pi-name{color:var(--accent)}
+  .pi-item.on{padding-left:6px}
+  @media(max-width:720px){
+    .work-layout{grid-template-columns:1fr;gap:20px}
+    .proj-index{border-left:none;border-top:1px solid var(--line);padding-left:0;padding-top:18px}
+  }
   .ai-badge{font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--accent);border:1px solid var(--accent);border-radius:2px;padding:2px 6px;margin-left:10px;vertical-align:middle;display:inline-block}
   .aiops{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:4px}
   .ai-card{border:1px solid var(--line);border-radius:4px;padding:24px 22px;position:relative;overflow:hidden;transition:border-color .3s,transform .3s}
@@ -104,7 +139,7 @@
   </header>
   <section id="about" class="reveal">
     <div class="sec-label"><span>01</span> / <span data-zh="关于" data-en="About">关于</span></div>
-    <p class="about" data-zh-html="我是 Raymond，一名运维工程师。日常工作围绕<strong>稳定性、自动化与效率</strong>展开——从 CI/CD 流水线到容器编排，从监控告警到故障应急。我相信好的运维是让系统&quot;安静地运转&quot;，把救火变成预防。" data-en-html="I'm Raymond, an operations engineer. My work revolves around <strong>stability, automation, and efficiency</strong> — from CI/CD pipelines to container orchestration, from monitoring to incident response. I believe good ops keeps systems quietly running, turning firefighting into prevention.">我是 Raymond，一名运维工程师。日常工作围绕<strong>稳定性、自动化与效率</strong>展开——从 CI/CD 流水线到容器编排，从监控告警到故障应急。我相信好的运维是让系统"安静地运转"，把救火变成预防。</p>
+    <p class="about" data-zh-html="我是 Raymond，一名运维工程师，信奉&quot;看不见&quot;的运维——系统安静运转、无人察觉，便是最好的状态。我拥有丰富的<strong>海外工作经验</strong>，在泰国、越南、台湾等地独立扛起线上稳定。围绕<strong>稳定性、自动化与效率</strong>，把救火变成预防——目标只有一个：让系统别出事。" data-en-html="I'm Raymond, an operations engineer who believes in invisible ops — when systems run quietly and unnoticed, that's the best state to be in. With extensive <strong>overseas experience</strong> across Thailand, Vietnam, and Taiwan, I've owned production stability solo. Around <strong>stability, automation, and efficiency</strong>, I turn firefighting into prevention — one goal: keep things from breaking.">我是 Raymond，一名运维工程师，信奉"看不见"的运维——系统安静运转、无人察觉，便是最好的状态。我拥有丰富的<strong>海外工作经验</strong>，在泰国、越南、台湾等地独立扛起线上稳定。围绕<strong>稳定性、自动化与效率</strong>，把救火变成预防——目标只有一个：让系统别出事。</p>
     <div class="stack">
       <span class="chip">Linux</span><span class="chip">Kubernetes</span><span class="chip">Docker</span>
       <span class="chip">Terraform</span><span class="chip">Ansible</span><span class="chip">Prometheus</span>
@@ -149,12 +184,35 @@
   </section>
   <section id="work" class="reveal">
     <div class="sec-label"><span>04</span> / <span data-zh="精选项目" data-en="Selected Work">精选项目</span></div>
-    <a href="projects/project-1.html" class="proj"><span class="p-num">001</span><span><div class="p-name"><span data-zh="智能运维平台" data-en="Intelligent Ops Platform">智能运维平台</span><span class="ai-badge">AI</span></div><div class="p-desc" data-zh="集成告警降噪、根因分析与故障预测的一体化 AIOps 平台" data-en="An integrated AIOps platform unifying alert reduction, RCA, and failure prediction">集成告警降噪、根因分析与故障预测的一体化 AIOps 平台</div></span><span class="arrow">→</span></a>
-    <a href="projects/project-2.html" class="proj"><span class="p-num">002</span><span><div class="p-name"><span data-zh="运维知识库 Copilot" data-en="Ops Knowledge Copilot">运维知识库 Copilot</span><span class="ai-badge">AI</span></div><div class="p-desc" data-zh="本地化 LLM + RAG 私有部署，秒级检索文档与历史工单" data-en="On-prem LLM + RAG deployment, retrieving docs and past tickets in seconds">本地化 LLM + RAG 私有部署，秒级检索文档与历史工单</div></span><span class="arrow">→</span></a>
-    <a href="projects/project-3.html" class="proj"><span class="p-num">003</span><span><div class="p-name"><span data-zh="K8s 集群迁移" data-en="K8s Cluster Migration">K8s 集群迁移</span></div><div class="p-desc" data-zh="将单体服务平滑迁移至容器化平台，零停机" data-en="Smoothly migrated monolithic services to a containerized platform, zero downtime">将单体服务平滑迁移至容器化平台，零停机</div></span><span class="arrow">→</span></a>
-    <a href="projects/project-4.html" class="proj"><span class="p-num">004</span><span><div class="p-name"><span data-zh="监控告警体系" data-en="Monitoring & Alerting">监控告警体系</span></div><div class="p-desc" data-zh="基于 Prometheus + Grafana 构建全链路可观测性" data-en="Full-stack observability built on Prometheus + Grafana">基于 Prometheus + Grafana 构建全链路可观测性</div></span><span class="arrow">→</span></a>
-    <a href="projects/project-5.html" class="proj"><span class="p-num">005</span><span><div class="p-name"><span data-zh="CI/CD 自动化" data-en="CI/CD Automation">CI/CD 自动化</span></div><div class="p-desc" data-zh="从代码提交到生产部署的全流程流水线" data-en="End-to-end pipeline from commit to production deployment">从代码提交到生产部署的全流程流水线</div></span><span class="arrow">→</span></a>
-    <a href="projects/project-6.html" class="proj"><span class="p-num">006</span><span><div class="p-name"><span data-zh="基础设施即代码" data-en="Infrastructure as Code">基础设施即代码</span></div><div class="p-desc" data-zh="用 Terraform + Ansible 实现环境一键重建" data-en="One-click environment rebuilds with Terraform + Ansible">用 Terraform + Ansible 实现环境一键重建</div></span><span class="arrow">→</span></a>
+    <div class="work-layout">
+      <div>
+        <div class="wheel" id="projWheel">
+          <div class="wheel-track" id="wheelTrack">
+            <a href="projects/project-1.html" class="w-item"><span class="p-num">001</span><span><div class="p-name"><span data-zh="智能运维平台" data-en="Intelligent Ops Platform">智能运维平台</span><span class="ai-badge">AI</span></div><div class="p-desc" data-zh="集成告警降噪、根因分析与故障预测的一体化 AIOps 平台" data-en="An integrated AIOps platform unifying alert reduction, RCA, and failure prediction">集成告警降噪、根因分析与故障预测的一体化 AIOps 平台</div></span><span class="star-name">天枢</span><span class="arrow">→</span></a>
+            <a href="projects/project-2.html" class="w-item"><span class="p-num">002</span><span><div class="p-name"><span data-zh="运维知识库 Copilot" data-en="Ops Knowledge Copilot">运维知识库 Copilot</span><span class="ai-badge">AI</span></div><div class="p-desc" data-zh="本地化 LLM + RAG 私有部署，秒级检索文档与历史工单" data-en="On-prem LLM + RAG deployment, retrieving docs and past tickets in seconds">本地化 LLM + RAG 私有部署，秒级检索文档与历史工单</div></span><span class="star-name">天璇</span><span class="arrow">→</span></a>
+            <a href="projects/project-3.html" class="w-item"><span class="p-num">003</span><span><div class="p-name"><span data-zh="K8s 集群迁移" data-en="K8s Cluster Migration">K8s 集群迁移</span></div><div class="p-desc" data-zh="将单体服务平滑迁移至容器化平台，零停机" data-en="Smoothly migrated monolithic services to a containerized platform, zero downtime">将单体服务平滑迁移至容器化平台，零停机</div></span><span class="star-name">天玑</span><span class="arrow">→</span></a>
+            <a href="projects/project-4.html" class="w-item"><span class="p-num">004</span><span><div class="p-name"><span data-zh="监控告警体系" data-en="Monitoring & Alerting">监控告警体系</span></div><div class="p-desc" data-zh="基于 Prometheus + Grafana 构建全链路可观测性" data-en="Full-stack observability built on Prometheus + Grafana">基于 Prometheus + Grafana 构建全链路可观测性</div></span><span class="star-name">天权</span><span class="arrow">→</span></a>
+            <a href="projects/project-5.html" class="w-item"><span class="p-num">005</span><span><div class="p-name"><span data-zh="CI/CD 自动化" data-en="CI/CD Automation">CI/CD 自动化</span></div><div class="p-desc" data-zh="从代码提交到生产部署的全流程流水线" data-en="End-to-end pipeline from commit to production deployment">从代码提交到生产部署的全流程流水线</div></span><span class="star-name">玉衡</span><span class="arrow">→</span></a>
+            <a href="projects/project-6.html" class="w-item"><span class="p-num">006</span><span><div class="p-name"><span data-zh="基础设施即代码" data-en="Infrastructure as Code">基础设施即代码</span></div><div class="p-desc" data-zh="用 Terraform + Ansible 实现环境一键重建" data-en="One-click environment rebuilds with Terraform + Ansible">用 Terraform + Ansible 实现环境一键重建</div></span><span class="star-name">开阳</span><span class="arrow">→</span></a>
+          </div>
+        </div>
+        <div class="wheel-nav">
+          <button id="wheelPrev" aria-label="prev">↑</button>
+          <button id="wheelNext" aria-label="next">↓</button>
+          <span class="wheel-dots" id="wheelDots"></span>
+          <span class="wheel-count" id="wheelCount"></span>
+        </div>
+      </div>
+      <div class="proj-index">
+        <div class="pi-title" data-zh="全部项目" data-en="All Projects">全部项目</div>
+        <div class="pi-item" data-idx="0"><span class="pi-star">天枢</span><span class="pi-name" data-zh="智能运维平台" data-en="Intelligent Ops Platform">智能运维平台</span></div>
+        <div class="pi-item" data-idx="1"><span class="pi-star">天璇</span><span class="pi-name" data-zh="运维知识库 Copilot" data-en="Ops Knowledge Copilot">运维知识库 Copilot</span></div>
+        <div class="pi-item" data-idx="2"><span class="pi-star">天玑</span><span class="pi-name" data-zh="K8s 集群迁移" data-en="K8s Cluster Migration">K8s 集群迁移</span></div>
+        <div class="pi-item" data-idx="3"><span class="pi-star">天权</span><span class="pi-name" data-zh="监控告警体系" data-en="Monitoring & Alerting">监控告警体系</span></div>
+        <div class="pi-item" data-idx="4"><span class="pi-star">玉衡</span><span class="pi-name" data-zh="CI/CD 自动化" data-en="CI/CD Automation">CI/CD 自动化</span></div>
+        <div class="pi-item" data-idx="5"><span class="pi-star">开阳</span><span class="pi-name" data-zh="基础设施即代码" data-en="Infrastructure as Code">基础设施即代码</span></div>
+      </div>
+    </div>
   </section>
   <section id="contact" class="reveal">
     <div class="sec-label"><span>05</span> / <span data-zh="联系" data-en="Contact">联系</span></div>
@@ -192,6 +250,82 @@
 <script>
   const io=new IntersectionObserver((es)=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{threshold:.12});
   document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+</script>
+<script>
+/* ===== 项目轮盘 ===== */
+(function(){
+  const wheel=document.getElementById('projWheel');
+  if(!wheel)return;
+  const items=[...document.querySelectorAll('#wheelTrack .w-item')];
+  const dotsBox=document.getElementById('wheelDots');
+  const countEl=document.getElementById('wheelCount');
+  const N=items.length;
+  let active=0;
+  const STEP=66;         // 相邻项垂直间距(px)
+ 
+  // 圆点
+  items.forEach((_,i)=>{
+    const d=document.createElement('i');
+    d.addEventListener('click',()=>{active=i;render();});
+    dotsBox.appendChild(d);
+  });
+  const dots=[...dotsBox.children];
+ 
+  // 静态目录联动
+  const piItems=[...document.querySelectorAll('.proj-index .pi-item')];
+  piItems.forEach(el=>el.addEventListener('click',()=>{active=+el.dataset.idx;render();}));
+ 
+  function render(){
+    items.forEach((el,i)=>{
+      let off=i-active;
+      // 环绕：让距离最近（可正可负）
+      if(off> N/2) off-=N;
+      if(off<-N/2) off+=N;
+      const abs=Math.abs(off);
+      const y=off*STEP;
+      const rot=off*-18;                  // 轮盘倾斜
+      const scale=Math.max(0.7,1-abs*0.12);
+      const op=abs>2?0:Math.max(0,1-abs*0.34);
+      el.style.transform=`translateY(${y}px) translateY(-50%) rotateX(${rot}deg) scale(${scale})`;
+      el.style.opacity=op;
+      el.style.pointerEvents=(off===0?'auto':'none');
+      el.style.zIndex=String(50-abs);
+      el.classList.toggle('active',off===0);
+    });
+    dots.forEach((d,i)=>d.classList.toggle('on',i===active));
+    piItems.forEach((el,i)=>el.classList.toggle('on',i===active));
+    countEl.textContent=String(active+1).padStart(2,'0')+' / '+String(N).padStart(2,'0');
+  }
+  function go(dir){ active=(active+dir+N)%N; render(); }
+ 
+  document.getElementById('wheelPrev').addEventListener('click',()=>go(-1));
+  document.getElementById('wheelNext').addEventListener('click',()=>go(1));
+ 
+  // 滚轮拨动
+  let wlock=false;
+  wheel.addEventListener('wheel',e=>{
+    e.preventDefault();
+    if(wlock)return;wlock=true;setTimeout(()=>wlock=false,260);
+    go(e.deltaY>0?1:-1);
+  },{passive:false});
+ 
+  // 拖拽 / 触摸拨动
+  let dragY=null,moved=0;
+  const start=y=>{dragY=y;moved=0;wheel.classList.add('dragging');};
+  const move=y=>{ if(dragY===null)return; const dy=y-dragY;
+    if(Math.abs(dy)>STEP*0.7){ go(dy>0?-1:1); dragY=y; moved+=1; } };
+  const end=()=>{ dragY=null;wheel.classList.remove('dragging'); };
+  wheel.addEventListener('mousedown',e=>start(e.clientY));
+  window.addEventListener('mousemove',e=>move(e.clientY));
+  window.addEventListener('mouseup',end);
+  wheel.addEventListener('touchstart',e=>start(e.touches[0].clientY),{passive:true});
+  wheel.addEventListener('touchmove',e=>move(e.touches[0].clientY),{passive:true});
+  wheel.addEventListener('touchend',end);
+  // 拖动时阻止误触发链接跳转
+  items.forEach(el=>el.addEventListener('click',e=>{ if(moved>0){e.preventDefault();} }));
+ 
+  render();
+})();
 </script>
 <script>
 /* ===== 星图：逐颗点亮 → 连线 → 闪光 → 循环 ===== */
@@ -323,12 +457,12 @@
     if(t>=ripple && t<=ripple+FLASH){
       flash=Math.sin(((t-ripple)/FLASH)*Math.PI);
     }
-    // 远处重型巡洋舰（原创造型）+ 跃迁：金色波扩散时缩为光点，跃迁到另一侧，闪烁后显现
+    // 远处星球 + 星环 + 跃迁：金色波扩散时缩为光点，跃迁到另一侧，闪烁后显现
     (function(){
       const A=v=>'rgba('+ACCENT+','+v+')';
-      const scale=Math.min(W,H)*0.13;             // 舰体尺度
+      const scale=Math.min(W,H)*0.13;             // 星球尺度
       const yPos=H*0.74;                           // 下方
-      const leftX=W*0.50, rightX=W*0.86;           // 在右下区域内左右跃迁
+      const leftX=W*0.16, rightX=W*0.84;           // 关于画面中心对称的左右停留位
  
       // 跃迁阶段：在金色波 FLASH 窗口内完成
       // 起点侧 = jumpSide（本循环停留侧），终点侧 = 另一侧
@@ -444,6 +578,22 @@
         rim.addColorStop(1,A(0));
         ctx.beginPath();ctx.arc(ex,ey,er*1.08,0,6.29);ctx.fillStyle=rim;ctx.fill();
  
+        // 星球闪光特效（金色波到达时整球泛光 + 向外扩散光波）
+        if(ringGlow>0.02){
+          // 整球泛金光
+          const bloom=ctx.createRadialGradient(ex,ey,0,ex,ey,er*1.5);
+          bloom.addColorStop(0,'rgba('+WHITE+','+(ringGlow*0.35)+')');
+          bloom.addColorStop(0.4,A(ringGlow*0.4));
+          bloom.addColorStop(1,A(0));
+          ctx.beginPath();ctx.arc(ex,ey,er*1.5,0,6.29);ctx.fillStyle=bloom;ctx.fill();
+          // 球面受光侧高光增强
+          ctx.save();ctx.beginPath();ctx.arc(ex,ey,er,0,6.29);ctx.clip();
+          const hi=ctx.createRadialGradient(ex+L.x*er*0.5,ey+L.y*er*0.5,0,ex,ey,er);
+          hi.addColorStop(0,A(ringGlow*0.45));
+          hi.addColorStop(1,A(0));
+          ctx.fillStyle=hi;ctx.fillRect(ex-er,ey-er,er*2,er*2);
+          ctx.restore();
+        }
         // 星环 近侧（球前）
         ctx.save();ctx.translate(ex,ey);ctx.rotate(tilt);
         ctx.beginPath();ctx.ellipse(0,0,ringRx,ringRy,0,0,Math.PI,true);
@@ -458,6 +608,27 @@
  
         ctx.restore();
         ctx.globalAlpha=1;
+      }
+ 
+      // 从星球+星环整体向外扩散的金色光波（世界坐标，不随跃迁缩放）
+      {
+        const er2=scale*1.1, tilt2=-0.42, baseR=er2*1.95;
+        const wt=t-(ripple+180);       // 与星环点亮同步
+        if(wt>=0 && wt<FLASH+450){
+          // 闪光发生在停留侧（本循环的 fromX 位置）
+          const cx=fromX, cy=yPos;
+          const maxAdd=Math.max(W,H)*0.55;
+          for(let w=0;w<3;w++){
+            const prog=(wt-w*150)/(FLASH+350);
+            if(prog<=0||prog>1)continue;
+            const rad=baseR+easeOut(prog)*maxAdd;
+            const al=0.55*(1-prog)*(1-w*0.25);
+            ctx.save();ctx.translate(cx,cy);ctx.rotate(tilt2);
+            ctx.beginPath();ctx.ellipse(0,0,rad,rad*0.82,0,0,6.29);
+            ctx.strokeStyle=A(al);ctx.lineWidth=2.6-w*0.6;ctx.stroke();
+            ctx.restore();
+          }
+        }
       }
     })();
  
@@ -599,4 +770,3 @@
 </script>
 </body>
 </html>
- 
