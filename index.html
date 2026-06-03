@@ -1,6 +1,3 @@
-
-raw
-Index · HTML
 <!DOCTYPE html>
 <html lang="zh">
 <head>
@@ -262,7 +259,7 @@ Index · HTML
   const N=items.length;
   let active=0;
   const STEP=92;         // 相邻项垂直间距(px)
- 
+
   // 圆点
   items.forEach((_,i)=>{
     const d=document.createElement('i');
@@ -270,11 +267,11 @@ Index · HTML
     dotsBox.appendChild(d);
   });
   const dots=[...dotsBox.children];
- 
+
   // 静态目录联动
   const piItems=[...document.querySelectorAll('.proj-index .pi-item')];
   piItems.forEach(el=>el.addEventListener('click',()=>{active=+el.dataset.idx;render();}));
- 
+
   function render(){
     items.forEach((el,i)=>{
       let off=i-active;
@@ -297,10 +294,10 @@ Index · HTML
     countEl.textContent=String(active+1).padStart(2,'0')+' / '+String(N).padStart(2,'0');
   }
   function go(dir){ active=(active+dir+N)%N; render(); }
- 
+
   document.getElementById('wheelPrev').addEventListener('click',()=>go(-1));
   document.getElementById('wheelNext').addEventListener('click',()=>go(1));
- 
+
   // 滚轮拨动
   let wlock=false;
   wheel.addEventListener('wheel',e=>{
@@ -308,7 +305,7 @@ Index · HTML
     if(wlock)return;wlock=true;setTimeout(()=>wlock=false,260);
     go(e.deltaY>0?1:-1);
   },{passive:false});
- 
+
   // 拖拽 / 触摸拨动
   let dragY=null,moved=0;
   const start=y=>{dragY=y;moved=0;wheel.classList.add('dragging');};
@@ -323,7 +320,7 @@ Index · HTML
   wheel.addEventListener('touchend',end);
   // 拖动时阻止误触发链接跳转
   items.forEach(el=>el.addEventListener('click',e=>{ if(moved>0){e.preventDefault();} }));
- 
+
   render();
 })();
 </script>
@@ -335,7 +332,7 @@ Index · HTML
   const ACCENT='184,134,11';      // 暗金色 (dark goldenrod)
   const WHITE='245,222,160';       // 星核 暖金白
   let W,H,DPR,bgStars=[];
- 
+
   /* 北斗七星：按真实相对位置布点，铺开显示
      连线顺序 天枢→天璇→天玑→天权→玉衡→开阳→摇光 */
   const STARS=[
@@ -350,16 +347,16 @@ Index · HTML
   // 飞射路径：沿北斗顺序，每颗星经过一次
   const PATH=[0,1,2,3,4,5,6];
   const SEGMENTS=PATH.length-1;
- 
+
   const RED='225,72,72';                          // ping 失败/待确认（红）
- 
+
   // 时间参数（毫秒）
   const HOP=560;                                  // 光束飞过一段
   const PING_GAP=560;                             // 双ping节点：红→二次ping束飞回→金 的间隔
   const HOLD=1100;                                // 全部点亮后停留
   const FLASH=900;                                // 金色扩散闪光
   const FADE=750;                                 // 熄灭
- 
+
   // 每个循环随机挑选需要"ping 两次"的节点（2~3个，不含起点）
   let SCHED=[], TRAVEL=0, CYCLE=0, ripple=0;
   function buildSchedule(){
@@ -383,10 +380,10 @@ Index · HTML
     CYCLE=TRAVEL+HOLD+FLASH+FADE;
     ripple=TRAVEL+HOLD;                             // 金色扩散起始时刻
   }
- 
+
   // 星 -> 其调度项
   const schedOf=i=>SCHED.find(s=>s.star===i);
- 
+
   function rebuild(){
     DPR=Math.min(window.devicePixelRatio||1,2);
     W=window.innerWidth;H=window.innerHeight;
@@ -424,7 +421,7 @@ Index · HTML
     const a=c1.split(',').map(Number),b=c2.split(',').map(Number);
     return a.map((v,j)=>Math.round(v+(b[j]-v)*k)).join(',');
   }
- 
+
   buildSchedule();
   let jumpSide=0;        // 0=左, 1=右；每次跃迁后翻转
   // 星球跃迁停留位置（供星盘环节点点亮共用）
@@ -446,7 +443,7 @@ Index · HTML
     }
     const tg=ts*0.001;
     ctx.clearRect(0,0,W,H);
- 
+
     // —— 星盘环（取自传统星图：双层圆环 + 刻度 + 节气/方位标记，转动；光波扫到节点会亮）——
     (function(){
       const cx=W*0.5, cy=H*0.5;
@@ -467,13 +464,13 @@ Index · HTML
       const TERMS=['冬至','小寒','大寒','立春','雨水','惊蛰','春分','清明','谷雨','立夏','小满','芒种','夏至','小暑','大暑','立秋','处暑','白露','秋分','寒露','霜降','立冬','小雪','大雪'];
       ctx.save();
       ctx.translate(cx,cy);
- 
+
       // 静态基准双环（外圈）
       ctx.beginPath();ctx.arc(0,0,R,0,6.29);
       ctx.strokeStyle='rgba('+GOLD+',0.22)';ctx.lineWidth=1.2;ctx.stroke();
       ctx.beginPath();ctx.arc(0,0,R*0.93,0,6.29);
       ctx.strokeStyle='rgba('+GOLD+',0.16)';ctx.lineWidth=1;ctx.stroke();
- 
+
       // —— 外层（转动）：24 格刻度 + 节气字 + 节点 ——
       ctx.save();ctx.rotate(rotOut);
       for(let i=0;i<24;i++){
@@ -502,7 +499,7 @@ Index · HTML
         ctx.restore();
       }
       ctx.restore();
- 
+
       // —— 内层（反向转动）：内环 + 48 短刻度 + 28 宿分段点 ——
       ctx.save();ctx.rotate(rotIn);
       // 内双环
@@ -533,7 +530,7 @@ Index · HTML
         }
       }
       ctx.restore();
- 
+
       // 星球驻留的节点：持续点亮（跟随内环转动，与星球落点一致）
       if(parkedNode>=0){
         const ang=parkedNode/RING_NODES*6.29 + rotIn;
@@ -547,7 +544,7 @@ Index · HTML
         gg.addColorStop(1,'rgba('+BRIGHT+',0)');
         ctx.fillStyle=gg;ctx.fill();
       }
- 
+
       // 四方方位（东南西北，固定不转）
       const DIRS=[['北',0,-1],['南',0,1],['东',1,0],['西',-1,0]];
       ctx.fillStyle='rgba('+GOLD+',0.34)';
@@ -557,7 +554,7 @@ Index · HTML
       }
       ctx.restore();
     })();
- 
+
     // 背景碎星（近景闪烁 + 远景星尘）
     for(const b of bgStars){
       const tw=(Math.sin(tg*b.sp+b.ph)+1)/2;
@@ -570,7 +567,7 @@ Index · HTML
         ctx.fillStyle='rgba('+WHITE+','+(a*0.12)+')';ctx.fill();
       }
     }
- 
+
     // 阶段亮度 / 熄灭（提前计算，供地球星环使用）
     let globalFade=1;
     if(t>ripple+FLASH){
@@ -587,7 +584,7 @@ Index · HTML
       const yPos=H*0.74;                           // 下方
       const leftX=W*0.16, rightX=W*0.84;           // 关于画面中心对称的左右停留位
       leftX_=leftX; rightX_=rightX; yPos_=yPos;     // 供星盘环读取
- 
+
       // 星盘环中心与节点位置（与星盘环块一致；跟随内环转动 rotIn=-tg*0.085）
       const ringCx=W*0.5, ringCy=H*0.5, ringR=Math.min(W,H)*0.42;
       const ringRotIn=-tg*0.085;
@@ -600,14 +597,14 @@ Index · HTML
       // 本程：从哪飞到哪。atNode=true 表示这程终点是节点
       const fromPt = atNode ? restPt : nPt;
       const toPt   = atNode ? nPt    : restPt;
- 
+
       const jStart = ripple+120;                   // 开始收缩
       const jShrink= 280;                          // 收缩为光点
       const jTravel= 420;                          // 光点飞行
       const jBlink = 220;                          // 到达后闪烁
       const jGrow  = 320;                          // 重新显现
       const jEnd   = jStart+jShrink+jTravel+jBlink+jGrow;
- 
+
       const toNode = (toPt===nPt);    // 本程终点是否为节点
       const fromNode = (fromPt===nPt); // 本程起点是否为节点
       // 计算当前星球位置(2D)、缩放、光点强度
@@ -643,10 +640,10 @@ Index · HTML
       parkedNode = (toNode && t>jStart+jShrink+jTravel) ? curNodeIdx
                  : (fromNode && t<jStart) ? curNodeIdx
                  : -1;
- 
+
       const shipX=sx, yAnchorIsDynamic=true;       // 兼容下方引用
       const planetY=sy;
- 
+
       // 跃迁拖痕（光点飞行时拉一条光带）
       if(t>=jStart+jShrink && t<jStart+jShrink+jTravel){
         const k=easeInOut((t-(jStart+jShrink))/jTravel);
@@ -658,7 +655,7 @@ Index · HTML
         ctx.strokeStyle=g;ctx.lineWidth=2;
         ctx.beginPath();ctx.moveTo(tx,ty);ctx.lineTo(hx,hy);ctx.stroke();
       }
- 
+
       // 光点（收缩/飞行/显现期间的能量核心）
       if(pointGlow>0.01){
         const pr=(6+pointGlow*10);
@@ -671,7 +668,7 @@ Index · HTML
         ctx.beginPath();ctx.moveTo(sx-pr*1.6,sy);ctx.lineTo(sx+pr*1.6,sy);
         ctx.moveTo(sx,sy-pr*1.6);ctx.lineTo(sx,sy+pr*1.6);ctx.stroke();
       }
- 
+
       // —— 星球 + 星环（跃迁主体；金色波到达时星环点亮）——
       if(shipAlpha>0.02){
         const er=scale*1.1;                       // 星球半径
@@ -682,7 +679,7 @@ Index · HTML
         ctx.globalAlpha=shipAlpha;
         // 跃迁缩放：以星球中心为锚点整体缩放
         ctx.translate(ex,ey);ctx.scale(shipScale,shipScale);ctx.translate(-ex,-ey);
- 
+
         // 星环亮度：金色波到达时点亮（仅静止显现时可见）
         const ringDelay=180;
         let ringGlow=0;
@@ -690,7 +687,7 @@ Index · HTML
           ringGlow=Math.sin(((t-(ripple+ringDelay))/FLASH)*Math.PI);
         }
         const L={x:-0.5,y:-0.55,z:0.66};
- 
+
         // 星环 远侧（球后）
         ctx.save();ctx.translate(ex,ey);ctx.rotate(tilt);
         ctx.beginPath();ctx.ellipse(0,0,ringRx,ringRy,0,Math.PI,0,true);
@@ -698,7 +695,7 @@ Index · HTML
         ctx.beginPath();ctx.ellipse(0,0,ringRx*0.85,ringRy*0.85,0,Math.PI,0,true);
         ctx.strokeStyle=A(0.05+ringGlow*0.35);ctx.lineWidth=1.5+ringGlow*2;ctx.stroke();
         ctx.restore();
- 
+
         // 球体（带光照明暗 + 大气弧光）
         const body=ctx.createRadialGradient(ex+L.x*er*0.7,ey+L.y*er*0.7,er*0.05,ex,ey,er);
         body.addColorStop(0,'rgba(72,110,120,0.7)');
@@ -706,7 +703,7 @@ Index · HTML
         body.addColorStop(0.85,'rgba(18,30,38,0.58)');
         body.addColorStop(1,'rgba(10,16,22,0.52)');
         ctx.beginPath();ctx.arc(ex,ey,er,0,6.29);ctx.fillStyle=body;ctx.fill();
- 
+
         // 球面纹理（经纬带）
         ctx.save();ctx.beginPath();ctx.arc(ex,ey,er,0,6.29);ctx.clip();
         ctx.lineWidth=1;const GL='rgba(120,170,180,0.06)';
@@ -720,14 +717,14 @@ Index · HTML
         lit.addColorStop(0.5,A(0));
         ctx.fillStyle=lit;ctx.fillRect(ex-er,ey-er,er*2,er*2);
         ctx.restore();
- 
+
         // 大气弧光（金色波随之增亮）
         const rim=ctx.createRadialGradient(ex,ey,er*0.93,ex,ey,er*1.08);
         rim.addColorStop(0,A(0));
         rim.addColorStop(0.5,A(0.12+ringGlow*0.35));
         rim.addColorStop(1,A(0));
         ctx.beginPath();ctx.arc(ex,ey,er*1.08,0,6.29);ctx.fillStyle=rim;ctx.fill();
- 
+
         // 星球闪光特效（金色波到达时整球泛光 + 向外扩散光波）
         if(ringGlow>0.02){
           // 整球泛金光
@@ -755,11 +752,11 @@ Index · HTML
           ctx.strokeStyle='rgba('+WHITE+','+(ringGlow*0.25)+')';ctx.lineWidth=1;ctx.stroke();
         }
         ctx.restore();
- 
+
         ctx.restore();
         ctx.globalAlpha=1;
       }
- 
+
       // 从星球+星环整体向外扩散的金色光波（世界坐标，不随跃迁缩放）
       {
         const er2=scale*1.1, tilt2=-0.42, baseR=er2*1.95;
@@ -781,7 +778,7 @@ Index · HTML
         }
       }
     })();
- 
+
     // 光束当前所在段（依据 SCHED 的 arrive 时刻）
     let segIdx=-1, segT=0;
     if(t<TRAVEL){
@@ -794,7 +791,7 @@ Index · HTML
       }
       if(segIdx<0 && t>=SCHED[SEGMENTS].arrive) segIdx=SEGMENTS; // 已抵末星
     }
- 
+
     // 已连好的段 + 当前飞行段
     ctx.lineWidth=1.2;
     for(let k=0;k<SEGMENTS;k++){
@@ -809,7 +806,7 @@ Index · HTML
       ctx.strokeStyle='rgba('+ACCENT+','+((0.30+flash*0.5)*globalFade)+')';
       ctx.beginPath();ctx.moveTo(ax,ay);ctx.lineTo(bx,by);ctx.stroke();
     }
- 
+
     // 飞行光束头部
     if(t<TRAVEL && segIdx>=0 && segIdx<SEGMENTS){
       const A=STARS[PATH[segIdx]],B=STARS[PATH[segIdx+1]];
@@ -826,7 +823,7 @@ Index · HTML
       ctx.beginPath();ctx.arc(hx,hy,2.8,0,6.29);ctx.fillStyle='rgba('+WHITE+',1)';ctx.fill();
       ctx.beginPath();ctx.arc(hx,hy,7,0,6.29);ctx.fillStyle='rgba('+ACCENT+',0.25)';ctx.fill();
     }
- 
+
     // 双ping节点的二次 ping：从上一颗星再射出一道光束
     if(t<TRAVEL){
       for(let k=1;k<SCHED.length;k++){
@@ -851,7 +848,7 @@ Index · HTML
         }
       }
     }
- 
+
     // 星点：被 ping 后先红(双ping节点)→转金
     for(let i=0;i<STARS.length;i++){
       const sc=schedOf(i); if(!sc)continue;
@@ -862,12 +859,12 @@ Index · HTML
       const tw=(Math.sin(tg*1.8+i)+1)/2;
       const lit=p*globalFade;
       const mag=s.m||1;
- 
+
       // 颜色：goldAt 之前红，之后渐变到金
       let col;
       if(t<sc.goldAt) col=RED;
       else col=mix(RED,ACCENT,Math.min(1,(t-sc.goldAt)/300));
- 
+
       const baseR=(1.6+lit*1.4)*mag;
       const glowR=(7+tw*5+flash*14)*lit*mag;
       const a1=(0.4+tw*0.3+flash*0.6)*lit;
@@ -878,7 +875,7 @@ Index · HTML
       const core=(t<sc.goldAt)?'255,200,200':WHITE;
       ctx.beginPath();ctx.arc(x,y,baseR,0,6.29);
       ctx.fillStyle='rgba('+core+','+((0.8+flash*0.2)*lit)+')';ctx.fill();
- 
+
       // ping 扩散环：抵达瞬间红环；双ping节点在 goldAt 再来个金环
       const rings=[{at:sc.arrive,c:sc.twice?RED:ACCENT}];
       if(sc.twice) rings.push({at:sc.goldAt,c:ACCENT});
@@ -891,7 +888,7 @@ Index · HTML
         }
       }
     }
- 
+
     // 终局金色扩散波（从星图中心向外）
     if(t>=ripple && t<ripple+FLASH){
       const r=(t-ripple)/FLASH;
@@ -910,7 +907,7 @@ Index · HTML
       gg.addColorStop(1,'rgba('+ACCENT+',0)');
       ctx.beginPath();ctx.arc(cx,cy,maxR*0.5,0,6.29);ctx.fillStyle=gg;ctx.fill();
     }
- 
+
     requestAnimationFrame(frame);
   }
   rebuild();
