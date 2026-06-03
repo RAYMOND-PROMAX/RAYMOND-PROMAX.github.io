@@ -1,3 +1,6 @@
+
+raw
+Index · HTML
 <!DOCTYPE html>
 <html lang="zh">
 <head>
@@ -336,13 +339,13 @@
   /* 北斗七星：按真实相对位置布点，铺开显示
      连线顺序 天枢→天璇→天玑→天权→玉衡→开阳→摇光 */
   const STARS=[
-    {x:.18,y:.24,m:1.4},  //0 天枢 Dubhe（勺口上）
-    {x:.24,y:.46,m:1.2},  //1 天璇 Merak（勺口下）
-    {x:.40,y:.49,m:1.1},  //2 天玑 Phecda
-    {x:.45,y:.30,m:1.0},  //3 天权 Megrez（最暗）
-    {x:.60,y:.23,m:1.3},  //4 玉衡 Alioth（柄起）
-    {x:.74,y:.26,m:1.2},  //5 开阳 Mizar
-    {x:.86,y:.16,m:1.4}   //6 摇光 Alkaid（柄端）
+    {x:.18,y:.42,m:1.4},  //0 天枢 Dubhe（勺口上）
+    {x:.24,y:.64,m:1.2},  //1 天璇 Merak（勺口下）
+    {x:.40,y:.67,m:1.1},  //2 天玑 Phecda
+    {x:.45,y:.48,m:1.0},  //3 天权 Megrez（最暗）
+    {x:.60,y:.41,m:1.3},  //4 玉衡 Alioth（柄起）
+    {x:.74,y:.44,m:1.2},  //5 开阳 Mizar
+    {x:.86,y:.34,m:1.4}   //6 摇光 Alkaid（柄端）
   ];
   // 飞射路径：沿北斗顺序，每颗星经过一次
   const PATH=[0,1,2,3,4,5,6];
@@ -446,7 +449,7 @@
  
     // —— 星盘环（取自传统星图：双层圆环 + 刻度 + 节气/方位标记，转动；光波扫到节点会亮）——
     (function(){
-      const cx=W*0.5, cy=H*0.34;
+      const cx=W*0.5, cy=H*0.5;
       const R=Math.min(W,H)*0.42;                 // 外环半径
       if(R<60) return;
       const GOLD='184,134,11';
@@ -531,9 +534,9 @@
       }
       ctx.restore();
  
-      // 星球驻留的节点：持续点亮（静态位置，与星球落点一致）
+      // 星球驻留的节点：持续点亮（跟随内环转动，与星球落点一致）
       if(parkedNode>=0){
-        const ang=parkedNode/RING_NODES*6.29;
+        const ang=parkedNode/RING_NODES*6.29 + rotIn;
         const px2=Math.cos(ang)*R*0.67, py2=Math.sin(ang)*R*0.67;
         const pulse=0.7+0.3*Math.sin(tg*3);
         ctx.beginPath();ctx.arc(px2,py2,3.2,0,6.29);
@@ -585,11 +588,12 @@
       const leftX=W*0.16, rightX=W*0.84;           // 关于画面中心对称的左右停留位
       leftX_=leftX; rightX_=rightX; yPos_=yPos;     // 供星盘环读取
  
-      // 星盘环中心与节点位置（与星盘环块一致）
-      const ringCx=W*0.5, ringCy=H*0.34, ringR=Math.min(W,H)*0.42;
+      // 星盘环中心与节点位置（与星盘环块一致；跟随内环转动 rotIn=-tg*0.085）
+      const ringCx=W*0.5, ringCy=H*0.5, ringR=Math.min(W,H)*0.42;
+      const ringRotIn=-tg*0.085;
       function nodePt(i){
-        const ang=i/RING_NODES*6.29 + (tg*0.085*-1)*0; // 节点静态取位（不跟随内环转动，避免飘）
-        return {x:ringCx+Math.cos(i/RING_NODES*6.29)*ringR*0.67, y:ringCy+Math.sin(i/RING_NODES*6.29)*ringR*0.67};
+        const ang=i/RING_NODES*6.29 + ringRotIn;   // 跟随内环旋转
+        return {x:ringCx+Math.cos(ang)*ringR*0.67, y:ringCy+Math.sin(ang)*ringR*0.67};
       }
       const restPt = {x:(jumpSide?rightX:leftX), y:yPos};
       const nPt = nodePt(curNodeIdx);
@@ -891,7 +895,7 @@
     // 终局金色扩散波（从星图中心向外）
     if(t>=ripple && t<ripple+FLASH){
       const r=(t-ripple)/FLASH;
-      const cx=W*0.5, cy=H*0.32;
+      const cx=W*0.5, cy=H*0.5;
       const maxR=Math.hypot(W,H)*0.6;
       for(let w=0;w<2;w++){
         const rr=easeOut(Math.min(1,r*1.3-w*0.18))*maxR;
