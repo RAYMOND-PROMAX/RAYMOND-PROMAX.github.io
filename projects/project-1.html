@@ -48,10 +48,26 @@
   .res .num{font-family:var(--mono);font-size:26px;color:var(--accent);font-weight:700;line-height:1}
   .res .lab{font-size:12px;color:var(--muted);margin-top:10px}
   .shot{margin-top:8px;border:1px dashed var(--line);border-radius:4px;height:220px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-family:var(--mono);font-size:13px;text-align:center;padding:20px}
+  .hero-results{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin:34px 0 10px;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+  .hero-results .hr{padding:26px 20px;border-right:1px solid var(--line);background:rgba(45,212,191,.03)}
+  .hero-results .hr:last-child{border-right:none}
+  .hero-results .n{font-family:var(--mono);font-size:38px;font-weight:700;color:var(--accent);line-height:1}
+  .hero-results .l{font-size:13px;color:var(--muted);margin-top:12px}
+  .figure{margin:8px 0 4px;border:1px solid var(--line);border-radius:8px;background:rgba(45,212,191,.03);padding:30px 26px}
+  .figure-cap{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:16px;text-align:center;letter-spacing:.06em}
   .pager{display:flex;justify-content:space-between;padding-top:36px;font-family:var(--mono);font-size:14px}
   .pager a{color:var(--muted);text-decoration:none;transition:color .25s}
   .pager a:hover{color:var(--accent)}
-  @media(max-width:600px){.results{grid-template-columns:1fr}}
+  @media(max-width:600px){.results{grid-template-columns:1fr}.hero-results{grid-template-columns:1fr}.hero-results .hr{border-right:none;border-bottom:1px solid var(--line)}}
+  /* —— Demo 充能环入口 —— */
+  .demo-entry{display:flex;flex-direction:column;align-items:center;gap:18px;padding:48px 0 8px}
+  .demo-hint{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase}
+  .charge{position:relative;width:170px;height:170px;cursor:pointer;user-select:none;outline:none}
+  .charge canvas{position:absolute;inset:0;width:100%;height:100%}
+  .charge .core{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;z-index:2;pointer-events:none}
+  .charge .core .pwr{font-family:var(--mono);font-size:14px;color:var(--accent);letter-spacing:.1em}
+  .charge .core .sub{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:5px}
+  .charge:hover .core .pwr{text-shadow:0 0 10px var(--accent)}
 </style>
 </head>
 <body>
@@ -65,7 +81,7 @@
   <div class="head">
     <div class="crumb">Project · 001 · 天枢</div>
     <h1>智能运维平台<span class="ai-badge">AI</span></h1>
-    <p class="lede">集成告警降噪、根因分析与故障预测的一体化 AIOps 平台，让运维从"被动救火"走向"主动预防"。</p>
+    <p class="lede">让监控学会思考——把"告警风暴"收敛成"一条结论"的智能运维平台。</p>
     <div class="meta">
       <div><span class="k">角色</span><span class="v">核心开发 / 平台负责人</span></div>
       <div><span class="k">周期</span><span class="v">2024 — 2025</span></div>
@@ -74,49 +90,35 @@
   </div>
 
   <section>
-    <div class="sec-label"><span>01</span> / 背景与挑战</div>
-    <p class="body">随着业务规模扩张，监控系统每天产生数万条告警，其中大量是重复、抖动或由同一根因衍生的"告警风暴"。值班工程师疲于在海量告警中辨别真正重要的问题，平均故障定位时间长、误报疲劳严重，深夜被无效告警叫醒成了常态。</p>
-    <p class="body">团队需要的不再是"更多监控"，而是让监控"更聪明"——能自动过滤噪声、定位根因，甚至在故障发生前给出预警。这就是这个平台立项的初衷。</p>
+    <div class="sec-label"><span>01</span> / 起因</div>
+    <p class="body">公司业务进入快速扩张期，服务规模从几十个增长到数百个，监控告警量随之飙升至日均数万条。但问题不在"量"，而在<strong>信噪比</strong>——一次数据库抖动会瞬间引发上百条衍生告警，值班工程师很难在几分钟内辨认出真正的根因。MTTR 居高不下，"告警疲劳"让团队逐渐对告警麻木，真正的事故反而被淹没。监控越做越多，却越来越不可信。</p>
   </section>
 
   <section>
-    <div class="sec-label"><span>02</span> / 我做了什么</div>
+    <div class="sec-label"><span>02</span> / 经过</div>
+    <p class="body">团队评估了商业 AIOps 产品、纯开源方案与自研三条路，最终选择「开源监控栈为底座 + 自研智能分析层」：复用成熟的采集能力，把最核心的降噪与根因逻辑握在自己手里。</p>
+    <p class="body" style="color:var(--accent)">我在项目中的贡献：</p>
     <ul class="list">
-      <li>设计并搭建平台整体架构，打通监控（Prometheus）、日志（ELK）、链路追踪的数据，统一接入实时处理管道。</li>
-      <li>实现<strong>告警降噪引擎</strong>：基于时间窗口聚类与相似度算法，对同源、重复、抖动告警自动合并去重，大幅压缩告警量。</li>
-      <li>构建<strong>根因分析</strong>模块：结合服务拓扑与告警时序关系，自动推断最可能的根因节点，将一连串衍生告警归并到一个事件。</li>
-      <li>引入<strong>时序预测</strong>模型对磁盘、内存、连接数等关键指标做趋势预测，在容量耗尽前主动预警。</li>
-      <li>对接 IM 与值班系统，告警分级推送，并沉淀处置记录形成可复用的运维知识。</li>
+      <li><strong>主导整体架构设计</strong>，确定"数据底座 + 三大引擎"的分层方案，打通指标、日志、链路三类数据接入。</li>
+      <li><strong>独立实现告警降噪引擎</strong>：基于时间窗口聚类与相似度算法，将同源、重复、抖动告警自动合并，一场风暴收敛为一个事件。</li>
+      <li><strong>攻克根因分析难点</strong>：在缺乏完整服务拓扑的前提下，从调用链路与告警时序共现关系中动态推断依赖、回溯根因——这正是多数现成方案落地翻车之处。</li>
+      <li>设计故障预测模块，对关键资源指标做时序预测，并推动平台在值班团队的落地与迭代。</li>
     </ul>
   </section>
 
-  <section>
-    <div class="sec-label"><span>03</span> / 技术栈</div>
-    <div class="stack">
-      <span class="chip">Python</span>
-      <span class="chip">Kubernetes</span>
-      <span class="chip">Prometheus</span>
-      <span class="chip">Grafana</span>
-      <span class="chip">Kafka</span>
-      <span class="chip">ELK</span>
-      <span class="chip">Redis</span>
-      <span class="chip">PostgreSQL</span>
-      <span class="chip">scikit-learn</span>
-    </div>
+  <div class="hero-results">
+    <div class="hr"><div class="n">-70%</div><div class="l">告警总量下降</div></div>
+    <div class="hr"><div class="n">-60%</div><div class="l">平均故障定位时间</div></div>
+    <div class="hr"><div class="n">200+</div><div class="l">接入服务 / 节点</div></div>
+  </div>
+  <section style="padding-top:14px">
+    <div class="sec-label"><span>03</span> / 成果</div>
+    <p class="body">平台上线后，无效告警被大幅过滤，值班工程师得以聚焦真正重要的问题；根因分析将一连串衍生告警归并为单一事件，显著缩短了故障定位时间；故障预测让多起潜在容量问题在发生前被拦截，运维真正从"被动救火"走向"主动预防"。</p>
   </section>
 
   <section>
-    <div class="sec-label"><span>04</span> / 成果</div>
-    <div class="results">
-      <div class="res"><div class="num">-70%</div><div class="lab">告警总量下降</div></div>
-      <div class="res"><div class="num">-60%</div><div class="lab">平均故障定位时间</div></div>
-      <div class="res"><div class="num">200+</div><div class="lab">接入服务 / 节点</div></div>
-    </div>
-  </section>
-
-  <section>
-    <div class="sec-label"><span>05</span> / 架构示意</div>
-    <div class="shot" style="height:auto;padding:24px;display:block">
+    <div class="sec-label"><span>04</span> / 项目框架</div>
+    <div class="figure">
       <svg viewBox="0 0 660 230" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;font-family:'Space Mono',monospace">
         <defs>
           <marker id="ar" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
@@ -129,7 +131,6 @@
             .ln{stroke:#2dd4bf;stroke-opacity:.45;stroke-width:1;marker-end:url(#ar)}
           </style>
         </defs>
-        <!-- sources -->
         <rect class="bx" x="10" y="20" width="120" height="38" rx="4"/>
         <text class="tx" x="70" y="38" text-anchor="middle">Metrics</text>
         <text class="tl" x="70" y="51" text-anchor="middle">Prometheus</text>
@@ -139,11 +140,9 @@
         <rect class="bx" x="10" y="172" width="120" height="38" rx="4"/>
         <text class="tx" x="70" y="190" text-anchor="middle">Tracing</text>
         <text class="tl" x="70" y="203" text-anchor="middle">链路追踪</text>
-        <!-- pipeline -->
         <rect class="bx" x="200" y="96" width="120" height="38" rx="4"/>
         <text class="tx" x="260" y="114" text-anchor="middle">采集管道</text>
         <text class="tl" x="260" y="127" text-anchor="middle">Kafka</text>
-        <!-- engine -->
         <rect class="bx" x="390" y="20" width="130" height="38" rx="4"/>
         <text class="tx" x="455" y="38" text-anchor="middle">告警降噪</text>
         <text class="tl" x="455" y="51" text-anchor="middle">聚类去重</text>
@@ -153,11 +152,9 @@
         <rect class="bx" x="390" y="172" width="130" height="38" rx="4"/>
         <text class="tx" x="455" y="190" text-anchor="middle">故障预测</text>
         <text class="tl" x="455" y="203" text-anchor="middle">时序模型</text>
-        <!-- output -->
         <rect class="bx" x="560" y="96" width="90" height="38" rx="4"/>
         <text class="tx" x="605" y="114" text-anchor="middle">告警/自愈</text>
         <text class="tl" x="605" y="127" text-anchor="middle">IM 推送</text>
-        <!-- lines -->
         <line class="ln" x1="130" y1="39" x2="196" y2="108"/>
         <line class="ln" x1="130" y1="115" x2="196" y2="115"/>
         <line class="ln" x1="130" y1="191" x2="196" y2="122"/>
@@ -168,6 +165,33 @@
         <line class="ln" x1="520" y1="115" x2="556" y2="115"/>
         <line class="ln" x1="520" y1="188" x2="556" y2="122"/>
       </svg>
+      <div class="figure-cap">数据源 → 采集管道 → 三大智能引擎 → 告警 / 自愈输出</div>
+    </div>
+    <div class="stack" style="margin-top:24px">
+      <span class="chip">Python</span>
+      <span class="chip">Kubernetes</span>
+      <span class="chip">Prometheus</span>
+      <span class="chip">Grafana</span>
+      <span class="chip">Kafka</span>
+      <span class="chip">ELK</span>
+      <span class="chip">Redis</span>
+      <span class="chip">PostgreSQL</span>
+      <span class="chip">scikit-learn</span>
+    </div>
+  </section>
+
+  <section style="border-bottom:none">
+    <div class="sec-label"><span>05</span> / 在线 Demo</div>
+    <div class="demo-entry">
+      <div class="charge" id="chargeRing" tabindex="0" role="button" aria-label="启动并进入 Demo"
+           data-demo="https://example.com/demo">
+        <canvas id="chargeCanvas"></canvas>
+        <div class="core">
+          <div class="pwr" id="chargeText">▶ 启动</div>
+          <div class="sub" id="chargeSub">点击充能进入</div>
+        </div>
+      </div>
+      <div class="demo-hint">点击充能环 · 充满后进入演示</div>
     </div>
   </section>
 
@@ -176,5 +200,122 @@
     <a href="../index.html#contact">联系我 →</a>
   </div>
 </div>
+<script>
+(function(){
+  const ring=document.getElementById('chargeRing');
+  if(!ring)return;
+  const cv=document.getElementById('chargeCanvas');
+  const ctx=cv.getContext('2d');
+  const txt=document.getElementById('chargeText');
+  const sub=document.getElementById('chargeSub');
+  const GREEN='45,212,191', GOLD='212,175,55', WHITE='235,247,243';
+
+  /* 待机：小环绿色呼吸灯 + 环外四散星 */
+  let W,H,cx,cy,R;
+  function size(){
+    const DPR=Math.min(window.devicePixelRatio||1,2);
+    W=ring.clientWidth;H=ring.clientHeight;
+    cv.width=W*DPR;cv.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0);
+    cx=W/2;cy=H/2;R=Math.min(W,H)/2-12;
+  }
+  size();window.addEventListener('resize',size);
+  const N=36, stars=[];
+  for(let i=0;i<N;i++){const ang=Math.random()*6.28,d=R*(1.3+Math.random()*1.6);
+    stars.push({ang,d,r:Math.random()*1.5+0.6,ph:Math.random()*6.28,sp:0.6+Math.random()*1.6});}
+  let idle=true;
+  function idleFrame(ts){
+    if(!idle)return;const time=ts*0.001;ctx.clearRect(0,0,W,H);
+    for(const s of stars){const tw=(Math.sin(time*s.sp+s.ph)+1)/2;
+      const x=cx+Math.cos(s.ang)*s.d,y=cy+Math.sin(s.ang)*s.d;
+      ctx.beginPath();ctx.arc(x,y,s.r,0,6.28);ctx.fillStyle='rgba('+GREEN+','+(0.25+tw*0.5)+')';ctx.fill();}
+    const br=0.4+0.4*(Math.sin(time*1.8)+1)/2;
+    ctx.lineWidth=3;ctx.beginPath();ctx.arc(cx,cy,R,0,6.28);
+    ctx.strokeStyle='rgba('+GREEN+','+br+')';ctx.shadowColor='rgba('+GREEN+',0.8)';ctx.shadowBlur=12*br;
+    ctx.stroke();ctx.shadowBlur=0;
+    requestAnimationFrame(idleFrame);
+  }
+  requestAnimationFrame(idleFrame);
+
+  /* 点击：全屏充能 —— 整屏星星汇聚、环绿转金、全屏炸开 */
+  function mix(c1,c2,k){const a=c1.split(',').map(Number),b=c2.split(',').map(Number);return a.map((v,j)=>Math.round(v+(b[j]-v)*k)).join(',');}
+  const easeIn=t=>t*t, easeOut=t=>1-Math.pow(1-t,3);
+  const DUR=3000, BURST=900;
+
+  function start(){
+    if(!idle)return; idle=false;
+    txt.textContent='充能中';sub.textContent='00%';
+    const ov=document.createElement('canvas');
+    ov.style.cssText='position:fixed;inset:0;z-index:9999;width:100vw;height:100vh;background:rgba(10,14,18,.92);transition:background .3s';
+    document.body.appendChild(ov);
+    const c=ov.getContext('2d');
+    let FW,FH,FCX,FCY,FR;
+    function fsize(){
+      const dpr=Math.min(window.devicePixelRatio||1,2);
+      FW=window.innerWidth;FH=window.innerHeight;
+      ov.width=FW*dpr;ov.height=FH*dpr;c.setTransform(dpr,0,0,dpr,0,0);
+      FCX=FW/2;FCY=FH/2;FR=Math.min(FW,FH)*0.15;     // 中心环（适中，不随屏过大）
+    }
+    fsize();window.addEventListener('resize',fsize);
+
+    // 整屏散布的星星（铺满全屏宽高），向中心环汇聚
+    const FN=260, fs=[];
+    for(let i=0;i<FN;i++){
+      fs.push({ox:Math.random()*FW, oy:Math.random()*FH,    // 全屏任意位置
+        tang:Math.random()*6.28, tr:Math.random()*FR*0.85,
+        r:Math.random()*1.8+0.6, ph:Math.random()*6.28});
+    }
+    let state='charging', t0=performance.now();
+    function frame(ts){
+      const time=ts*0.001;let prog=0,burstK=0;
+      if(state==='charging'){
+        prog=Math.min(1,(ts-t0)/DUR);
+        sub.textContent=String(Math.floor(prog*100)).padStart(2,'0')+'%';
+        if(prog>=1){state='burst';t0=ts;txt.textContent='✓ 完毕';sub.textContent='进入中…';}
+      } else { burstK=Math.min(1,(ts-t0)/BURST);prog=1;
+        if(burstK>=1){ window.location.href=ring.dataset.demo; return; } }
+      const col=mix(GREEN,GOLD,prog);
+      c.clearRect(0,0,FW,FH);
+      // 整屏星星
+      for(const s of fs){
+        const ix=FCX+Math.cos(s.tang)*s.tr, iy=FCY+Math.sin(s.tang)*s.tr;
+        let x,y,a;
+        if(state==='charging'){const k=easeIn(prog);
+          x=s.ox+(ix-s.ox)*k;y=s.oy+(iy-s.oy)*k;a=0.4+0.5*Math.sin(time*4+s.ph);
+        } else {
+          const bx=FCX+Math.cos(s.tang)*(s.tr+burstK*Math.max(FW,FH));
+          const by=FCY+Math.sin(s.tang)*(s.tr+burstK*Math.max(FW,FH));
+          x=ix+(bx-ix)*easeOut(burstK);y=iy+(by-iy)*easeOut(burstK);a=1-burstK;
+        }
+        c.beginPath();c.arc(x,y,s.r,0,6.28);c.fillStyle='rgba('+col+','+a+')';c.fill();
+      }
+      // 中心环
+      c.lineWidth=4;
+      c.beginPath();c.arc(FCX,FCY,FR,0,6.28);c.strokeStyle='rgba(125,139,151,0.2)';c.stroke();
+      c.beginPath();c.arc(FCX,FCY,FR,-Math.PI/2,-Math.PI/2+prog*6.283);
+      c.strokeStyle='rgba('+col+',0.95)';c.lineCap='round';
+      c.shadowColor='rgba('+col+',0.9)';c.shadowBlur=20;c.stroke();c.shadowBlur=0;c.lineCap='butt';
+      const gl=c.createRadialGradient(FCX,FCY,0,FCX,FCY,FR*1.4);
+      gl.addColorStop(0,'rgba('+col+','+(0.12+prog*0.3)+')');gl.addColorStop(1,'rgba('+col+',0)');
+      c.beginPath();c.arc(FCX,FCY,FR*1.4,0,6.28);c.fillStyle=gl;c.fill();
+      // 全屏炸开
+      if(state==='burst'){
+        ov.style.background='rgba(10,14,18,'+(0.92*(1-burstK))+')';
+        for(let w=0;w<3;w++){const k=Math.min(1,burstK*1.25-w*0.12);if(k<=0)continue;
+          c.beginPath();c.arc(FCX,FCY,FR+easeOut(k)*Math.max(FW,FH),0,6.28);
+          c.strokeStyle='rgba('+GOLD+','+(0.7*(1-k))+')';c.lineWidth=6-w*1.8;c.stroke();}
+        const fg=c.createRadialGradient(FCX,FCY,0,FCX,FCY,Math.max(FW,FH)*burstK);
+        fg.addColorStop(0,'rgba('+WHITE+','+(0.7*(1-burstK))+')');
+        fg.addColorStop(0.35,'rgba('+GOLD+','+(0.5*(1-burstK))+')');
+        fg.addColorStop(1,'rgba('+GOLD+',0)');
+        c.beginPath();c.arc(FCX,FCY,Math.max(FW,FH)*burstK,0,6.28);c.fillStyle=fg;c.fill();
+      }
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+  ring.addEventListener('click',start);
+  ring.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();start();}});
+})();
+</script>
 </body>
 </html>
