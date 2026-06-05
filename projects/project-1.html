@@ -18,6 +18,7 @@
   body{background:var(--bg);color:var(--fg);font-family:var(--sans);font-weight:300;line-height:1.7;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
   body::before{content:"";position:fixed;inset:0;z-index:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(ellipse 80% 60% at 50% 0%,#000 30%,transparent 75%);opacity:.5;}
   .glow{position:fixed;top:-20%;left:50%;transform:translateX(-50%);width:700px;height:700px;z-index:0;pointer-events:none;background:radial-gradient(circle,var(--accent-dim),transparent 60%);filter:blur(40px);}
+  #bgRain{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;pointer-events:none;opacity:.28}
   .wrap{position:relative;z-index:1;max-width:760px;margin:0 auto;padding:0 28px 80px}
   nav{display:flex;justify-content:space-between;align-items:center;padding:32px 0;font-family:var(--mono);font-size:13px;}
   nav .logo{color:var(--accent);font-weight:700;letter-spacing:.05em;text-decoration:none}
@@ -60,7 +61,7 @@
   .pager a:hover{color:var(--accent)}
   @media(max-width:600px){.results{grid-template-columns:1fr}.hero-results{grid-template-columns:1fr}.hero-results .hr{border-right:none;border-bottom:1px solid var(--line)}}
   /* —— Demo 充能环入口 —— */
-  .demo-entry{display:flex;flex-direction:column;align-items:center;gap:18px;padding:48px 0 8px}
+  .demo-entry{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:18px;padding:54px 0 40px}
   .demo-hint{font-family:var(--mono);font-size:12px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase}
   .charge{position:relative;width:170px;height:170px;cursor:pointer;user-select:none;outline:none}
   .charge canvas{position:absolute;inset:0;width:100%;height:100%}
@@ -71,6 +72,7 @@
 </style>
 </head>
 <body>
+<canvas id="bgRain"></canvas>
 <div class="glow"></div>
 <div class="wrap">
   <nav>
@@ -184,7 +186,7 @@
     <div class="sec-label"><span>05</span> / 在线 Demo</div>
     <div class="demo-entry">
       <div class="charge" id="chargeRing" tabindex="0" role="button" aria-label="启动并进入 Demo"
-           data-demo="https://example.com/demo">
+           data-demo="https://github.com/RAYMOND-PROMAX">
         <canvas id="chargeCanvas"></canvas>
         <div class="core">
           <div class="pwr" id="chargeText">▶ 启动</div>
@@ -201,6 +203,69 @@
   </div>
 </div>
 <script>
+/* 数字流的雨（全页面背景）——可冻结、可交出所有字符位置 */
+(function(){
+  const cv=document.getElementById('bgRain');
+  if(!cv)return;
+  const ctx=cv.getContext('2d');
+  let W,H,cols,fontSize,columns,frozen=false;
+  const chars='01<>{}[]/\\|=+-*#$%&アカサタナ0123456789'.split('');
+  const TRAIL=14;                         // 每列保留的字符数（拖尾）
+  function rc(){return chars[(Math.random()*chars.length)|0];}
+  function size(){
+    const dpr=Math.min(window.devicePixelRatio||1,2);
+    W=window.innerWidth;H=window.innerHeight;
+    cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+    fontSize=15;cols=Math.floor(W/fontSize);
+    columns=new Array(cols).fill(0).map(()=>({
+      head:Math.random()*-H/fontSize,
+      glyphs:new Array(TRAIL).fill(0).map(()=>rc())
+    }));
+  }
+  size();window.addEventListener('resize',()=>{if(!frozen)size();});
+  function frame(){
+    if(frozen){return;}                   // 冻结：停止重绘（画面定格）
+    ctx.clearRect(0,0,W,H);
+    ctx.font=fontSize+'px "Space Mono", monospace';
+    for(let i=0;i<cols;i++){
+      const col=columns[i];
+      const x=i*fontSize;
+      for(let j=0;j<TRAIL;j++){
+        const y=(col.head-j)*fontSize;
+        if(y<0||y>H)continue;
+        const a=(1-j/TRAIL)*(0.5+Math.random()*0.5);
+        ctx.fillStyle='rgba(45,212,191,'+a+')';
+        ctx.fillText(col.glyphs[j],x,y);
+      }
+      if(Math.random()>0.5) col.glyphs[0]=rc();
+      col.head+=0.45;
+      if((col.head-TRAIL)*fontSize>H && Math.random()>0.975){ col.head=Math.random()*-10; }
+    }
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  // 对外接口：冻结 + 交出当前屏幕上所有字符的位置 + 重启
+  window.__rain={
+    freeze(){ frozen=true; },
+    clear(){ ctx.clearRect(0,0,W,H); },
+    restart(){ frozen=false; size(); requestAnimationFrame(frame); },
+    collect(){
+      const pts=[];
+      for(let i=0;i<cols;i++){
+        const col=columns[i], x=i*fontSize;
+        for(let j=0;j<TRAIL;j++){
+          const y=(col.head-j)*fontSize;
+          if(y<0||y>H)continue;
+          pts.push({x,y,ch:col.glyphs[j]});
+        }
+      }
+      return pts;
+    }
+  };
+})();
+</script>
+<script>
 (function(){
   const ring=document.getElementById('chargeRing');
   if(!ring)return;
@@ -209,6 +274,20 @@
   const txt=document.getElementById('chargeText');
   const sub=document.getElementById('chargeSub');
   const GREEN='45,212,191', GOLD='212,175,55', WHITE='235,247,243';
+  const DEMO=ring.dataset.demo;
+  // 滚动锁定辅助
+  function preventScroll(e){ e.preventDefault(); }
+  function preventScrollKeys(e){
+    const keys=['ArrowUp','ArrowDown','PageUp','PageDown','Home','End',' ','Spacebar'];
+    if(keys.includes(e.key)) e.preventDefault();
+  }
+  function unlockScroll(){
+    document.documentElement.style.overflow='';
+    document.body.style.overflow='';
+    window.removeEventListener('wheel',preventScroll);
+    window.removeEventListener('touchmove',preventScroll);
+    window.removeEventListener('keydown',preventScrollKeys);
+  }
 
   /* 待机：小环绿色呼吸灯 + 环外四散星 */
   let W,H,cx,cy,R;
@@ -236,85 +315,257 @@
   }
   requestAnimationFrame(idleFrame);
 
-  /* 点击：全屏充能 —— 整屏星星汇聚、环绿转金、全屏炸开 */
   function mix(c1,c2,k){const a=c1.split(',').map(Number),b=c2.split(',').map(Number);return a.map((v,j)=>Math.round(v+(b[j]-v)*k)).join(',');}
-  const easeIn=t=>t*t, easeOut=t=>1-Math.pow(1-t,3);
-  const DUR=3000, BURST=900;
+  const easeIn=t=>t*t, easeOut=t=>1-Math.pow(1-t,3), easeInOut=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+
+  // 各阶段时长(ms)
+  const T_BRAKE=1100;    // 刹车惯性
+  const T_GATHER=3800;   // 圈层汇聚（放慢，液位随之渐升）
+  const T_GOLD=260;      // 液位满→短暂变金闪光→炸开
+  const T_BURST=900;     // 炸开成满天星
+  const T_COLLAPSE=700;  // 坍缩为黑
+  const T_TYPE=1700;     // 命令行打字
+  const TYPE_TEXT='> 骇入成功';
 
   function start(){
     if(!idle)return; idle=false;
-    txt.textContent='充能中';sub.textContent='00%';
+    txt.textContent='充能中';sub.textContent='';
+    // 锁定页面滚动（充能期间不能上下滑）
+    document.documentElement.style.overflow='hidden';
+    document.body.style.overflow='hidden';
+    window.addEventListener('wheel',preventScroll,{passive:false});
+    window.addEventListener('touchmove',preventScroll,{passive:false});
+    window.addEventListener('keydown',preventScrollKeys,{passive:false});
+
     const ov=document.createElement('canvas');
-    ov.style.cssText='position:fixed;inset:0;z-index:9999;width:100vw;height:100vh;background:rgba(10,14,18,.92);transition:background .3s';
+    ov.id='chargeOverlay';
+    ov.style.cssText='position:fixed;inset:0;z-index:9999;width:100vw;height:100vh;background:transparent;pointer-events:none';
     document.body.appendChild(ov);
     const c=ov.getContext('2d');
-    let FW,FH,FCX,FCY,FR;
+    let FW,FH,FCX,FCY,FR,DPR;
     function fsize(){
-      const dpr=Math.min(window.devicePixelRatio||1,2);
+      DPR=Math.min(window.devicePixelRatio||1,2);
       FW=window.innerWidth;FH=window.innerHeight;
-      ov.width=FW*dpr;ov.height=FH*dpr;c.setTransform(dpr,0,0,dpr,0,0);
-      FCX=FW/2;FCY=FH/2;FR=Math.min(FW,FH)*0.15;     // 中心环（适中，不随屏过大）
+      ov.width=FW*DPR;ov.height=FH*DPR;c.setTransform(DPR,0,0,DPR,0,0);
+      const rc=ring.getBoundingClientRect();
+      FCX=rc.left+rc.width/2; FCY=rc.top+rc.height/2;
+      FR=Math.min(rc.width,rc.height)/2-12;
     }
     fsize();window.addEventListener('resize',fsize);
 
-    // 整屏散布的星星（铺满全屏宽高），向中心环汇聚
-    const FN=260, fs=[];
-    for(let i=0;i<FN;i++){
-      fs.push({ox:Math.random()*FW, oy:Math.random()*FH,    // 全屏任意位置
-        tang:Math.random()*6.28, tr:Math.random()*FR*0.85,
-        r:Math.random()*1.8+0.6, ph:Math.random()*6.28});
-    }
-    let state='charging', t0=performance.now();
-    function frame(ts){
-      const time=ts*0.001;let prog=0,burstK=0;
-      if(state==='charging'){
-        prog=Math.min(1,(ts-t0)/DUR);
-        sub.textContent=String(Math.floor(prog*100)).padStart(2,'0')+'%';
-        if(prog>=1){state='burst';t0=ts;txt.textContent='✓ 完毕';sub.textContent='进入中…';}
-      } else { burstK=Math.min(1,(ts-t0)/BURST);prog=1;
-        if(burstK>=1){ window.location.href=ring.dataset.demo; return; } }
-      const col=mix(GREEN,GOLD,prog);
-      c.clearRect(0,0,FW,FH);
-      // 整屏星星
-      for(const s of fs){
-        const ix=FCX+Math.cos(s.tang)*s.tr, iy=FCY+Math.sin(s.tang)*s.tr;
-        let x,y,a;
-        if(state==='charging'){const k=easeIn(prog);
-          x=s.ox+(ix-s.ox)*k;y=s.oy+(iy-s.oy)*k;a=0.4+0.5*Math.sin(time*4+s.ph);
-        } else {
-          const bx=FCX+Math.cos(s.tang)*(s.tr+burstK*Math.max(FW,FH));
-          const by=FCY+Math.sin(s.tang)*(s.tr+burstK*Math.max(FW,FH));
-          x=ix+(bx-ix)*easeOut(burstK);y=iy+(by-iy)*easeOut(burstK);a=1-burstK;
-        }
-        c.beginPath();c.arc(x,y,s.r,0,6.28);c.fillStyle='rgba('+col+','+a+')';c.fill();
+    // 冻结数字雨，收集所有字符（带各自下落速度作为惯性初值）
+    let glyphs=[];
+    if(window.__rain){ window.__rain.freeze(); glyphs=window.__rain.collect(); window.__rain.clear(); }
+    const FS=15;
+    // 每个字符：原位、初速度(惯性)、到中心的距离(用于圈层)、目标汇聚点
+    const maxD=Math.hypot(Math.max(FCX,FW-FCX),Math.max(FCY,FH-FCY))||1;
+    const parts=glyphs.map(g=>{
+      const dx=g.x-FCX, dy=g.y-FCY, dist=Math.hypot(dx,dy);
+      const tang=Math.atan2(dy,dx)+(Math.random()-0.5)*0.5;   // 大致保持方位，圈层感
+      return {
+        ox:g.x, oy:g.y, ch:g.ch,
+        vy:1.2+Math.random()*1.6,        // 惯性初速度
+        bx:g.x, by:g.y,                  // 刹车后定格位置
+        dist, layer:dist/maxD,           // 0(内)~1(外)
+        tang, tr:Math.random()*FR*0.85,
+        ph:Math.random()*6.28,
+        trail:[]                         // 残影
+      };
+    });
+    // 补足
+    if(parts.length<120){
+      for(let i=parts.length;i<200;i++){
+        const x=Math.random()*FW,y=Math.random()*FH;
+        const dx=x-FCX,dy=y-FCY,dist=Math.hypot(dx,dy);
+        parts.push({ox:x,oy:y,ch:'1',vy:1.2+Math.random()*1.6,bx:x,by:y,dist,layer:dist/maxD,
+          tang:Math.atan2(dy,dx),tr:Math.random()*FR*0.85,ph:Math.random()*6.28,trail:[]});
       }
-      // 中心环
-      c.lineWidth=4;
-      c.beginPath();c.arc(FCX,FCY,FR,0,6.28);c.strokeStyle='rgba(125,139,151,0.2)';c.stroke();
-      c.beginPath();c.arc(FCX,FCY,FR,-Math.PI/2,-Math.PI/2+prog*6.283);
-      c.strokeStyle='rgba('+col+',0.95)';c.lineCap='round';
-      c.shadowColor='rgba('+col+',0.9)';c.shadowBlur=20;c.stroke();c.shadowBlur=0;c.lineCap='butt';
-      const gl=c.createRadialGradient(FCX,FCY,0,FCX,FCY,FR*1.4);
-      gl.addColorStop(0,'rgba('+col+','+(0.12+prog*0.3)+')');gl.addColorStop(1,'rgba('+col+',0)');
-      c.beginPath();c.arc(FCX,FCY,FR*1.4,0,6.28);c.fillStyle=gl;c.fill();
-      // 全屏炸开
-      if(state==='burst'){
-        ov.style.background='rgba(10,14,18,'+(0.92*(1-burstK))+')';
-        for(let w=0;w<3;w++){const k=Math.min(1,burstK*1.25-w*0.12);if(k<=0)continue;
-          c.beginPath();c.arc(FCX,FCY,FR+easeOut(k)*Math.max(FW,FH),0,6.28);
-          c.strokeStyle='rgba('+GOLD+','+(0.7*(1-k))+')';c.lineWidth=6-w*1.8;c.stroke();}
-        const fg=c.createRadialGradient(FCX,FCY,0,FCX,FCY,Math.max(FW,FH)*burstK);
-        fg.addColorStop(0,'rgba('+WHITE+','+(0.7*(1-burstK))+')');
-        fg.addColorStop(0.35,'rgba('+GOLD+','+(0.5*(1-burstK))+')');
-        fg.addColorStop(1,'rgba('+GOLD+',0)');
-        c.beginPath();c.arc(FCX,FCY,Math.max(FW,FH)*burstK,0,6.28);c.fillStyle=fg;c.fill();
+    }
+
+    let phase='brake', t0=performance.now();
+    function frame(ts){
+      const now=ts, time=ts*0.001;
+      c.clearRect(0,0,FW,FH);
+      c.font=FS+'px "Space Mono", monospace';c.textAlign='center';c.textBaseline='middle';
+
+      if(phase==='brake'){
+        // 刹车惯性：字继续下滑一点点，减速停下；尾巴收回；越来越亮
+        const k=Math.min(1,(now-t0)/T_BRAKE);
+        const damp=1-easeOut(k);                 // 速度衰减到0
+        for(const p of parts){
+          p.by=p.oy + p.vy*FS*easeOut(k)*2.2;    // 惯性下滑距离（刹车曲线）
+          const bright=0.4+0.6*k;                // 越来越亮
+          // 尾巴（残影向字内收回）
+          const tlen=(1-k)*4;                    // 尾巴长度随刹车缩短
+          for(let j=1;j<=4;j++){
+            const ta=(1-j/5)*0.5*(1-k);
+            if(ta<=0.02)continue;
+            c.fillStyle='rgba('+GREEN+','+ta+')';
+            c.fillText(p.ch,p.ox,p.by - j*FS*0.7*tlen);
+          }
+          c.fillStyle='rgba('+mix(GREEN,WHITE,k*0.5)+','+bright+')';
+          c.fillText(p.ch,p.ox,p.by);
+        }
+        if(k>=1){phase='gather';t0=now;}
+      }
+      else if(phase==='gather'){
+        // 圈层汇聚：字飞到环内即"被吸收"消失，液位按已吸收数量上升
+        const k=Math.min(1,(now-t0)/T_GATHER);
+        let arrived=0;
+        for(const p of parts){
+          const delay=p.layer*0.5;                   // 从内到外：内层(layer小)先飞，外层后飞
+          let lk=(k-delay)/(1-delay);
+          lk=Math.max(0,Math.min(1,lk));
+          if(lk>=1){ arrived++; continue; }          // 已到环内 → 消失（被吸收）
+          const e=easeIn(lk);                         // 加速度感
+          const ix=FCX+Math.cos(p.tang)*p.tr, iy=FCY+Math.sin(p.tang)*p.tr;
+          const x=p.ox+(ix-p.ox)*e, y=p.by+(iy-p.by)*e;
+          const col=mix(GREEN,GOLD,lk*0.5);
+          // 文字残影拖尾
+          if(lk>0){ p.trail.push({x,y}); if(p.trail.length>8)p.trail.shift(); }
+          for(let j=0;j<p.trail.length;j++){
+            const ta=(j/p.trail.length);
+            const a=ta*ta*0.5*lk;
+            if(a<=0.02)continue;
+            c.fillStyle='rgba('+col+','+a+')';
+            c.fillText(p.ch,p.trail[j].x,p.trail[j].y);
+          }
+          // 头部实体字符
+          c.shadowColor='rgba('+col+',0.8)';c.shadowBlur=5*lk;
+          c.fillStyle='rgba('+mix(col,WHITE,0.25)+',0.95)';
+          c.fillText(p.ch,x,y);
+          c.shadowBlur=0;
+        }
+        // 液位 = 已吸收比例（字进一个、水涨一点）
+        const fill=arrived/parts.length;
+        drawRing(fill*0.5, fill, time);
+        if(fill>=0.999 || k>=1){phase='gold';t0=now;}
+      }
+      else if(phase==='gold'){
+        // 收尾全部变金 + 环金亮
+        const k=Math.min(1,(now-t0)/T_GOLD);
+        for(const p of parts){
+          const ix=FCX+Math.cos(p.tang)*p.tr, iy=FCY+Math.sin(p.tang)*p.tr;
+          c.fillStyle='rgba('+GOLD+','+(0.9)+')';
+          c.fillText(p.ch,ix,iy);
+        }
+        drawRing(0.5+k*0.5, 1, time);      // 水满，环转金
+        // 中心蓄能爆点
+        const gl=c.createRadialGradient(FCX,FCY,0,FCX,FCY,FR*1.6);
+        gl.addColorStop(0,'rgba('+WHITE+','+(0.3*k)+')');
+        gl.addColorStop(1,'rgba('+GOLD+',0)');
+        c.beginPath();c.arc(FCX,FCY,FR*1.6,0,6.28);c.fillStyle=gl;c.fill();
+        if(k>=1){phase='burst';t0=now;
+          // 生成满天星
+          window.__bs=parts.map(p=>({x:FCX+Math.cos(p.tang)*p.tr,y:FCY+Math.sin(p.tang)*p.tr,
+            ang:Math.random()*6.28,sp:Math.random()*Math.max(FW,FH)*0.9+60,r:Math.random()*1.8+0.6}));
+        }
+      }
+      else if(phase==='burst'){
+        // 炸开成满天星
+        const k=Math.min(1,(now-t0)/T_BURST);
+        for(let w=0;w<3;w++){const kk=Math.min(1,k*1.3-w*0.12);if(kk<=0)continue;
+          c.beginPath();c.arc(FCX,FCY,FR+easeOut(kk)*Math.max(FW,FH)*0.6,0,6.28);
+          c.strokeStyle='rgba('+GOLD+','+(0.5*(1-kk))+')';c.lineWidth=5-w*1.5;c.stroke();}
+        for(const b of window.__bs){
+          const e=easeOut(k);
+          const x=b.x+Math.cos(b.ang)*b.sp*e, y=b.y+Math.sin(b.ang)*b.sp*e;
+          c.beginPath();c.arc(x,y,b.r,0,6.28);
+          c.fillStyle='rgba('+mix(GOLD,WHITE,Math.random())+','+(1-k*0.5)+')';c.fill();
+        }
+        if(k>=1){phase='collapse';t0=now;}
+      }
+      else if(phase==='collapse'){
+        // 一切坍缩为黑
+        const k=Math.min(1,(now-t0)/T_COLLAPSE);
+        // 满天星向中心吸回并淡出
+        for(const b of window.__bs){
+          const e=easeIn(k);
+          const fx=b.x+Math.cos(b.ang)*b.sp, fy=b.y+Math.sin(b.ang)*b.sp;
+          const x=fx+(FCX-fx)*e, y=fy+(FCY-fy)*e;
+          c.beginPath();c.arc(x,y,b.r*(1-k),0,6.28);
+          c.fillStyle='rgba('+WHITE+','+(1-k)+')';c.fill();
+        }
+        // 黑幕渐起
+        c.fillStyle='rgba(0,0,0,'+easeIn(k)+')';c.fillRect(0,0,FW,FH);
+        ov.style.background='rgba(0,0,0,'+easeIn(k)+')';
+        if(k>=1){phase='type';t0=now;}
+      }
+      else if(phase==='type'){
+        // 纯黑底，命令行逐字敲出
+        c.fillStyle='#000';c.fillRect(0,0,FW,FH);
+        ov.style.background='#000';
+        const k=(now-t0)/T_TYPE;
+        const n=Math.min(TYPE_TEXT.length, Math.floor(k*TYPE_TEXT.length));
+        const shown=TYPE_TEXT.slice(0,n);
+        const blink=(Math.floor(now/450)%2===0)?'_':' ';
+        c.textAlign='left';c.textBaseline='middle';
+        c.font='600 '+Math.max(18,Math.min(30,FW*0.03))+'px "Space Mono", monospace';
+        c.fillStyle='rgba('+GREEN+',0.95)';
+        c.shadowColor='rgba('+GREEN+',0.8)';c.shadowBlur=8;
+        const fontPx=Math.max(18,Math.min(30,FW*0.03));
+        c.fillText(shown+blink, FCX-FW*0.18, FCY);
+        c.shadowBlur=0;
+        if(k>=1.15){ window.location.href=DEMO; return; }
       }
       requestAnimationFrame(frame);
     }
+    function drawRing(prog, fill, time){
+      const col=mix(GREEN,GOLD,prog);
+      // 环内装水：液位 fill(0~1) 从底部升高，带波动水面
+      if(fill>0){
+        c.save();
+        c.beginPath();c.arc(FCX,FCY,FR-2,0,6.28);c.clip();
+        const top=FCY+FR - fill*(FR*2);          // 水面 y（fill=1 到顶）
+        const amp=Math.min(4, FR*0.06);          // 波幅
+        const wcol=mix(GREEN,GOLD,Math.max(prog,fill*0.6));
+        c.beginPath();
+        c.moveTo(FCX-FR, FCY+FR);
+        c.lineTo(FCX-FR, top);
+        const tt=(time||0);
+        for(let x=-FR;x<=FR;x+=6){
+          const y=top+Math.sin((x*0.13)+tt*3)*amp + Math.sin((x*0.05)-tt*2)*amp*0.5;
+          c.lineTo(FCX+x, y);
+        }
+        c.lineTo(FCX+FR, FCY+FR);
+        c.closePath();
+        const wg=c.createLinearGradient(0,top,0,FCY+FR);
+        wg.addColorStop(0,'rgba('+wcol+',0.55)');
+        wg.addColorStop(1,'rgba('+wcol+',0.22)');
+        c.fillStyle=wg;c.fill();
+        // 水面高光线
+        c.beginPath();
+        for(let x=-FR;x<=FR;x+=6){
+          const y=top+Math.sin((x*0.13)+tt*3)*amp + Math.sin((x*0.05)-tt*2)*amp*0.5;
+          (x===-FR)?c.moveTo(FCX+x,y):c.lineTo(FCX+x,y);
+        }
+        c.strokeStyle='rgba('+mix(wcol,WHITE,0.4)+',0.7)';c.lineWidth=1.5;c.stroke();
+        c.restore();
+      }
+      // 环本体
+      c.lineWidth=4;
+      c.beginPath();c.arc(FCX,FCY,FR,0,6.28);c.strokeStyle='rgba(125,139,151,0.2)';c.stroke();
+      c.beginPath();c.arc(FCX,FCY,FR,-Math.PI/2,-Math.PI/2+(fill!=null?fill:prog)*6.283);
+      c.strokeStyle='rgba('+col+',0.95)';c.lineCap='round';
+      c.shadowColor='rgba('+col+',0.9)';c.shadowBlur=18;c.stroke();c.shadowBlur=0;c.lineCap='butt';
+    }
     requestAnimationFrame(frame);
   }
+
   ring.addEventListener('click',start);
   ring.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();start();}});
+
+  // 从 demo 返回时（含往返缓存）一切归位
+  function resetAll(){
+    const ov=document.getElementById('chargeOverlay');
+    if(ov)ov.remove();
+    unlockScroll();
+    idle=true;
+    txt.textContent='\u25b6 \u542f\u52a8';sub.textContent='\u70b9\u51fb\u5145\u80fd\u8fdb\u5165';
+    if(window.__rain&&window.__rain.restart)window.__rain.restart();
+    requestAnimationFrame(idleFrame);
+  }
+  window.addEventListener('pageshow',e=>{ if(e.persisted) resetAll(); });
 })();
 </script>
 </body>
