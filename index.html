@@ -101,11 +101,29 @@
   /* —— 精选项目 —— */
   #work{width:100%;margin-left:0}
   .wrap .aiops,#work .work-layout{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:32px}
-  #work .work-layout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px;align-items:start;background:linear-gradient(110deg,rgba(10,14,18,.76),rgba(10,14,18,.62) 75%,rgba(10,14,18,.25))}
+  #work .work-layout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px;align-items:stretch;background:linear-gradient(110deg,rgba(10,14,18,.76),rgba(10,14,18,.62) 75%,rgba(10,14,18,.25))}
   #work .project-navigation,#work .project-content{min-width:0}
-  #work .project-list{display:grid;padding:0;font-family:inherit;align-items:stretch;justify-content:stretch}
+  #work .project-navigation{display:flex;flex-direction:column}
+  #work .project-list{display:flex;flex-direction:column;flex:1;padding:0;font-family:inherit;align-items:stretch;justify-content:space-between}
+  #work .project-list > .project-choice{flex-shrink:0}
   #work .project-choice{display:grid;grid-template-columns:32px minmax(max-content,1fr) 16px;gap:16px;align-items:center;height:72px;width:100%;padding:0;background:transparent;border:0;border-bottom:1px solid var(--line);text-align:left;color:#cbd5e1;font:inherit;font-size:16px;cursor:pointer;transition:color 250ms ease,background 250ms ease}
-  #work .project-choice > :last-child{text-align:right}
+  #work .project-select{grid-column:1 / 3;display:grid;grid-template-columns:32px minmax(max-content,1fr);gap:16px;align-items:center;align-self:stretch;padding:0;border:0;background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer}
+  #work .project-arrow{display:flex;align-items:center;justify-content:flex-end;justify-self:end;width:36px;height:36px;color:#cbd5e1;text-decoration:none}
+  #work .project-arrow span{transition:color 300ms ease-out,transform 300ms ease-out}
+  #work .project-arrow:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  #work .project-arrow:focus-visible span{color:var(--accent);transform:translateX(3px)}
+  #work .project-detail-link{display:inline-block;transform-origin:left center;transition:color 300ms ease-out,text-shadow 300ms ease-out,transform 300ms ease-out}
+  #work .project-detail-arrow{display:inline-block;transition:transform 300ms ease-out}
+  #work .project-content:focus-within .project-detail-link{color:#5df5df;text-shadow:0 0 12px rgba(45,212,191,.45);transform:scale(1.07)}
+  #work .project-content:focus-within .project-detail-arrow{transform:translate(3px,-3px)}
+  @media(hover:hover) and (pointer:fine){
+    #work .project-arrow:hover span{color:var(--accent);transform:translateX(3px)}
+    #work .project-content:hover .project-detail-link{color:#5df5df;text-shadow:0 0 12px rgba(45,212,191,.45);transform:scale(1.07)}
+    #work .project-content:hover .project-detail-arrow{transform:translate(3px,-3px)}
+  }
+  @media(prefers-reduced-motion:reduce){
+    #work .project-arrow:is(:hover,:focus-visible) span,#work .project-arrow span,#work .project-content:is(:hover,:focus-within) .project-detail-link,#work .project-content:is(:hover,:focus-within) .project-detail-arrow,#work .project-content .project-detail-link,#work .project-content .project-detail-arrow{transition:none;transform:none}
+  }
   #work .project-choice-name{white-space:nowrap;display:block}
   #work .work-theme{display:inline-block;margin-left:18px;color:#a69876;font-family:var(--mono);font-size:10px;font-weight:400;letter-spacing:.06em}
   #work .project-star{color:#a69876;font-family:var(--mono);font-size:11px;font-weight:400;letter-spacing:.08em;white-space:nowrap}
@@ -114,8 +132,8 @@
   #work .project-card-identity{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
   #work .project-number,#work .project-meta{font-family:var(--mono);font-size:12px}
   #work .project-number{color:var(--accent)}
-  #work .project-choice:hover,#work .project-choice[aria-pressed="true"]{color:var(--accent);background:rgba(45,212,191,.022)}
-  #work .project-choice:focus-visible,#work .project-detail-link:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  #work .project-choice:hover,#work .project-choice:has(.project-select[aria-pressed="true"]){color:var(--accent);background:rgba(45,212,191,.022)}
+  #work .project-select:focus-visible,#work .project-detail-link:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   #work .project-content{display:grid;border-left:1px solid var(--line);padding:0;min-height:360px}
   #work .project-panel{grid-area:1 / 1;display:flex;flex-direction:column;min-width:0;max-width:700px;opacity:1;visibility:visible;transition:opacity 250ms ease;overflow-wrap:break-word}
   #work .project-panel[aria-hidden="true"]{opacity:0;visibility:hidden;pointer-events:none}
@@ -258,18 +276,18 @@
   <section id="work" class="reveal">
     <div class="sec-label"><span>04</span> / <span data-zh="精选项目" data-en="Selected Work">精选项目</span><span class="work-theme">北斗七星 / THE BIG DIPPER</span></div>
     <div class="work-layout">
-      <div class="project-navigation"><nav class="project-list" aria-label="项目 / Projects"><button type="button" class="project-choice" id="project-choice-01" aria-controls="project-panel-01" aria-pressed="true"><span class="project-number">01 /</span><span class="project-choice-copy"><span class="project-star">天枢</span><span class="project-choice-name"><span data-zh="GPU 大模型训练与推理平台" data-en="GPU LLM Training &amp; Inference Platform">GPU 大模型训练与推理平台</span></span></span><span aria-hidden="true">→</span></button>
-<button type="button" class="project-choice" id="project-choice-02" aria-controls="project-panel-02" aria-pressed="false"><span class="project-number">02 /</span><span class="project-choice-copy"><span class="project-star">天璇</span><span class="project-choice-name"><span data-zh="IT/OT 统一监控与可观测性平台" data-en="IT/OT Unified Monitoring &amp; Observability Platform">IT/OT 统一监控与可观测性平台</span></span></span><span aria-hidden="true">→</span></button>
-<button type="button" class="project-choice" id="project-choice-03" aria-controls="project-panel-03" aria-pressed="false"><span class="project-number">03 /</span><span class="project-choice-copy"><span class="project-star">天玑</span><span class="project-choice-name"><span data-zh="工业 AI 数据与知识中台" data-en="Industrial AI Data &amp; Knowledge Platform">工业 AI 数据与知识中台</span></span></span><span aria-hidden="true">→</span></button>
-<button type="button" class="project-choice" id="project-choice-04" aria-controls="project-panel-04" aria-pressed="false"><span class="project-number">04 /</span><span class="project-choice-copy"><span class="project-star">玉衡</span><span class="project-choice-name"><span data-zh="AIOps 智能运维 Agent" data-en="AIOps Intelligent Operations Agent">AIOps 智能运维 Agent</span></span></span><span aria-hidden="true">→</span></button>
-<button type="button" class="project-choice" id="project-choice-05" aria-controls="project-panel-05" aria-pressed="false"><span class="project-number">05 /</span><span class="project-choice-copy"><span class="project-star">开阳</span><span class="project-choice-name"><span data-zh="海外制造基地 IT 基础设施建设" data-en="IT Infrastructure for Overseas Manufacturing Sites">海外制造基地 IT 基础设施建设</span></span></span><span aria-hidden="true">→</span></button>
+      <div class="project-navigation"><nav class="project-list" aria-label="项目 / Projects"><div class="project-choice"><button type="button" class="project-select" id="project-choice-01" aria-controls="project-panel-01" aria-pressed="true"><span class="project-number">01 /</span><span class="project-choice-copy"><span class="project-star">天枢</span><span class="project-choice-name"><span data-zh="GPU 大模型训练与推理平台" data-en="GPU LLM Training &amp; Inference Platform">GPU 大模型训练与推理平台</span></span></span></button><a class="project-arrow" href="projects/project-1.html" aria-label="查看项目 01 详情 / View project 01"><span aria-hidden="true">→</span></a></div>
+<div class="project-choice"><button type="button" class="project-select" id="project-choice-02" aria-controls="project-panel-02" aria-pressed="false"><span class="project-number">02 /</span><span class="project-choice-copy"><span class="project-star">天璇</span><span class="project-choice-name"><span data-zh="IT/OT 统一监控与可观测性平台" data-en="IT/OT Unified Monitoring &amp; Observability Platform">IT/OT 统一监控与可观测性平台</span></span></span></button><a class="project-arrow" href="projects/project-2.html" aria-label="查看项目 02 详情 / View project 02"><span aria-hidden="true">→</span></a></div>
+<div class="project-choice"><button type="button" class="project-select" id="project-choice-03" aria-controls="project-panel-03" aria-pressed="false"><span class="project-number">03 /</span><span class="project-choice-copy"><span class="project-star">天玑</span><span class="project-choice-name"><span data-zh="工业 AI 数据与知识中台" data-en="Industrial AI Data &amp; Knowledge Platform">工业 AI 数据与知识中台</span></span></span></button><a class="project-arrow" href="projects/project-3.html" aria-label="查看项目 03 详情 / View project 03"><span aria-hidden="true">→</span></a></div>
+<div class="project-choice"><button type="button" class="project-select" id="project-choice-04" aria-controls="project-panel-04" aria-pressed="false"><span class="project-number">04 /</span><span class="project-choice-copy"><span class="project-star">玉衡</span><span class="project-choice-name"><span data-zh="AIOps 智能运维 Agent" data-en="AIOps Intelligent Operations Agent">AIOps 智能运维 Agent</span></span></span></button><a class="project-arrow" href="projects/project-4.html" aria-label="查看项目 04 详情 / View project 04"><span aria-hidden="true">→</span></a></div>
+<div class="project-choice"><button type="button" class="project-select" id="project-choice-05" aria-controls="project-panel-05" aria-pressed="false"><span class="project-number">05 /</span><span class="project-choice-copy"><span class="project-star">开阳</span><span class="project-choice-name"><span data-zh="海外制造基地 IT 基础设施建设" data-en="IT Infrastructure for Overseas Manufacturing Sites">海外制造基地 IT 基础设施建设</span></span></span></button><a class="project-arrow" href="projects/project-5.html" aria-label="查看项目 05 详情 / View project 05"><span aria-hidden="true">→</span></a></div>
 </nav></div>
       <div class="project-content"><div class="project-card-body"><article class="project-panel" id="project-panel-01" aria-labelledby="project-choice-01" aria-hidden="false"><div class="project-card-header"><div class="project-card-identity"><span class="project-meta">FEATURED / 001</span><span class="project-star">天枢</span></div><span class="project-category">AI INFRA</span></div><h3><span data-zh="GPU 大模型训练与推理平台" data-en="GPU LLM Training &amp; Inference Platform">GPU 大模型训练与推理平台</span></h3><p class="project-summary">基于 Kubernetes 与 vLLM 构建私有化 GPU 算力资源池，支持大模型推理、训练及弹性资源调度。</p><div class="project-tags"><span>Kubernetes</span><span>NVIDIA L40S</span><span>vLLM</span><span>CUDA</span></div></article>
 <article class="project-panel" id="project-panel-02" aria-labelledby="project-choice-02" aria-hidden="true" inert><div class="project-card-header"><div class="project-card-identity"><span class="project-meta">FEATURED / 002</span><span class="project-star">天璇</span></div><span class="project-category">OBSERVABILITY</span></div><h3><span data-zh="IT/OT 统一监控与可观测性平台" data-en="IT/OT Unified Monitoring &amp; Observability Platform">IT/OT 统一监控与可观测性平台</span></h3><p class="project-summary">面向海外制造基地，整合服务器、网络与 GPU 的指标和日志，提供统一监控视图与故障追溯能力。通过 MES API 分阶段接入工业设备状态与告警。</p><div class="project-tags"><span>Prometheus</span><span>Grafana</span><span>ELK</span><span>MES API</span></div></article>
 <article class="project-panel" id="project-panel-03" aria-labelledby="project-choice-03" aria-hidden="true" inert><div class="project-card-header"><div class="project-card-identity"><span class="project-meta">FEATURED / 003</span><span class="project-star">天玑</span></div><span class="project-category">KNOWLEDGE</span></div><h3><span data-zh="工业 AI 数据与知识中台" data-en="Industrial AI Data &amp; Knowledge Platform">工业 AI 数据与知识中台</span></h3><p class="project-summary">面向企业知识分散与检索需求，基于 RAG、Milvus 与 BGE-M3 建设工业知识中台，覆盖文档治理、向量检索和权限隔离，为企业 AI 应用提供知识服务。</p><div class="project-tags"><span>RAG</span><span>Milvus</span><span>BGE-M3</span><span>Rerank</span></div></article>
 <article class="project-panel" id="project-panel-04" aria-labelledby="project-choice-04" aria-hidden="true" inert><div class="project-card-header"><div class="project-card-identity"><span class="project-meta">FEATURED / 004</span><span class="project-star">玉衡</span></div><span class="project-category">AIOPS</span></div><h3><span data-zh="AIOps 智能运维 Agent" data-en="AIOps Intelligent Operations Agent">AIOps 智能运维 Agent</span></h3><p class="project-summary">结合 LangGraph、Dify 与私有化模型，将监控信息、历史案例和知识检索融入运维工作流，支持智能问答与 RCA 辅助分析，高风险操作保留人工确认。</p><div class="project-tags"><span>LangGraph</span><span>Dify</span><span>RAG</span><span>Qwen</span></div></article>
 <article class="project-panel" id="project-panel-05" aria-labelledby="project-choice-05" aria-hidden="true" inert><div class="project-card-header"><div class="project-card-identity"><span class="project-meta">FEATURED / 005</span><span class="project-star">开阳</span></div><span class="project-category">INFRASTRUCTURE</span></div><h3><span data-zh="海外制造基地 IT 基础设施建设" data-en="IT Infrastructure for Overseas Manufacturing Sites">海外制造基地 IT 基础设施建设</span></h3><p class="project-summary">参与泰国制造基地从 0 到 1 的 IT 基础设施建设，协调跨国团队与供应商完成服务器、网络部署及验收，并通过 SOP、Runbook 和应急流程支持运维交接。</p><div class="project-tags"><span>Linux</span><span>Network</span><span>SOP</span><span>Runbook</span></div></article>
-</div><div class="project-card-footer"><a class="project-detail-link" href="projects/project-1.html" data-zh="查看项目 ↗" data-en="View project ↗">查看项目 ↗</a><div class="project-controls"><button type="button" data-project-step="-1" aria-label="上一个项目 / Previous project">←</button><span class="project-count" aria-live="polite">01 / 05</span><button type="button" data-project-step="1" aria-label="下一个项目 / Next project">→</button></div></div></div>
+</div><div class="project-card-footer"><a class="project-detail-link" href="projects/project-1.html"><span data-zh="查看项目" data-en="View project">查看项目</span> <span class="project-detail-arrow" aria-hidden="true">↗</span></a><div class="project-controls"><button type="button" data-project-step="-1" aria-label="上一个项目 / Previous project">←</button><span class="project-count" aria-live="polite">01 / 05</span><button type="button" data-project-step="1" aria-label="下一个项目 / Next project">→</button></div></div></div>
     </div>
   </section>
   <section id="contact" class="reveal">
@@ -277,8 +295,8 @@
     <p class="about" style="margin-bottom:26px" data-zh="有合作、招聘或技术交流？随时找我。" data-en="Collaboration, hiring, or just talking tech? Reach out anytime.">有合作、招聘或技术交流？随时找我。</p>
     <div class="contact-grid">
       <a href="mailto:raymond@example.com" class="clink">Email</a>
-      <a href="https://github.com" class="clink">GitHub</a>
-      <a href="#" class="clink" data-zh="博客 / Blog" data-en="Blog">博客 / Blog</a>
+      <a href="https://github.com/RAYMOND-PROMAX" class="clink">GitHub</a>
+      <a href="https://github.com/RAYMOND-PROMAX/cloud-engineering-notes" class="clink" data-zh="博客 / Blog" data-en="Blog">博客 / Blog</a>
       <a href="assets/wechat-qr.png" id="wechatLink" class="clink" aria-haspopup="dialog" aria-controls="wechatDialog" data-zh="微信 / WeChat" data-en="WeChat">微信 / WeChat</a>
     </div>
   </section>
@@ -387,7 +405,7 @@
 /* ===== 项目选择 ===== */
 (function(){
   const root=document.getElementById('work');
-  const buttons=[...root.querySelectorAll('.project-choice')];
+  const buttons=[...root.querySelectorAll('.project-select')];
   const panels=[...root.querySelectorAll('.project-panel')];
   const link=root.querySelector('.project-detail-link');
   const count=root.querySelector('.project-count');
@@ -402,7 +420,10 @@
     link.setAttribute('href','projects/project-'+(active+1)+'.html');
     count.textContent=String(active+1).padStart(2,'0')+' / 05';
   }
-  buttons.forEach((button,index)=>button.addEventListener('click',()=>select(index)));
+  buttons.forEach((button,index)=>button.closest('.project-choice').addEventListener('click',event=>{
+    if(event.target.closest('.project-arrow')) return;
+    select(index);
+  }));
   root.querySelectorAll('[data-project-step]').forEach(button=>button.addEventListener('click',()=>select(active+Number(button.dataset.projectStep))));
 })();
 </script>
