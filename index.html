@@ -112,18 +112,13 @@
   #work .project-arrow span{transition:color 300ms ease-out,transform 300ms ease-out}
   #work .project-arrow:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   #work .project-arrow:focus-visible span{color:var(--accent);transform:translateX(3px)}
-  #work .project-detail-link{display:inline-block;transform-origin:left center;transition:color 300ms ease-out,text-shadow 300ms ease-out,transform 300ms ease-out}
-  #work .project-detail-arrow{display:inline-block;transition:transform 300ms ease-out}
-  #work .project-content:focus-within .project-detail-link{color:#5df5df;text-shadow:0 0 12px rgba(45,212,191,.45);transform:scale(1.07)}
-  #work .project-content:focus-within .project-detail-arrow{transform:translate(3px,-3px)}
-  @media(hover:hover) and (pointer:fine){
-    #work .project-arrow:hover span{color:var(--accent);transform:translateX(3px)}
-    #work .project-content:hover .project-detail-link{color:#5df5df;text-shadow:0 0 12px rgba(45,212,191,.45);transform:scale(1.07)}
-    #work .project-content:hover .project-detail-arrow{transform:translate(3px,-3px)}
-  }
-  @media(prefers-reduced-motion:reduce){
-    #work .project-arrow:is(:hover,:focus-visible) span,#work .project-arrow span,#work .project-content:is(:hover,:focus-within) .project-detail-link,#work .project-content:is(:hover,:focus-within) .project-detail-arrow,#work .project-content .project-detail-link,#work .project-content .project-detail-arrow{transition:none;transform:none}
-  }
+  #work .project-detail-link{display:inline-block}
+  #work .project-detail-text{display:inline-block;transform-origin:left center}
+  #work .project-detail-arrow{display:inline-block;position:relative;width:1em;height:1em;vertical-align:-.12em;pointer-events:none}
+  #work .project-detail-arrow svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;transform-origin:center}
+  #work .project-detail-arrow svg:last-child{opacity:0}
+  @media(hover:hover) and (pointer:fine){#work .project-arrow:hover span{color:var(--accent);transform:translateX(3px)}}
+  @media(prefers-reduced-motion:reduce){#work .project-arrow:is(:hover,:focus-visible) span,#work .project-arrow span{transition:none;transform:none}}
   #work .project-choice-name{white-space:nowrap;display:block}
   #work .work-theme{display:inline-block;margin-left:18px;color:#a69876;font-family:var(--mono);font-size:10px;font-weight:400;letter-spacing:.06em}
   #work .project-star{color:#a69876;font-family:var(--mono);font-size:11px;font-weight:400;letter-spacing:.08em;white-space:nowrap}
@@ -287,7 +282,7 @@
 <article class="project-panel" id="project-panel-03" aria-labelledby="project-choice-03" aria-hidden="true" inert><div class="project-card-header"><div class="project-card-identity"><span class="project-meta">FEATURED / 003</span><span class="project-star">天玑</span></div><span class="project-category">KNOWLEDGE</span></div><h3><span data-zh="工业 AI 数据与知识中台" data-en="Industrial AI Data &amp; Knowledge Platform">工业 AI 数据与知识中台</span></h3><p class="project-summary">面向企业知识分散与检索需求，基于 RAG、Milvus 与 BGE-M3 建设工业知识中台，覆盖文档治理、向量检索和权限隔离，为企业 AI 应用提供知识服务。</p><div class="project-tags"><span>RAG</span><span>Milvus</span><span>BGE-M3</span><span>Rerank</span></div></article>
 <article class="project-panel" id="project-panel-04" aria-labelledby="project-choice-04" aria-hidden="true" inert><div class="project-card-header"><div class="project-card-identity"><span class="project-meta">FEATURED / 004</span><span class="project-star">玉衡</span></div><span class="project-category">AIOPS</span></div><h3><span data-zh="AIOps 智能运维 Agent" data-en="AIOps Intelligent Operations Agent">AIOps 智能运维 Agent</span></h3><p class="project-summary">结合 LangGraph、Dify 与私有化模型，将监控信息、历史案例和知识检索融入运维工作流，支持智能问答与 RCA 辅助分析，高风险操作保留人工确认。</p><div class="project-tags"><span>LangGraph</span><span>Dify</span><span>RAG</span><span>Qwen</span></div></article>
 <article class="project-panel" id="project-panel-05" aria-labelledby="project-choice-05" aria-hidden="true" inert><div class="project-card-header"><div class="project-card-identity"><span class="project-meta">FEATURED / 005</span><span class="project-star">开阳</span></div><span class="project-category">INFRASTRUCTURE</span></div><h3><span data-zh="海外制造基地 IT 基础设施建设" data-en="IT Infrastructure for Overseas Manufacturing Sites">海外制造基地 IT 基础设施建设</span></h3><p class="project-summary">参与泰国制造基地从 0 到 1 的 IT 基础设施建设，协调跨国团队与供应商完成服务器、网络部署及验收，并通过 SOP、Runbook 和应急流程支持运维交接。</p><div class="project-tags"><span>Linux</span><span>Network</span><span>SOP</span><span>Runbook</span></div></article>
-</div><div class="project-card-footer"><a class="project-detail-link" href="projects/project-1.html"><span data-zh="查看项目" data-en="View project">查看项目</span> <span class="project-detail-arrow" aria-hidden="true">↗</span></a><div class="project-controls"><button type="button" data-project-step="-1" aria-label="上一个项目 / Previous project">←</button><span class="project-count" aria-live="polite">01 / 05</span><button type="button" data-project-step="1" aria-label="下一个项目 / Next project">→</button></div></div></div>
+</div><div class="project-card-footer"><a class="project-detail-link" href="projects/project-1.html"><span class="project-detail-text" data-zh="查看项目" data-en="View project">查看项目</span> <span class="project-detail-arrow" aria-hidden="true"><svg viewBox="0 0 16 16" focusable="false"><path d="M3 13 13 3M4 3h9v9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><svg viewBox="0 0 16 16" focusable="false"><path d="M3 13 13 3M4 3h9v9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span></a><div class="project-controls"><button type="button" data-project-step="-1" aria-label="上一个项目 / Previous project">←</button><span class="project-count" aria-live="polite">01 / 05</span><button type="button" data-project-step="1" aria-label="下一个项目 / Next project">→</button></div></div></div>
     </div>
   </section>
   <section id="contact" class="reveal">
@@ -402,6 +397,60 @@
   document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 </script>
 <script>
+/* ===== 项目详情链接动画 ===== */
+(function(){
+  const card=document.querySelector('#work .project-content');
+  const text=card.querySelector('.project-detail-text');
+  const arrows=[...card.querySelectorAll('.project-detail-arrow svg')];
+  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+  const hover=matchMedia('(hover: hover) and (pointer: fine)');
+  let pointerInside=false,keyboardInside=false,active=false;
+  let animations=[];
+  const ease='cubic-bezier(0.4,0,0.2,1)';
+  function animate(element,frames,options){
+    animations.push(element.animate(frames,{fill:'forwards',...options}));
+  }
+  function update(){
+    const next=pointerInside||keyboardInside;
+    if(next===active) return;
+    active=next;
+    const elements=[text,...arrows];
+    const current=elements.map(element=>{
+      const style=getComputedStyle(element);
+      return {transform:style.transform,opacity:style.opacity,color:style.color,textShadow:style.textShadow,filter:style.filter};
+    });
+    animations.forEach(animation=>animation.cancel());
+    animations=[];
+    if(!active||reduced.matches){
+      elements.forEach((element,index)=>animate(element,[current[index],{
+        transform:'none',opacity:index===2?0:1,color:active&&index===0?'#5df5df':'#2dd4bf',
+        textShadow:active&&index===0?'0 0 12px rgba(45,212,191,.45)':'none',filter:'none'
+      }],{duration:reduced.matches?0:250,easing:ease}));
+      return;
+    }
+    arrows.forEach((arrow,index)=>{
+      const direction=index===0?1:-1;
+      const pose=(angle,radius,scale)=>`rotate(${angle*direction}deg) translateX(${radius*direction}px) rotate(${-angle*direction}deg) scale(${scale})`;
+      animate(arrow,[
+        {offset:0,transform:pose(0,0,1),opacity:index===0?1:0,filter:'drop-shadow(0 0 0 transparent)',easing:ease},
+        {offset:200/950,transform:pose(0,7,1.4),opacity:1,filter:'drop-shadow(0 0 3px rgba(45,212,191,.35))',easing:ease},
+        {offset:750/950,transform:pose(90,7,1.4),opacity:1,filter:'drop-shadow(0 0 3px rgba(45,212,191,.35))',easing:ease},
+        {offset:1,transform:pose(90,0,1),opacity:index===0?1:0,filter:'drop-shadow(0 0 4px rgba(45,212,191,.3))'}
+      ],{duration:950});
+      animate(arrow,[{filter:'drop-shadow(0 0 4px rgba(45,212,191,.3))'},{filter:'none'}],{delay:950,duration:250,easing:ease,fill:'forwards'});
+    });
+    animate(text,[
+      {transform:'scale(1)',color:'#2dd4bf',textShadow:'0 0 0 transparent'},
+      {transform:'scale(1.12)',color:'#5df5df',textShadow:'0 0 12px rgba(45,212,191,.45)'}
+    ],{delay:950,duration:250,easing:ease});
+  }
+  card.addEventListener('pointerenter',event=>{if(event.pointerType==='mouse'&&hover.matches){pointerInside=true;update();}});
+  card.addEventListener('pointerleave',()=>{pointerInside=false;update();});
+  card.addEventListener('focusin',event=>{keyboardInside=event.target.matches(':focus-visible');update();});
+  card.addEventListener('focusout',event=>{if(!card.contains(event.relatedTarget)){keyboardInside=false;update();}});
+  reduced.addEventListener('change',()=>{active=!(pointerInside||keyboardInside);update();});
+  hover.addEventListener('change',()=>{if(!hover.matches){pointerInside=false;update();}});
+})();
 /* ===== 项目选择 ===== */
 (function(){
   const root=document.getElementById('work');
