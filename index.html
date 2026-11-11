@@ -29,9 +29,14 @@
   .tag{font-family:var(--mono);font-size:12px;color:var(--accent);letter-spacing:.18em;text-transform:uppercase;display:inline-flex;align-items:center;gap:8px;margin-bottom:24px;}
   .tag::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent);animation:pulse 2s infinite}
   @keyframes pulse{50%{opacity:.35}}
-  h1{font-size:clamp(42px,8vw,82px);font-weight:700;line-height:1.02;letter-spacing:-.02em;margin-bottom:24px;}
+  header h1{font-size:clamp(28px,6vw,64px);font-weight:500;line-height:1.3;letter-spacing:0;margin-bottom:32px;}
   h1 .accent{color:var(--accent)}
-  header p{font-size:clamp(16px,2.4vw,19px);color:var(--muted);max-width:540px}
+  header p{font-size:clamp(16px,2.4vw,18px);color:#a7b1bb;line-height:1.9;max-width:600px}
+  header .hero-principles{font-size:clamp(19px,2.8vw,23px);font-weight:500;color:var(--fg);line-height:1.8}
+  header .hero-principles strong{color:var(--accent);font-weight:500}
+  header .hero-principles + p{margin-top:22px}
+  html[lang="en"] header h1{font-size:clamp(26px,4.2vw,46px)}
+  @media(max-width:560px){header .tag{font-size:10px;letter-spacing:.1em;flex-wrap:wrap}}
   .cta{display:flex;gap:14px;margin-top:38px;flex-wrap:wrap}
   .btn{font-family:var(--mono);font-size:13px;text-decoration:none;padding:13px 22px;border-radius:2px;transition:all .25s;letter-spacing:.03em;}
   .btn-primary{background:var(--accent);color:var(--bg);font-weight:700}
@@ -103,6 +108,15 @@
   .ai-card p{font-size:14px;color:var(--muted)}
   @media(max-width:620px){.aiops{grid-template-columns:1fr}}
   .contact-grid{display:flex;flex-wrap:wrap;gap:16px}
+  .wechat-dialog{margin:auto;width:min(420px,calc(100vw - 32px));max-height:calc(100dvh - 32px);padding:20px;background:var(--bg-soft);color:var(--fg);border:1px solid var(--accent);border-radius:8px;overflow:auto;box-shadow:0 0 32px var(--accent-dim)}
+  .wechat-dialog::backdrop{background:rgba(0,0,0,.78)}
+  .wechat-dialog-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px}
+  .wechat-dialog h2{font-size:18px;font-weight:500}
+  .wechat-close{background:transparent;border:1px solid var(--line);color:var(--fg);padding:6px 10px;font:12px var(--mono);cursor:pointer;border-radius:2px;transition:color .25s,border-color .25s}
+  .wechat-close:hover{color:var(--accent);border-color:var(--accent)}
+  .wechat-close:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+  .wechat-qr{display:block;width:100%;height:auto;max-height:calc(100dvh - 140px);object-fit:contain}
+  html.wechat-open{overflow:hidden}
   .clink{font-family:var(--mono);font-size:14px;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:8px;transition:color .25s;}
   .clink:hover{color:var(--accent)}
   .clink::before{content:"↗";color:var(--accent)}
@@ -127,9 +141,10 @@
     </span>
   </nav>
   <header>
-    <span class="tag">AI INFRA OPERATIONAL · 99.99%</span>
-    <h1 data-zh-html="让智能<span class=&quot;accent&quot;>稳定</span><br>运转的人" data-en-html="Keeping AI<br><span class=&quot;accent&quot;>resilient</span> & alive">让智能<span class="accent">稳定</span><br>运转的人</h1>
-    <p data-zh="AI Infra &amp; AIOps 工程师。专注 GPU 算力集群、LLM 高并发推理与智能体工程化，把 AI 基础设施做成高可用、低延迟、可自愈的智能底座。" data-en="AI Infra &amp; AIOps Engineer. Focused on GPU compute clusters, high-concurrency LLM inference, and production-ready AI agents — building highly available, low-latency, self-healing AI infrastructure.">AI Infra &amp; AIOps 工程师。专注 GPU 算力集群、LLM 高并发推理与智能体工程化，把 AI 基础设施做成高可用、低延迟、可自愈的智能底座。</p>
+    <span class="tag">RAYMOND / AI INFRASTRUCTURE</span>
+    <h1 data-zh-html="从海外IT基建，<br>到<span class=&quot;accent&quot;>大模型平台落地</span>。" data-en-html="From overseas factory builds<br>to <span class=&quot;accent&quot;>LLM platform delivery</span>.">从海外工厂建设，<br>到<span class="accent">大模型平台落地</span>。</h1>
+    <p class="hero-principles" data-zh-html="专注于<strong>算力</strong>，坚守<strong>安全</strong>，追求<strong>稳定</strong>。" data-en-html="Focused on <strong>compute</strong>, committed to <strong>security</strong>, striving for <strong>stability</strong>.">专注于<strong>算力</strong>，坚守<strong>安全</strong>，追求<strong>稳定</strong>。</p>
+    <p data-zh="深耕 AI Infrastructure 与云原生技术，致力于构建安全、可靠、易于维护的大模型基础设施。" data-en="Specializing in AI Infrastructure and cloud-native technologies to build secure, reliable, and maintainable infrastructure for large language models.">深耕 AI Infrastructure 与云原生技术，致力于构建安全、可靠、易于维护的大模型基础设施。</p>
     <div class="cta">
       <a href="#work" class="btn btn-primary" data-zh="查看项目 →" data-en="View Work →">查看项目 →</a>
       <a href="#contact" class="btn btn-ghost" data-zh="联系我" data-en="Get in Touch">联系我</a>
@@ -218,11 +233,40 @@
       <a href="mailto:raymond@example.com" class="clink">Email</a>
       <a href="https://github.com" class="clink">GitHub</a>
       <a href="#" class="clink" data-zh="博客 / Blog" data-en="Blog">博客 / Blog</a>
-      <a href="#" class="clink" data-zh="微信 / WeChat" data-en="WeChat">微信 / WeChat</a>
+      <a href="assets/wechat-qr.png" id="wechatLink" class="clink" aria-haspopup="dialog" aria-controls="wechatDialog" data-zh="微信 / WeChat" data-en="WeChat">微信 / WeChat</a>
     </div>
   </section>
   <footer><span>© 2026 RAYMOND-PROMAX</span><span data-zh="用心打造 · 部署于 GitHub Pages" data-en="Built with care · Hosted on GitHub Pages">Built with care · Hosted on GitHub Pages</span></footer>
 </div>
+<dialog id="wechatDialog" class="wechat-dialog" aria-labelledby="wechatTitle">
+  <div class="wechat-dialog-head">
+    <h2 id="wechatTitle" data-zh="微信扫码添加" data-en="Add me on WeChat">微信扫码添加</h2>
+    <button type="button" class="wechat-close" autofocus data-zh="关闭" data-en="Close">关闭</button>
+  </div>
+  <img class="wechat-qr" src="assets/wechat-qr.png" width="768" height="1136" alt="微信好友二维码 / WeChat contact QR code">
+</dialog>
+<script>
+  (function(){
+    const link=document.getElementById('wechatLink');
+    const dialog=document.getElementById('wechatDialog');
+    link.addEventListener('click',event=>{
+      if(typeof dialog.showModal!=='function') return;
+      event.preventDefault();
+      dialog.showModal();
+      document.documentElement.classList.add('wechat-open');
+    });
+    dialog.querySelector('.wechat-close').addEventListener('click',()=>dialog.close());
+    dialog.addEventListener('click',event=>{
+      if(event.target!==dialog) return;
+      const rect=dialog.getBoundingClientRect();
+      if(event.clientX<rect.left || event.clientX>rect.right || event.clientY<rect.top || event.clientY>rect.bottom) dialog.close();
+    });
+    dialog.addEventListener('close',()=>{
+      document.documentElement.classList.remove('wechat-open');
+      link.focus({preventScroll:true});
+    });
+  })();
+</script>
 <script>
   /* 双语切换 */
   (function(){
