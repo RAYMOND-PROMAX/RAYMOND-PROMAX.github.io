@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>监控告警体系 — RAYMOND-PROMAX</title>
+<title>AIOps 智能运维 Agent — RAYMOND-PROMAX</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Sora:wght@300;500;700&display=swap" rel="stylesheet">
@@ -64,53 +64,53 @@
 
   <div class="head">
     <div class="crumb">Project · 004</div>
-    <h1>监控告警体系</h1>
-    <p class="lede">基于 Prometheus + Grafana 构建全链路可观测性</p>
+    <h1>AIOps 智能运维 Agent</h1>
+    <p class="lede">结合私有化模型、RAG 与监控信息，为员工和运维工程师提供问答与诊断辅助。</p>
     <div class="meta">
-      <div><span class="k">角色</span><span class="v">[ 占位：你的角色 ]</span></div>
-      <div><span class="k">周期</span><span class="v">[ 占位：2025 ]</span></div>
-      <div><span class="k">团队规模</span><span class="v">[ 占位：N 人 ]</span></div>
+      <div><span class="k">工程重点</span><span class="v">Agent 编排与 RCA 辅助</span></div>
+      <div><span class="k">应用定位</span><span class="v">智能辅助运维</span></div>
+      <div><span class="k">操作边界</span><span class="v">高风险操作人工确认</span></div>
     </div>
   </div>
 
   <section>
     <div class="sec-label"><span>01</span> / 背景与挑战</div>
-    <p class="body">[ 占位内容 ] 在这里写项目的背景：当时遇到了什么问题、为什么要做这件事、面临哪些痛点和挑战。比如告警风暴严重、人工排障耗时长、系统扩展性差等。把"为什么做"讲清楚，比罗列技术更有说服力。</p>
+    <p class="body">依托 GPU 算力、统一可观测性和工业知识中台，将监控信息、历史案例与 Runbook 融入运维诊断。平台辅助分析与决策，高风险操作需人工确认，不作为完全无人值守的自动化运维系统。</p>
   </section>
 
   <section>
     <div class="sec-label"><span>02</span> / 我做了什么</div>
     <ul class="list">
-      <li>[ 占位 ] 关键工作一：描述你具体负责和实现的部分。</li>
-      <li>[ 占位 ] 关键工作二：用了什么方案 / 架构 / 工具来解决问题。</li>
-      <li>[ 占位 ] 关键工作三：遇到的难点和你的解决思路。</li>
-      <li>[ 占位 ] 关键工作四：上线、推广或落地的过程。</li>
+      <li>以 Dify 与 LangGraph Agent 作为应用入口和编排层，调用私有化 Qwen 系列模型，组织意图识别、任务规划、工具调用与状态管理。</li>
+      <li>通过 RAG 检索、Rerank 和上下文构建调用工业知识，结合监控信息、历史案例与 Runbook 辅助 RCA 分析。</li>
+      <li>管理短期会话状态、历史摘要和长期知识检索；将上下文管理与工具调用异常处理纳入诊断工作流。</li>
+      <li>围绕鉴权、会话隔离及敏感数据控制设置安全边界，高风险操作保留人工确认环节。</li>
     </ul>
   </section>
 
   <section>
     <div class="sec-label"><span>03</span> / 技术栈</div>
     <div class="stack">
-      <span class="chip">[ 占位 ]</span>
-      <span class="chip">Kubernetes</span>
-      <span class="chip">Prometheus</span>
-      <span class="chip">Python</span>
-      <span class="chip">[ 替换成实际用到的 ]</span>
+      <span class="chip">Dify</span>
+      <span class="chip">LangGraph</span>
+      <span class="chip">Qwen</span>
+      <span class="chip">RAG / Rerank</span>
+      <span class="chip">Runbook</span>
     </div>
   </section>
 
   <section>
-    <div class="sec-label"><span>04</span> / 成果</div>
+    <div class="sec-label"><span>04</span> / 应用能力与安全边界</div>
     <div class="results">
-      <div class="res"><div class="num">[ XX ]</div><div class="lab">占位：指标一</div></div>
-      <div class="res"><div class="num">[ XX ]</div><div class="lab">占位：指标二</div></div>
-      <div class="res"><div class="num">[ XX ]</div><div class="lab">占位：指标三</div></div>
+      <div class="res"><div class="num">辅助 RCA</div><div class="lab">结合监控、案例与 Runbook 分析</div></div>
+      <div class="res"><div class="num">会话记忆</div><div class="lab">短期状态、历史摘要与长期检索</div></div>
+      <div class="res"><div class="num">人工确认</div><div class="lab">高风险操作由人员审核确认</div></div>
     </div>
   </section>
 
   <section>
-    <div class="sec-label"><span>05</span> / 截图 / 架构图</div>
-    <div class="shot">[ 占位：把架构图、Grafana 大盘、流程图等放这里<br>用 &lt;img src="图片地址"&gt; 替换本区块 ]</div>
+    <div class="sec-label"><span>05</span> / 诊断工作流与工程经验</div>
+    <div class="shot">意图识别 → 检索与上下文 → 工具调用 → 辅助诊断<br>高风险操作人工确认；关注会话隔离与异常处理。</div>
   </section>
 
   <div class="pager">

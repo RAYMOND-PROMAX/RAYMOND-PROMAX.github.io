@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>智能运维平台 — RAYMOND-PROMAX</title>
+<title>GPU 大模型训练与推理平台 — RAYMOND-PROMAX</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Sora:wght@300;500;700&display=swap" rel="stylesheet">
@@ -83,44 +83,44 @@
 
   <div class="head">
     <div class="crumb">Project · 001 · 天枢</div>
-    <h1>智能运维平台<span class="ai-badge">AI</span></h1>
-    <p class="lede">让监控学会思考——把"告警风暴"收敛成"一条结论"的智能运维平台。</p>
+    <h1>GPU 大模型训练与推理平台<span class="ai-badge">AI</span></h1>
+    <p class="lede">企业级私有化 AI Infrastructure 核心算力平台，面向工业 AI、知识检索与智能运维。</p>
     <div class="meta">
-      <div><span class="k">角色</span><span class="v">核心开发 / 平台负责人</span></div>
-      <div><span class="k">周期</span><span class="v">2024 — 2025</span></div>
-      <div><span class="k">团队规模</span><span class="v">4 人</span></div>
+      <div><span class="k">角色</span><span class="v">GPU 平台建设与运维</span></div>
+      <div><span class="k">部署形态</span><span class="v">私有化部署</span></div>
+      <div><span class="k">服务场景</span><span class="v">工业 AI / 知识检索</span></div>
     </div>
   </div>
 
   <section>
-    <div class="sec-label"><span>01</span> / 起因</div>
-    <p class="body">公司业务进入快速扩张期，服务规模从几十个增长到数百个，监控告警量随之飙升至日均数万条。但问题不在"量"，而在<strong>信噪比</strong>——一次数据库抖动会瞬间引发上百条衍生告警，值班工程师很难在几分钟内辨认出真正的根因。MTTR 居高不下，"告警疲劳"让团队逐渐对告警麻木，真正的事故反而被淹没。监控越做越多，却越来越不可信。</p>
+    <div class="sec-label"><span>01</span> / 项目背景与挑战</div>
+    <p class="body">海外制造基地的工业 AI、知识检索与智能运维需要统一的私有化算力底座。核心挑战是<strong>训练与推理的资源竞争</strong>：模型显存需求、在线响应与批量训练负载不同，需要规划 GPU 资源池、隔离工作负载并建立可验证的模型发布流程。</p>
   </section>
 
   <section>
-    <div class="sec-label"><span>02</span> / 经过</div>
-    <p class="body">团队评估了商业 AIOps 产品、纯开源方案与自研三条路，最终选择「开源监控栈为底座 + 自研智能分析层」：复用成熟的采集能力，把最核心的降噪与根因逻辑握在自己手里。</p>
+    <div class="sec-label"><span>02</span> / 工程实施与个人职责</div>
+    <p class="body">计算资源为 4 台 Dell R760xa、16 张 NVIDIA L40S 与 3 台 Dell R660 控制节点。以 Linux、Docker、Kubernetes 和 NVIDIA GPU Operator 管理资源，承载 Qwen2.5-32B、14B、Embedding、Rerank 及视觉模型服务。</p>
     <p class="body" style="color:var(--accent)">我在项目中的贡献：</p>
     <ul class="list">
-      <li><strong>主导整体架构设计</strong>，确定"数据底座 + 三大引擎"的分层方案，打通指标、日志、链路三类数据接入。</li>
-      <li><strong>独立实现告警降噪引擎</strong>：基于时间窗口聚类与相似度算法，将同源、重复、抖动告警自动合并，一场风暴收敛为一个事件。</li>
-      <li><strong>攻克根因分析难点</strong>：在缺乏完整服务拓扑的前提下，从调用链路与告警时序共现关系中动态推断依赖、回溯根因——这正是多数现成方案落地翻车之处。</li>
-      <li>设计故障预测模块，对关键资源指标做时序预测，并推动平台在值班团队的落地与迭代。</li>
+      <li><strong>GPU 资源池规划</strong>：围绕模型显存、训练任务与在线推理划分资源，明确训练推理隔离及昼夜调度方案；自动切换能力按验证进度推进。</li>
+      <li><strong>模型部署与推理链路</strong>：HAProxy → Envoy → Inference Router → vLLM → CUDA/GPU，关注模型加载、显存不足、请求超时与服务恢复。</li>
+      <li><strong>训练与发布流程</strong>：数据准备 → SFT/LoRA → Checkpoint → 模型评测；发布前执行模型验证与压力测试，按灰度方案发布并保留回滚版本。</li>
+      <li>运维保障采用 Prometheus、Grafana 与 DCGM Exporter，围绕 GPU 利用率、显存、温度和服务状态排障，按测试记录验证并发、延迟及恢复能力。</li>
     </ul>
   </section>
 
   <div class="hero-results">
-    <div class="hr"><div class="n">-70%</div><div class="l">告警总量下降</div></div>
-    <div class="hr"><div class="n">-60%</div><div class="l">平均故障定位时间</div></div>
-    <div class="hr"><div class="n">200+</div><div class="l">接入服务 / 节点</div></div>
+    <div class="hr"><div class="n">4 台</div><div class="l">Dell R760xa 计算节点</div></div>
+    <div class="hr"><div class="n">16 张</div><div class="l">NVIDIA L40S GPU</div></div>
+    <div class="hr"><div class="n">3 台</div><div class="l">Dell R660 控制节点</div></div>
   </div>
   <section style="padding-top:14px">
-    <div class="sec-label"><span>03</span> / 成果</div>
-    <p class="body">平台上线后，无效告警被大幅过滤，值班工程师得以聚焦真正重要的问题；根因分析将一连串衍生告警归并为单一事件，显著缩短了故障定位时间；故障预测让多起潜在容量问题在发生前被拦截，运维真正从"被动救火"走向"主动预防"。</p>
+    <div class="sec-label"><span>03</span> / 成果验证与工程复盘</div>
+    <p class="body">平台围绕私有化 GPU 资源池组织模型服务、训练链路与运维保障。验收关注模型可用性、训练产物、监控覆盖及发布回滚记录；吞吐、延迟与并发上限需经专项压力测试确认，昼夜自动调度及自动化恢复不作为已完成成果。工程复盘重点是先明确资源边界，再用可重复测试验证稳定性，避免将架构方案等同于生产能力。</p>
   </section>
 
   <section>
-    <div class="sec-label"><span>04</span> / 项目框架</div>
+    <div class="sec-label"><span>04</span> / 系统架构与技术选型</div>
     <div class="figure">
       <svg viewBox="0 0 660 230" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;font-family:'Space Mono',monospace">
         <defs>
@@ -135,29 +135,29 @@
           </style>
         </defs>
         <rect class="bx" x="10" y="20" width="120" height="38" rx="4"/>
-        <text class="tx" x="70" y="38" text-anchor="middle">Metrics</text>
-        <text class="tl" x="70" y="51" text-anchor="middle">Prometheus</text>
+        <text class="tx" x="70" y="38" text-anchor="middle">推理请求</text>
+        <text class="tl" x="70" y="51" text-anchor="middle">Qwen2.5 / vLLM</text>
         <rect class="bx" x="10" y="96" width="120" height="38" rx="4"/>
-        <text class="tx" x="70" y="114" text-anchor="middle">Logs</text>
-        <text class="tl" x="70" y="127" text-anchor="middle">ELK</text>
+        <text class="tx" x="70" y="114" text-anchor="middle">训练任务</text>
+        <text class="tl" x="70" y="127" text-anchor="middle">SFT / LoRA</text>
         <rect class="bx" x="10" y="172" width="120" height="38" rx="4"/>
-        <text class="tx" x="70" y="190" text-anchor="middle">Tracing</text>
-        <text class="tl" x="70" y="203" text-anchor="middle">链路追踪</text>
+        <text class="tx" x="70" y="190" text-anchor="middle">模型服务</text>
+        <text class="tl" x="70" y="203" text-anchor="middle">Embedding / Rerank</text>
         <rect class="bx" x="200" y="96" width="120" height="38" rx="4"/>
-        <text class="tx" x="260" y="114" text-anchor="middle">采集管道</text>
-        <text class="tl" x="260" y="127" text-anchor="middle">Kafka</text>
+        <text class="tx" x="260" y="114" text-anchor="middle">资源管理</text>
+        <text class="tl" x="260" y="127" text-anchor="middle">K8s / GPU Operator</text>
         <rect class="bx" x="390" y="20" width="130" height="38" rx="4"/>
-        <text class="tx" x="455" y="38" text-anchor="middle">告警降噪</text>
-        <text class="tl" x="455" y="51" text-anchor="middle">聚类去重</text>
+        <text class="tx" x="455" y="38" text-anchor="middle">计算资源</text>
+        <text class="tl" x="455" y="51" text-anchor="middle">16 × L40S</text>
         <rect class="bx" x="390" y="96" width="130" height="38" rx="4"/>
-        <text class="tx" x="455" y="114" text-anchor="middle">根因分析</text>
-        <text class="tl" x="455" y="127" text-anchor="middle">拓扑 + 时序</text>
+        <text class="tx" x="455" y="114" text-anchor="middle">控制节点</text>
+        <text class="tl" x="455" y="127" text-anchor="middle">3 × R660</text>
         <rect class="bx" x="390" y="172" width="130" height="38" rx="4"/>
-        <text class="tx" x="455" y="190" text-anchor="middle">故障预测</text>
-        <text class="tl" x="455" y="203" text-anchor="middle">时序模型</text>
+        <text class="tx" x="455" y="190" text-anchor="middle">可观测性</text>
+        <text class="tl" x="455" y="203" text-anchor="middle">DCGM / Prometheus</text>
         <rect class="bx" x="560" y="96" width="90" height="38" rx="4"/>
-        <text class="tx" x="605" y="114" text-anchor="middle">告警/自愈</text>
-        <text class="tl" x="605" y="127" text-anchor="middle">IM 推送</text>
+        <text class="tx" x="605" y="114" text-anchor="middle">交付验证</text>
+        <text class="tl" x="605" y="127" text-anchor="middle">评测 / 回滚</text>
         <line class="ln" x1="130" y1="39" x2="196" y2="108"/>
         <line class="ln" x1="130" y1="115" x2="196" y2="115"/>
         <line class="ln" x1="130" y1="191" x2="196" y2="122"/>
@@ -168,25 +168,25 @@
         <line class="ln" x1="520" y1="115" x2="556" y2="115"/>
         <line class="ln" x1="520" y1="188" x2="556" y2="122"/>
       </svg>
-      <div class="figure-cap">数据源 → 采集管道 → 三大智能引擎 → 告警 / 自愈输出</div>
+      <div class="figure-cap">工作负载 → 资源管理 → 算力 / 控制 / 监控 → 交付验证</div>
     </div>
     <div class="stack" style="margin-top:24px">
-      <span class="chip">Python</span>
+      <span class="chip">Linux / Docker</span>
       <span class="chip">Kubernetes</span>
       <span class="chip">Prometheus</span>
       <span class="chip">Grafana</span>
-      <span class="chip">Kafka</span>
-      <span class="chip">ELK</span>
-      <span class="chip">Redis</span>
-      <span class="chip">PostgreSQL</span>
-      <span class="chip">scikit-learn</span>
+      <span class="chip">GPU Operator</span>
+      <span class="chip">vLLM / CUDA</span>
+      <span class="chip">SFT / LoRA</span>
+      <span class="chip">HAProxy / Envoy</span>
+      <span class="chip">DCGM Exporter</span>
     </div>
   </section>
 
   <section style="border-bottom:none">
-    <div class="sec-label"><span>05</span> / 在线 Demo</div>
+    <div class="sec-label"><span>05</span> / 项目交流</div>
     <div class="demo-entry">
-      <div class="charge" id="chargeRing" tabindex="0" role="button" aria-label="启动并进入 Demo"
+      <div class="charge" id="chargeRing" tabindex="0" role="button" aria-label="充能后访问 GitHub 主页"
            data-demo="https://github.com/RAYMOND-PROMAX">
         <canvas id="chargeCanvas"></canvas>
         <div class="core">
@@ -194,7 +194,7 @@
           <div class="sub" id="chargeSub">点击充能进入</div>
         </div>
       </div>
-      <div class="demo-hint">点击充能环 · 充满后进入演示</div>
+      <div class="demo-hint">点击充能环 · 充满后访问 GitHub 主页</div>
     </div>
   </section>
 
@@ -329,7 +329,7 @@
   const T_BURST=1300;    // 炸开成满天星
   const T_COLLAPSE=1000; // 坍缩为黑
   const T_TYPE=2200;     // 命令行打字
-  const TYPE_TEXT='> 骇入成功';
+  const TYPE_TEXT='> 算力就绪';
 
   function start(){
     if(!idle)return; idle=false;

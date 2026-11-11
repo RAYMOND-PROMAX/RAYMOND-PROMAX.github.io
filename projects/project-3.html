@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>K8s 集群迁移 — RAYMOND-PROMAX</title>
+<title>工业 AI 数据与知识中台 — RAYMOND-PROMAX</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Sora:wght@300;500;700&display=swap" rel="stylesheet">
@@ -64,53 +64,53 @@
 
   <div class="head">
     <div class="crumb">Project · 003</div>
-    <h1>K8s 集群迁移</h1>
-    <p class="lede">将单体服务平滑迁移至容器化平台，零停机</p>
+    <h1>工业 AI 数据与知识中台</h1>
+    <p class="lede">以知识治理、权限隔离与 RAG 检索服务，支撑工业知识复用和可信 AI 应用。</p>
     <div class="meta">
-      <div><span class="k">角色</span><span class="v">[ 占位：你的角色 ]</span></div>
-      <div><span class="k">周期</span><span class="v">[ 占位：2025 ]</span></div>
-      <div><span class="k">团队规模</span><span class="v">[ 占位：N 人 ]</span></div>
+      <div><span class="k">工程重点</span><span class="v">知识治理与检索服务</span></div>
+      <div><span class="k">知识范围</span><span class="v">工业文档与工程经验</span></div>
+      <div><span class="k">服务对象</span><span class="v">AI 应用与 Agent</span></div>
     </div>
   </div>
 
   <section>
     <div class="sec-label"><span>01</span> / 背景与挑战</div>
-    <p class="body">[ 占位内容 ] 在这里写项目的背景：当时遇到了什么问题、为什么要做这件事、面临哪些痛点和挑战。比如告警风暴严重、人工排障耗时长、系统扩展性差等。把"为什么做"讲清楚，比罗列技术更有说服力。</p>
+    <p class="body">企业 SOP、设备手册、故障案例及工程经验分散，知识复用困难，权限边界不清晰。中台聚焦工业知识资产治理，为应用提供标准化检索 API；不承担通用数据湖或原始监控数据存储职责。</p>
   </section>
 
   <section>
     <div class="sec-label"><span>02</span> / 我做了什么</div>
     <ul class="list">
-      <li>[ 占位 ] 关键工作一：描述你具体负责和实现的部分。</li>
-      <li>[ 占位 ] 关键工作二：用了什么方案 / 架构 / 工具来解决问题。</li>
-      <li>[ 占位 ] 关键工作三：遇到的难点和你的解决思路。</li>
-      <li>[ 占位 ] 关键工作四：上线、推广或落地的过程。</li>
+      <li>接入 SOP、Runbook、设备手册、RCA、Wiki 与工程知识，完成文档解析、清洗、分块、去重及元数据管理。</li>
+      <li>通过 BGE-M3 向量化、Milvus 检索与 bge-reranker-v2-m3 重排，构建面向 RAG 的知识检索链路。</li>
+      <li>以知识分级、ACL 权限控制、版本管理和资产准入治理知识，关注权限隔离与内容有效性。</li>
+      <li>提供标准化知识检索 API；围绕检索命中率、重排质量、知识有效性和授权正确性评估服务。</li>
     </ul>
   </section>
 
   <section>
     <div class="sec-label"><span>03</span> / 技术栈</div>
     <div class="stack">
-      <span class="chip">[ 占位 ]</span>
-      <span class="chip">Kubernetes</span>
-      <span class="chip">Prometheus</span>
-      <span class="chip">Python</span>
-      <span class="chip">[ 替换成实际用到的 ]</span>
+      <span class="chip">BGE-M3</span>
+      <span class="chip">Milvus</span>
+      <span class="chip">bge-reranker-v2-m3</span>
+      <span class="chip">RAG</span>
+      <span class="chip">ACL</span>
     </div>
   </section>
 
   <section>
-    <div class="sec-label"><span>04</span> / 成果</div>
+    <div class="sec-label"><span>04</span> / 治理产出与验证</div>
     <div class="results">
-      <div class="res"><div class="num">[ XX ]</div><div class="lab">占位：指标一</div></div>
-      <div class="res"><div class="num">[ XX ]</div><div class="lab">占位：指标二</div></div>
-      <div class="res"><div class="num">[ XX ]</div><div class="lab">占位：指标三</div></div>
+      <div class="res"><div class="num">知识治理</div><div class="lab">分级、版本与资产准入</div></div>
+      <div class="res"><div class="num">权限隔离</div><div class="lab">以授权正确性作为验证重点</div></div>
+      <div class="res"><div class="num">检索服务</div><div class="lab">为 AI 应用与 Agent 提供知识 API</div></div>
     </div>
   </section>
 
   <section>
-    <div class="sec-label"><span>05</span> / 截图 / 架构图</div>
-    <div class="shot">[ 占位：把架构图、Grafana 大盘、流程图等放这里<br>用 &lt;img src="图片地址"&gt; 替换本区块 ]</div>
+    <div class="sec-label"><span>05</span> / 知识链路与工程经验</div>
+    <div class="shot">文档 → 解析清洗 → 分块向量化 → 检索重排 → 知识 API<br>知识质量、版本有效性与授权边界需共同验证。</div>
   </section>
 
   <div class="pager">
