@@ -48,6 +48,37 @@
   .sec-label span{color:var(--accent)}
   .about{font-size:18px;color:var(--fg);font-weight:300;max-width:660px}
   .about strong{color:var(--accent);font-weight:500}
+  #about .about-position{max-width:680px;font-size:17px;line-height:1.9;color:var(--fg)}
+  #about .about-capabilities-title{font-size:19px;font-weight:500;margin:34px 0 20px;color:var(--fg)}
+  #about .about-capabilities{list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 32px}
+  #about .about-capabilities li{position:relative;isolation:isolate;box-sizing:border-box;border:1px solid transparent;border-top-color:var(--line);padding:20px 22px;min-width:0;border-radius:8px;overflow-wrap:anywhere;transition:border-color 250ms ease,box-shadow 250ms ease}
+  #about .about-capabilities li::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:rgba(15,35,38,.65);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity 250ms ease}
+  #about .about-capabilities li::after{content:"";position:absolute;top:9px;left:22px;width:24px;height:1px;background:var(--accent);opacity:0;pointer-events:none;transition:opacity 250ms ease}
+  @media(hover:hover) and (pointer:fine){
+    #about .about-capabilities li:hover{border-color:rgba(45,212,191,.28);box-shadow:0 2px 8px rgba(0,0,0,.08)}
+    #about .about-capabilities li:hover::before,#about .about-capabilities li:hover::after{opacity:1}
+  }
+  #about .about-capabilities h3{font-size:17px;font-weight:500;line-height:1.6;color:var(--fg);margin-bottom:12px}
+  #about .capability-number{font-family:var(--mono);font-size:13px;color:var(--accent);margin-right:8px;white-space:nowrap}
+  #about .about-capabilities p{font-size:15px;color:#a7b1bb;line-height:1.9;overflow-wrap:break-word}
+  @media(max-width:600px){#about .about-capabilities{grid-template-columns:1fr;gap:24px}}
+  #about .about-capabilities li{perspective:1000px;padding:0;border:0;border-radius:8px;isolation:auto;box-shadow:none;transition:none}
+  #about .about-capabilities li::before,#about .about-capabilities li::after{content:none}
+  #about .capability-flip{position:relative;min-width:0;height:100%;border-radius:8px;cursor:pointer;transform-style:preserve-3d;transition:transform 600ms cubic-bezier(0.4, 0, 0.2, 1);outline:none}
+  #about .capability-flip.is-flipped{transform:rotateY(180deg)}
+  #about .capability-front,#about .capability-back{box-sizing:border-box;width:100%;height:100%;padding:20px 22px;border:1px solid transparent;border-top-color:var(--line);border-radius:8px;-webkit-backface-visibility:hidden;backface-visibility:hidden;transition:border-color 250ms ease,background-color 250ms ease,box-shadow 250ms ease}
+  #about .capability-back{position:absolute;inset:0;transform:rotateY(180deg);background:rgba(15,35,38,.85);border-color:rgba(45,212,191,.16);overflow:auto}
+  #about .capability-front::before{content:"";position:absolute;inset:1px;z-index:-1;border-radius:7px;background:rgba(15,35,38,.65);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);opacity:0;transition:opacity 250ms ease;pointer-events:none}
+  #about .capability-front::after,#about .capability-back::after{content:"";position:absolute;top:9px;left:22px;width:24px;height:1px;background:var(--accent);opacity:0;transition:opacity 250ms ease;pointer-events:none}
+  #about .capability-tags{display:flex;flex-wrap:wrap;align-content:center;gap:6px;min-height:100%}
+  #about .capability-tag{font-family:var(--mono);font-size:11px;line-height:1.5;color:#cbd5e1;border:1px solid rgba(45,212,191,.16);border-radius:4px;padding:3px 6px;max-width:100%;overflow-wrap:anywhere}
+  #about .capability-flip:focus-visible{outline:2px solid var(--accent);outline-offset:4px}
+  @media(hover:hover) and (pointer:fine){
+    #about .about-capabilities li:hover{box-shadow:none}
+    #about .about-capabilities li:hover .capability-front,#about .about-capabilities li:hover .capability-back{border-color:rgba(45,212,191,.28);box-shadow:0 2px 8px rgba(0,0,0,.08)}
+    #about .about-capabilities li:hover .capability-front::before,#about .about-capabilities li:hover .capability-front::after,#about .about-capabilities li:hover .capability-back::after{opacity:1}
+  }
+  @media(prefers-reduced-motion:reduce){#about .capability-flip,#about .capability-front,#about .capability-back,#about .capability-front::before,#about .capability-front::after,#about .capability-back::after{transition:none}}
   .stack{display:flex;flex-direction:column;gap:10px;margin-top:28px}
   .stack-row{display:flex;flex-wrap:wrap;gap:8px}
   .chip{font-family:var(--mono);font-size:12px;color:#cbd5e1;border:1px solid rgba(255,255,255,.15);padding:6px 9px;border-radius:2px;transition:color .25s,border-color .25s}
@@ -67,36 +98,57 @@
   .arrow{font-family:var(--mono);color:var(--muted);transition:all .25s;font-size:18px}
   .star-name{font-family:var(--mono);font-size:18px;font-weight:700;letter-spacing:.1em;color:var(--muted);opacity:.75;transition:color .25s,opacity .25s;align-self:center;white-space:nowrap}
   .w-item.active .star-name{color:var(--accent);opacity:1}
-  /* —— 项目轮盘 —— */
-  .wheel{position:relative;height:420px;margin-top:10px;perspective:1100px;overflow:hidden;cursor:grab;user-select:none}
-  .wheel.dragging{cursor:grabbing}
-  .wheel-track{position:absolute;inset:0;transform-style:preserve-3d}
-  .w-item{position:absolute;left:0;right:0;top:50%;display:grid;grid-template-columns:auto 1fr auto auto;gap:22px;align-items:center;padding:20px 22px;text-decoration:none;color:inherit;border:1px solid transparent;border-radius:8px;transition:transform .45s cubic-bezier(.22,.61,.36,1),opacity .45s,border-color .3s,background .3s;will-change:transform,opacity}
-  .w-item.active{border-color:var(--line);background:rgba(45,212,191,.04)}
-  .w-item.active .p-name{color:var(--accent);font-size:25px}
-  .w-item.active .arrow{color:var(--accent)}
-  .wheel-nav{display:flex;align-items:center;gap:14px;margin-top:18px;font-family:var(--mono);font-size:12px;color:var(--muted)}
-  .wheel-nav button{background:transparent;border:1px solid var(--line);color:var(--muted);width:34px;height:34px;border-radius:50%;cursor:pointer;transition:all .25s;font-size:14px}
-  .wheel-nav button:hover{border-color:var(--accent);color:var(--accent)}
-  .wheel-dots{display:flex;gap:8px;margin-left:6px}
-  .wheel-dots i{width:7px;height:7px;border-radius:50%;background:var(--line);transition:all .3s;cursor:pointer;display:inline-block}
-  .wheel-dots i.on{background:var(--accent);transform:scale(1.25)}
-  .wheel-count{margin-left:auto;letter-spacing:.1em}
-  /* —— 轮盘 + 目录 两栏布局 —— */
-  .work-layout{display:grid;grid-template-columns:3fr 1fr;gap:36px;align-items:center;margin-top:10px}
-  .proj-index{border-left:1px solid var(--line);padding-left:24px}
-  .proj-index .pi-title{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;margin-bottom:14px}
-  .pi-item{display:flex;align-items:baseline;gap:12px;padding:9px 0;cursor:pointer;border-bottom:1px solid var(--line);transition:padding .25s,color .25s}
-  .pi-item:last-child{border-bottom:none}
-  .pi-item:hover{padding-left:6px}
-  .pi-star{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--muted);min-width:28px;transition:color .25s}
-  .pi-name{font-size:13px;color:var(--fg);transition:color .25s;line-height:1.35}
-  .pi-item.on .pi-star,.pi-item.on .pi-name{color:var(--accent)}
-  .pi-item.on{padding-left:6px}
-  @media(max-width:720px){
-    .work-layout{grid-template-columns:1fr;gap:20px}
-    .proj-index{border-left:none;border-top:1px solid var(--line);padding-left:0;padding-top:18px}
-  }
+  /* —— 精选项目 —— */
+  #work{width:100%;margin-left:0}
+  .wrap .aiops,#work .work-layout{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:32px}
+  #work .work-layout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px;align-items:start;background:linear-gradient(110deg,rgba(10,14,18,.76),rgba(10,14,18,.62) 75%,rgba(10,14,18,.25))}
+  #work .project-navigation,#work .project-content{min-width:0}
+  #work .project-list{display:grid;padding:0;font-family:inherit;align-items:stretch;justify-content:stretch}
+  #work .project-choice{display:grid;grid-template-columns:32px minmax(max-content,1fr) 16px;gap:16px;align-items:center;height:72px;width:100%;padding:0;background:transparent;border:0;border-bottom:1px solid var(--line);text-align:left;color:#cbd5e1;font:inherit;font-size:16px;cursor:pointer;transition:color 250ms ease,background 250ms ease}
+  #work .project-choice > :last-child{text-align:right}
+  #work .project-choice-name{white-space:nowrap;display:block}
+  #work .work-theme{display:inline-block;margin-left:18px;color:#a69876;font-family:var(--mono);font-size:10px;font-weight:400;letter-spacing:.06em}
+  #work .project-star{color:#a69876;font-family:var(--mono);font-size:11px;font-weight:400;letter-spacing:.08em;white-space:nowrap}
+  #work .project-choice-copy > .project-star{display:block;margin-bottom:3px;line-height:1.4}
+  #work .project-number{color:var(--accent)}
+  #work .project-card-identity{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
+  #work .project-number,#work .project-meta{font-family:var(--mono);font-size:12px}
+  #work .project-number{color:var(--accent)}
+  #work .project-choice:hover,#work .project-choice[aria-pressed="true"]{color:var(--accent);background:rgba(45,212,191,.022)}
+  #work .project-choice:focus-visible,#work .project-detail-link:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  #work .project-content{display:grid;border-left:1px solid var(--line);padding:0;min-height:360px}
+  #work .project-panel{grid-area:1 / 1;display:flex;flex-direction:column;min-width:0;max-width:700px;opacity:1;visibility:visible;transition:opacity 250ms ease;overflow-wrap:break-word}
+  #work .project-panel[aria-hidden="true"]{opacity:0;visibility:hidden;pointer-events:none}
+  #work .project-meta{color:var(--muted);margin-bottom:12px}
+  #work h3{font-size:26px;font-weight:600;line-height:1.45;margin-bottom:16px}
+  #work p,#work li{font-size:15px;line-height:1.8;color:#b6c0ca}
+  #work p{margin-bottom:18px}
+  #work ul{padding-left:20px;list-style:disc}#work li+li{margin-top:6px}
+  #work .project-tags{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0 18px}
+  #work .project-tags span{font-family:var(--mono);font-size:11px;padding:3px 8px;background:rgba(255,255,255,.04);border-radius:3px;color:#a7b1bb}
+  #work .project-detail-link{align-self:flex-start;margin-top:0;color:var(--accent);text-decoration:none;font-size:14px;padding-top:4px}
+  @media(max-width:800px){.wrap .aiops,#work .work-layout{grid-template-columns:minmax(0,1fr);gap:28px}#work .project-list{overflow-x:auto}#work .project-choice{min-width:max-content;font-size:15px}#work .project-content{padding:0;min-height:360px}#work .project-choice-copy{min-width:max-content}}
+  @media(prefers-reduced-motion:reduce){#work .project-panel{transition:none}}
+  #work .project-content{display:flex;flex-direction:column;padding:28px 30px;min-height:400px;background:rgba(13,28,32,.92);border:1px solid rgba(45,212,191,.25);border-radius:12px;backdrop-filter:blur(8px);transition:border-color 250ms ease}
+  #work .project-content:hover{border-color:rgba(45,212,191,.4)}
+  #work .project-card-body{display:grid;min-width:0}
+  #work .project-panel{max-width:none;transition:opacity 250ms ease,visibility 0s}
+  #work .project-panel[aria-hidden="true"]{transition:opacity 250ms ease,visibility 0s 250ms}
+  @media(prefers-reduced-motion:reduce){#work .project-content .project-panel{transition:none}}
+  #work .project-card-header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:22px;flex-wrap:wrap}
+  #work .project-meta{color:var(--accent);margin:0;font-size:11px}
+  #work .project-category{font-family:var(--mono);font-size:9px;letter-spacing:.06em;color:#a7b1bb;background:rgba(125,139,151,.12);border-radius:999px;padding:4px 8px}
+  #work .project-content h3{font-size:22px;font-weight:600;line-height:1.45;margin-bottom:14px}
+  #work .project-summary{font-size:14px;line-height:1.7;margin-bottom:0}
+  #work .project-tags{gap:8px;margin:18px 0 24px}
+  #work .project-tags span{background:rgba(45,212,191,.07);border-radius:999px;padding:4px 9px}
+  #work .project-card-footer{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:auto;padding-top:16px}
+  #work .project-detail-link{font-size:13px;padding:0}
+  #work .project-controls{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11px;color:#a7b1bb}
+  #work .project-controls button{width:28px;height:28px;border:0;background:transparent;color:var(--accent);font-size:16px;cursor:pointer;border-radius:4px}
+  #work .project-controls button:hover{background:rgba(45,212,191,.07)}
+  #work .project-controls button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  @media(max-width:480px){#work .project-content{padding:24px 20px}}
   .ai-badge{font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--accent);border:1px solid var(--accent);border-radius:2px;padding:2px 6px;margin-left:10px;vertical-align:middle;display:inline-block}
   .aiops{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:4px}
   .ai-card{border:1px solid var(--line);border-radius:4px;padding:24px 22px;position:relative;overflow:hidden;transition:border-color .3s,transform .3s}
@@ -152,7 +204,14 @@
   </header>
   <section id="about" class="reveal">
     <div class="sec-label"><span>01</span> / <span data-zh="关于" data-en="About">关于</span></div>
-    <p class="about" data-zh-html="我是 Raymond，一名 AI Infra 与智能运维工程师，信奉“无感化”的算力底座——模型丝滑响应、集群静默自愈，便是最好的状态。我拥有丰富的<strong>海外实战经验</strong>，曾在泰国、越南、台湾等地独立扛起高可用基础设施与 AI 平台从 0 到 1 的交付。围绕<strong>算力效率、推理稳定性与 AIOps 自愈</strong>，将故障响应前置为智能预测——目标只有一个：让 AI 系统跑得稳、用得起、不出事。" data-en-html="I'm Raymond, an AI Infra and AIOps engineer who believes in seamless compute infrastructure — responsive models and quietly self-healing clusters are the ideal state. With extensive <strong>hands-on overseas experience</strong> in Thailand, Vietnam, and Taiwan, I've independently delivered highly available infrastructure and AI platforms from the ground up. Focused on <strong>compute efficiency, inference stability, and AIOps self-healing</strong>, I turn reactive incident response into intelligent prediction — one goal: keep AI systems reliable, affordable, and trouble-free.">我是 Raymond，一名 AI Infra 与智能运维工程师，信奉“无感化”的算力底座——模型丝滑响应、集群静默自愈，便是最好的状态。我拥有丰富的<strong>海外实战经验</strong>，曾在泰国、越南、台湾等地独立扛起高可用基础设施与 AI 平台从 0 到 1 的交付。围绕<strong>算力效率、推理稳定性与 AIOps 自愈</strong>，将故障响应前置为智能预测——目标只有一个：让 AI 系统跑得稳、用得起、不出事。</p>
+    <p class="about-position" data-zh="半导体产线教会我对稳定性、安全与零中断的敬畏；如今，我将这套标准带入云原生基础设施、GPU 算力平台与企业级 AI 系统的建设与运维中。" data-en="With production experience in semiconductor manufacturing, I understand the stability, security, and business continuity requirements of highly reliable systems. My work focuses on building and operating cloud-native infrastructure, GPU compute platforms, and enterprise AI systems.">具备半导体制造行业生产环境经验，理解高可靠业务系统对稳定性、安全性和业务连续性的要求，主要从事云原生基础设施、GPU 算力平台与企业级 AI 系统的建设和运维。</p>     <h2 class="about-capabilities-title" data-zh="核心技术能力" data-en="Core Technical Capabilities">核心技术能力</h2>     <ol class="about-capabilities">
+      <li><div class="capability-flip" role="button" tabindex="0" aria-pressed="false" aria-label="01 / 切换技术栈"><div class="capability-front"><h3><span class="capability-number" aria-hidden="true">01 /</span> <span data-zh="基础设施建设" data-en="Infrastructure Delivery">基础设施建设</span></h3><p data-zh="具备企业级基础设施建设经验，覆盖服务器、网络、虚拟化、操作系统及应用平台的规划、部署、验收与运维。" data-en="Experienced in enterprise infrastructure delivery, covering planning, deployment, acceptance, and operations for servers, networks, virtualization, operating systems, and application platforms.">具备企业级基础设施建设经验，覆盖服务器、网络、虚拟化、操作系统及应用平台的规划、部署、验收与运维。</p></div><div class="capability-back" aria-hidden="true" inert><div class="capability-tags"><span class="capability-tag">Linux Server</span><span class="capability-tag">Dell PowerEdge</span><span class="capability-tag">Network</span><span class="capability-tag">Virtualization</span><span class="capability-tag">Hardware Acceptance</span><span class="capability-tag">Infrastructure Delivery</span></div></div></div></li>
+      <li><div class="capability-flip" role="button" tabindex="0" aria-pressed="false" aria-label="02 / 切换技术栈"><div class="capability-front"><h3><span class="capability-number" aria-hidden="true">02 /</span> <span data-zh="云原生与 DevOps" data-en="Cloud Native &amp; DevOps">云原生与 DevOps</span></h3><p data-zh="熟悉 Linux、Docker、Kubernetes、CI/CD、Ansible、Terraform，具备容器化部署、集群管理、自动化交付及 DevOps 实践经验。" data-en="Familiar with Linux, Docker, Kubernetes, CI/CD, Ansible, and Terraform, with practical experience in container deployment, cluster management, automated delivery, and DevOps.">熟悉 Linux、Docker、Kubernetes、CI/CD、Ansible、Terraform，具备容器化部署、集群管理、自动化交付及 DevOps 实践经验。</p></div><div class="capability-back" aria-hidden="true" inert><div class="capability-tags"><span class="capability-tag">Linux</span><span class="capability-tag">Docker</span><span class="capability-tag">Kubernetes</span><span class="capability-tag">GitLab CI/CD</span><span class="capability-tag">Ansible</span><span class="capability-tag">Terraform</span><span class="capability-tag">Shell</span></div></div></div></li>
+      <li><div class="capability-flip" role="button" tabindex="0" aria-pressed="false" aria-label="03 / 切换技术栈"><div class="capability-front"><h3><span class="capability-number" aria-hidden="true">03 /</span> <span data-zh="GPU 与大模型工程" data-en="GPU &amp; LLM Engineering">GPU 与大模型工程</span></h3><p data-zh="熟悉 NVIDIA GPU、CUDA、vLLM 等技术，参与私有化大模型训练与推理平台建设，涉及 GPU 资源管理、模型部署、弹性调度、监控与故障处理。" data-en="Familiar with NVIDIA GPUs, CUDA, and vLLM. Contributed to private LLM training and inference platforms, covering GPU resource management, model deployment, elastic scheduling, monitoring, and troubleshooting.">熟悉 NVIDIA GPU、CUDA、vLLM 等技术，参与私有化大模型训练与推理平台建设，涉及 GPU 资源管理、模型部署、弹性调度、监控与故障处理。</p></div><div class="capability-back" aria-hidden="true" inert><div class="capability-tags"><span class="capability-tag">NVIDIA L40S</span><span class="capability-tag">CUDA</span><span class="capability-tag">GPU Operator</span><span class="capability-tag">vLLM</span><span class="capability-tag">PyTorch</span><span class="capability-tag">LoRA</span><span class="capability-tag">SFT</span></div></div></div></li>
+      <li><div class="capability-flip" role="button" tabindex="0" aria-pressed="false" aria-label="04 / 切换技术栈"><div class="capability-front"><h3><span class="capability-number" aria-hidden="true">04 /</span> <span data-zh="可观测性与故障治理" data-en="Observability &amp; Incident Management">可观测性与故障治理</span></h3><p data-zh="熟悉 Prometheus、Grafana、ELK，具备生产环境监控、性能分析、故障定位、应急响应及 RCA 复盘经验。" data-en="Familiar with Prometheus, Grafana, and ELK, with experience in production monitoring, performance analysis, troubleshooting, incident response, and RCA reviews.">熟悉 Prometheus、Grafana、ELK，具备生产环境监控、性能分析、故障定位、应急响应及 RCA 复盘经验。</p></div><div class="capability-back" aria-hidden="true" inert><div class="capability-tags"><span class="capability-tag">Prometheus</span><span class="capability-tag">Grafana</span><span class="capability-tag">ELK</span><span class="capability-tag">DCGM Exporter</span><span class="capability-tag">Alerting</span><span class="capability-tag">RCA</span></div></div></div></li>
+      <li><div class="capability-flip" role="button" tabindex="0" aria-pressed="false" aria-label="05 / 切换技术栈"><div class="capability-front"><h3><span class="capability-number" aria-hidden="true">05 /</span> <span data-zh="系统与网络安全" data-en="System &amp; Network Security">系统与网络安全</span></h3><p data-zh="具备企业安全建设经验，涉及漏洞分析、安全基线、访问控制、网络隔离及安全风险治理。" data-en="Experienced in enterprise security implementation, including vulnerability analysis, security baselines, access control, network isolation, and security risk management.">具备企业安全建设经验，涉及漏洞分析、安全基线、访问控制、网络隔离及安全风险治理。</p></div><div class="capability-back" aria-hidden="true" inert><div class="capability-tags"><span class="capability-tag">Security Baseline</span><span class="capability-tag">Vulnerability Management</span><span class="capability-tag">RBAC</span><span class="capability-tag">Network Isolation</span><span class="capability-tag">Audit</span><span class="capability-tag">Risk Assessment</span></div></div></div></li>
+      <li><div class="capability-flip" role="button" tabindex="0" aria-pressed="false" aria-label="06 / 切换技术栈"><div class="capability-front"><h3><span class="capability-number" aria-hidden="true">06 /</span> <span data-zh="标准化与工程交付" data-en="Standardization &amp; Engineering Delivery">标准化与工程交付</span></h3><p data-zh="重视 SOP、Runbook、自动化脚本及技术文档建设，通过标准化流程与知识沉淀提升系统可维护性和团队交付效率。" data-en="Focused on SOPs, runbooks, automation scripts, and technical documentation, using standardized processes and shared knowledge to improve system maintainability and team delivery efficiency.">重视 SOP、Runbook、自动化脚本及技术文档建设，通过标准化流程与知识沉淀提升系统可维护性和团队交付效率。</p></div><div class="capability-back" aria-hidden="true" inert><div class="capability-tags"><span class="capability-tag">SOP</span><span class="capability-tag">Runbook</span><span class="capability-tag">FMEA</span><span class="capability-tag">Acceptance Testing</span><span class="capability-tag">Incident Response</span><span class="capability-tag">Knowledge Management</span></div></div></div></li>
+    </ol>
     <div class="stack">
       <div class="stack-row">
         <span class="chip">GPU / CUDA</span><span class="chip">vLLM / Ollama</span><span class="chip">LLM / RAG</span><span class="chip">Dify / LangGraph</span><span class="chip">AIOps</span><span class="chip">PyTorch</span><span class="chip">Kubernetes</span><span class="chip">Docker</span>
@@ -197,33 +256,20 @@
     </div>
   </section>
   <section id="work" class="reveal">
-    <div class="sec-label"><span>04</span> / <span data-zh="精选项目" data-en="Selected Work">精选项目</span></div>
+    <div class="sec-label"><span>04</span> / <span data-zh="精选项目" data-en="Selected Work">精选项目</span><span class="work-theme">北斗七星 / THE BIG DIPPER</span></div>
     <div class="work-layout">
-      <div>
-        <div class="wheel" id="projWheel">
-          <div class="wheel-track" id="wheelTrack">
-            <a href="projects/project-1.html" class="w-item"><span class="p-num">001</span><span><div class="p-name"><span data-zh="GPU 大模型训练与推理平台" data-en="GPU LLM Training &amp; Inference Platform">GPU 大模型训练与推理平台</span><span class="ai-badge">AI</span></div><div class="p-desc" data-zh="基于 Kubernetes + vLLM 构建私有化 GPU 算力资源池，实现大模型推理、训练、弹性调度与统一运维。" data-en="A private GPU compute pool built on Kubernetes + vLLM for LLM inference, training, elastic scheduling, and unified operations.">基于 Kubernetes + vLLM 构建私有化 GPU 算力资源池，实现大模型推理、训练、弹性调度与统一运维。</div></span><span class="star-name">天枢</span><span class="arrow">→</span></a>
-            <a href="projects/project-2.html" class="w-item"><span class="p-num">002</span><span><div class="p-name"><span data-zh="IT/OT 统一监控与可观测性平台" data-en="IT/OT Unified Monitoring &amp; Observability Platform">IT/OT 统一监控与可观测性平台</span><span class="ai-badge">AI</span></div><div class="p-desc" data-zh="整合服务器、网络、GPU 及工业设备监控数据，构建统一可视化、异常监测与故障追溯体系。" data-en="Unified monitoring data from servers, networks, GPUs, and industrial equipment for visualization, anomaly detection, and fault tracing.">整合服务器、网络、GPU 及工业设备监控数据，构建统一可视化、异常监测与故障追溯体系。</div></span><span class="star-name">天璇</span><span class="arrow">→</span></a>
-            <a href="projects/project-3.html" class="w-item"><span class="p-num">003</span><span><div class="p-name"><span data-zh="工业 AI 数据与知识中台" data-en="Industrial AI Data &amp; Knowledge Platform">工业 AI 数据与知识中台</span></div><div class="p-desc" data-zh="基于 RAG、Milvus 与 BGE-M3，构建企业知识治理、向量检索、权限隔离及知识服务体系。" data-en="Enterprise knowledge governance, vector retrieval, access isolation, and knowledge services built on RAG, Milvus, and BGE-M3.">基于 RAG、Milvus 与 BGE-M3，构建企业知识治理、向量检索、权限隔离及知识服务体系。</div></span><span class="star-name">天玑</span><span class="arrow">→</span></a>
-            <a href="projects/project-4.html" class="w-item"><span class="p-num">004</span><span><div class="p-name"><span data-zh="AIOps 智能运维 Agent" data-en="AIOps Intelligent Operations Agent">AIOps 智能运维 Agent</span></div><div class="p-desc" data-zh="融合 LangGraph、Dify 与 RAG，实现智能问答、故障诊断、RCA 辅助分析及运维流程编排。" data-en="Combining LangGraph, Dify, and RAG for intelligent Q&amp;A, fault diagnosis, assisted RCA, and operations workflow orchestration.">融合 LangGraph、Dify 与 RAG，实现智能问答、故障诊断、RCA 辅助分析及运维流程编排。</div></span><span class="star-name">玉衡</span><span class="arrow">→</span></a>
-            <a href="projects/project-5.html" class="w-item"><span class="p-num">005</span><span><div class="p-name"><span data-zh="海外制造基地 IT 基础设施建设" data-en="IT Infrastructure for Overseas Manufacturing Sites">海外制造基地 IT 基础设施建设</span></div><div class="p-desc" data-zh="参与海外制造基地从 0 到 1 建设，完成服务器、网络等基础设施交付及标准化运维体系建设。" data-en="Contributed to building overseas manufacturing sites from the ground up, delivering server and network infrastructure and establishing standardized operations.">参与海外制造基地从 0 到 1 建设，完成服务器、网络等基础设施交付及标准化运维体系建设。</div></span><span class="star-name">开阳</span><span class="arrow">→</span></a>
-          </div>
-        </div>
-        <div class="wheel-nav">
-          <button id="wheelPrev" aria-label="prev">↑</button>
-          <button id="wheelNext" aria-label="next">↓</button>
-          <span class="wheel-dots" id="wheelDots"></span>
-          <span class="wheel-count" id="wheelCount"></span>
-        </div>
-      </div>
-      <div class="proj-index">
-        <div class="pi-title" data-zh="全部项目" data-en="All Projects">全部项目</div>
-        <div class="pi-item" data-idx="0"><span class="pi-star">天枢</span><span class="pi-name" data-zh="GPU 大模型训练与推理平台" data-en="GPU LLM Training &amp; Inference Platform">GPU 大模型训练与推理平台</span></div>
-        <div class="pi-item" data-idx="1"><span class="pi-star">天璇</span><span class="pi-name" data-zh="IT/OT 统一监控与可观测性平台" data-en="IT/OT Unified Monitoring &amp; Observability Platform">IT/OT 统一监控与可观测性平台</span></div>
-        <div class="pi-item" data-idx="2"><span class="pi-star">天玑</span><span class="pi-name" data-zh="工业 AI 数据与知识中台" data-en="Industrial AI Data &amp; Knowledge Platform">工业 AI 数据与知识中台</span></div>
-        <div class="pi-item" data-idx="3"><span class="pi-star">玉衡</span><span class="pi-name" data-zh="AIOps 智能运维 Agent" data-en="AIOps Intelligent Operations Agent">AIOps 智能运维 Agent</span></div>
-        <div class="pi-item" data-idx="4"><span class="pi-star">开阳</span><span class="pi-name" data-zh="海外制造基地 IT 基础设施建设" data-en="IT Infrastructure for Overseas Manufacturing Sites">海外制造基地 IT 基础设施建设</span></div>
-      </div>
+      <div class="project-navigation"><nav class="project-list" aria-label="项目 / Projects"><button type="button" class="project-choice" id="project-choice-01" aria-controls="project-panel-01" aria-pressed="true"><span class="project-number">01 /</span><span class="project-choice-copy"><span class="project-star">天枢</span><span class="project-choice-name"><span data-zh="GPU 大模型训练与推理平台" data-en="GPU LLM Training &amp; Inference Platform">GPU 大模型训练与推理平台</span></span></span><span aria-hidden="true">→</span></button>
+<button type="button" class="project-choice" id="project-choice-02" aria-controls="project-panel-02" aria-pressed="false"><span class="project-number">02 /</span><span class="project-choice-copy"><span class="project-star">天璇</span><span class="project-choice-name"><span data-zh="IT/OT 统一监控与可观测性平台" data-en="IT/OT Unified Monitoring &amp; Observability Platform">IT/OT 统一监控与可观测性平台</span></span></span><span aria-hidden="true">→</span></button>
+<button type="button" class="project-choice" id="project-choice-03" aria-controls="project-panel-03" aria-pressed="false"><span class="project-number">03 /</span><span class="project-choice-copy"><span class="project-star">天玑</span><span class="project-choice-name"><span data-zh="工业 AI 数据与知识中台" data-en="Industrial AI Data &amp; Knowledge Platform">工业 AI 数据与知识中台</span></span></span><span aria-hidden="true">→</span></button>
+<button type="button" class="project-choice" id="project-choice-04" aria-controls="project-panel-04" aria-pressed="false"><span class="project-number">04 /</span><span class="project-choice-copy"><span class="project-star">玉衡</span><span class="project-choice-name"><span data-zh="AIOps 智能运维 Agent" data-en="AIOps Intelligent Operations Agent">AIOps 智能运维 Agent</span></span></span><span aria-hidden="true">→</span></button>
+<button type="button" class="project-choice" id="project-choice-05" aria-controls="project-panel-05" aria-pressed="false"><span class="project-number">05 /</span><span class="project-choice-copy"><span class="project-star">开阳</span><span class="project-choice-name"><span data-zh="海外制造基地 IT 基础设施建设" data-en="IT Infrastructure for Overseas Manufacturing Sites">海外制造基地 IT 基础设施建设</span></span></span><span aria-hidden="true">→</span></button>
+</nav></div>
+      <div class="project-content"><div class="project-card-body"><article class="project-panel" id="project-panel-01" aria-labelledby="project-choice-01" aria-hidden="false"><div class="project-card-header"><div class="project-card-identity"><span class="project-meta">FEATURED / 001</span><span class="project-star">天枢</span></div><span class="project-category">AI INFRA</span></div><h3><span data-zh="GPU 大模型训练与推理平台" data-en="GPU LLM Training &amp; Inference Platform">GPU 大模型训练与推理平台</span></h3><p class="project-summary">基于 Kubernetes 与 vLLM 构建私有化 GPU 算力资源池，支持大模型推理、训练及弹性资源调度。</p><div class="project-tags"><span>Kubernetes</span><span>NVIDIA L40S</span><span>vLLM</span><span>CUDA</span></div></article>
+<article class="project-panel" id="project-panel-02" aria-labelledby="project-choice-02" aria-hidden="true" inert><div class="project-card-header"><div class="project-card-identity"><span class="project-meta">FEATURED / 002</span><span class="project-star">天璇</span></div><span class="project-category">OBSERVABILITY</span></div><h3><span data-zh="IT/OT 统一监控与可观测性平台" data-en="IT/OT Unified Monitoring &amp; Observability Platform">IT/OT 统一监控与可观测性平台</span></h3><p class="project-summary">面向海外制造基地，整合服务器、网络与 GPU 的指标和日志，提供统一监控视图与故障追溯能力。通过 MES API 分阶段接入工业设备状态与告警。</p><div class="project-tags"><span>Prometheus</span><span>Grafana</span><span>ELK</span><span>MES API</span></div></article>
+<article class="project-panel" id="project-panel-03" aria-labelledby="project-choice-03" aria-hidden="true" inert><div class="project-card-header"><div class="project-card-identity"><span class="project-meta">FEATURED / 003</span><span class="project-star">天玑</span></div><span class="project-category">KNOWLEDGE</span></div><h3><span data-zh="工业 AI 数据与知识中台" data-en="Industrial AI Data &amp; Knowledge Platform">工业 AI 数据与知识中台</span></h3><p class="project-summary">面向企业知识分散与检索需求，基于 RAG、Milvus 与 BGE-M3 建设工业知识中台，覆盖文档治理、向量检索和权限隔离，为企业 AI 应用提供知识服务。</p><div class="project-tags"><span>RAG</span><span>Milvus</span><span>BGE-M3</span><span>Rerank</span></div></article>
+<article class="project-panel" id="project-panel-04" aria-labelledby="project-choice-04" aria-hidden="true" inert><div class="project-card-header"><div class="project-card-identity"><span class="project-meta">FEATURED / 004</span><span class="project-star">玉衡</span></div><span class="project-category">AIOPS</span></div><h3><span data-zh="AIOps 智能运维 Agent" data-en="AIOps Intelligent Operations Agent">AIOps 智能运维 Agent</span></h3><p class="project-summary">结合 LangGraph、Dify 与私有化模型，将监控信息、历史案例和知识检索融入运维工作流，支持智能问答与 RCA 辅助分析，高风险操作保留人工确认。</p><div class="project-tags"><span>LangGraph</span><span>Dify</span><span>RAG</span><span>Qwen</span></div></article>
+<article class="project-panel" id="project-panel-05" aria-labelledby="project-choice-05" aria-hidden="true" inert><div class="project-card-header"><div class="project-card-identity"><span class="project-meta">FEATURED / 005</span><span class="project-star">开阳</span></div><span class="project-category">INFRASTRUCTURE</span></div><h3><span data-zh="海外制造基地 IT 基础设施建设" data-en="IT Infrastructure for Overseas Manufacturing Sites">海外制造基地 IT 基础设施建设</span></h3><p class="project-summary">参与泰国制造基地从 0 到 1 的 IT 基础设施建设，协调跨国团队与供应商完成服务器、网络部署及验收，并通过 SOP、Runbook 和应急流程支持运维交接。</p><div class="project-tags"><span>Linux</span><span>Network</span><span>SOP</span><span>Runbook</span></div></article>
+</div><div class="project-card-footer"><a class="project-detail-link" href="projects/project-1.html" data-zh="查看项目 ↗" data-en="View project ↗">查看项目 ↗</a><div class="project-controls"><button type="button" data-project-step="-1" aria-label="上一个项目 / Previous project">←</button><span class="project-count" aria-live="polite">01 / 05</span><button type="button" data-project-step="1" aria-label="下一个项目 / Next project">→</button></div></div></div>
     </div>
   </section>
   <section id="contact" class="reveal">
@@ -245,6 +291,51 @@
   </div>
   <img class="wechat-qr" src="assets/wechat-qr.png" width="768" height="1136" alt="微信好友二维码 / WeChat contact QR code">
 </dialog>
+<script>
+(() => {
+  document.querySelectorAll('#about .capability-flip').forEach(card => {
+    const front = card.querySelector('.capability-front');
+    const back = card.querySelector('.capability-back');
+    const number = card.querySelector('.capability-number').textContent.trim();
+    const updateLabel = () => {
+      card.setAttribute('aria-label', number + (document.documentElement.lang.startsWith('en') ? ' Toggle technology stack' : ' 切换技术栈'));
+    };
+    updateLabel();
+    new MutationObserver(updateLabel).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+    const setFlipped = flipped => {
+      card.classList.toggle('is-flipped', flipped);
+      card.setAttribute('aria-pressed', String(flipped));
+      front.setAttribute('aria-hidden', String(flipped));
+      back.setAttribute('aria-hidden', String(!flipped));
+      front.inert = flipped;
+      back.inert = !flipped;
+    };
+    const toggle = () => setFlipped(!card.classList.contains('is-flipped'));
+    // Listen on the stationary grid item so the rotating face cannot retrigger hover.
+    const container = card.parentElement;
+    container.addEventListener('pointerenter', event => {
+      if (event.pointerType === 'mouse') setFlipped(true);
+    });
+    container.addEventListener('pointerleave', event => {
+      if (event.pointerType === 'mouse') setFlipped(false);
+    });
+    let pointerType = '';
+    card.addEventListener('pointerdown', event => {
+      pointerType = event.pointerType;
+    });
+    card.addEventListener('click', event => {
+      if (event.detail === 0 || pointerType === 'touch' || pointerType === 'pen') toggle();
+      pointerType = '';
+    });
+    card.addEventListener('keydown', event => {
+      if ((event.key === 'Enter' || event.key === ' ') && event.target === card) {
+        event.preventDefault();
+        if (!event.repeat) toggle();
+      }
+    });
+  });
+})();
+</script>
 <script>
   (function(){
     const link=document.getElementById('wechatLink');
@@ -293,79 +384,26 @@
   document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 </script>
 <script>
-/* ===== 项目轮盘 ===== */
+/* ===== 项目选择 ===== */
 (function(){
-  const wheel=document.getElementById('projWheel');
-  if(!wheel)return;
-  const items=[...document.querySelectorAll('#wheelTrack .w-item')];
-  const dotsBox=document.getElementById('wheelDots');
-  const countEl=document.getElementById('wheelCount');
-  const N=items.length;
+  const root=document.getElementById('work');
+  const buttons=[...root.querySelectorAll('.project-choice')];
+  const panels=[...root.querySelectorAll('.project-panel')];
+  const link=root.querySelector('.project-detail-link');
+  const count=root.querySelector('.project-count');
   let active=0;
-  const STEP=92;         // 相邻项垂直间距(px)
-
-  // 圆点
-  items.forEach((_,i)=>{
-    const d=document.createElement('i');
-    d.addEventListener('click',()=>{active=i;render();});
-    dotsBox.appendChild(d);
-  });
-  const dots=[...dotsBox.children];
-
-  // 静态目录联动
-  const piItems=[...document.querySelectorAll('.proj-index .pi-item')];
-  piItems.forEach(el=>el.addEventListener('click',()=>{active=+el.dataset.idx;render();}));
-
-  function render(){
-    items.forEach((el,i)=>{
-      let off=i-active;
-      // 环绕：让距离最近（可正可负）
-      if(off> N/2) off-=N;
-      if(off<-N/2) off+=N;
-      const abs=Math.abs(off);
-      const y=off*STEP;
-      const rot=off*-18;                  // 轮盘倾斜
-      const scale=Math.max(0.7,1-abs*0.12);
-      const op=abs>2?0:Math.max(0,1-abs*0.34);
-      el.style.transform=`translateY(${y}px) translateY(-50%) rotateX(${rot}deg) scale(${scale})`;
-      el.style.opacity=op;
-      el.style.pointerEvents=(off===0?'auto':'none');
-      el.style.zIndex=String(50-abs);
-      el.classList.toggle('active',off===0);
+  function select(index){
+    active=(index+panels.length)%panels.length;
+    buttons.forEach((item,i)=>item.setAttribute('aria-pressed',String(i===active)));
+    panels.forEach((panel,i)=>{
+      panel.setAttribute('aria-hidden',String(i!==active));
+      panel.inert=i!==active;
     });
-    dots.forEach((d,i)=>d.classList.toggle('on',i===active));
-    piItems.forEach((el,i)=>el.classList.toggle('on',i===active));
-    countEl.textContent=String(active+1).padStart(2,'0')+' / '+String(N).padStart(2,'0');
+    link.setAttribute('href','projects/project-'+(active+1)+'.html');
+    count.textContent=String(active+1).padStart(2,'0')+' / 05';
   }
-  function go(dir){ active=(active+dir+N)%N; render(); }
-
-  document.getElementById('wheelPrev').addEventListener('click',()=>go(-1));
-  document.getElementById('wheelNext').addEventListener('click',()=>go(1));
-
-  // 滚轮拨动
-  let wlock=false;
-  wheel.addEventListener('wheel',e=>{
-    e.preventDefault();
-    if(wlock)return;wlock=true;setTimeout(()=>wlock=false,260);
-    go(e.deltaY>0?1:-1);
-  },{passive:false});
-
-  // 拖拽 / 触摸拨动
-  let dragY=null,moved=0;
-  const start=y=>{dragY=y;moved=0;wheel.classList.add('dragging');};
-  const move=y=>{ if(dragY===null)return; const dy=y-dragY;
-    if(Math.abs(dy)>STEP*0.7){ go(dy>0?-1:1); dragY=y; moved+=1; } };
-  const end=()=>{ dragY=null;wheel.classList.remove('dragging'); };
-  wheel.addEventListener('mousedown',e=>start(e.clientY));
-  window.addEventListener('mousemove',e=>move(e.clientY));
-  window.addEventListener('mouseup',end);
-  wheel.addEventListener('touchstart',e=>start(e.touches[0].clientY),{passive:true});
-  wheel.addEventListener('touchmove',e=>move(e.touches[0].clientY),{passive:true});
-  wheel.addEventListener('touchend',end);
-  // 拖动时阻止误触发链接跳转
-  items.forEach(el=>el.addEventListener('click',e=>{ if(moved>0){e.preventDefault();} }));
-
-  render();
+  buttons.forEach((button,index)=>button.addEventListener('click',()=>select(index)));
+  root.querySelectorAll('[data-project-step]').forEach(button=>button.addEventListener('click',()=>select(active+Number(button.dataset.projectStep))));
 })();
 </script>
 <script>
