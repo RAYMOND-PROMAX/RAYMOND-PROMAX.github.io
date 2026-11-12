@@ -101,7 +101,7 @@
   /* —— 精选项目 —— */
   #work{width:100%;margin-left:0}
   .wrap .aiops,#work .work-layout{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:32px}
-  #work .work-layout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px;align-items:stretch;background:linear-gradient(110deg,rgba(10,14,18,.76),rgba(10,14,18,.62) 75%,rgba(10,14,18,.25))}
+  #work .work-layout{display:grid;grid-template-columns:minmax(max-content,1fr) minmax(0,1fr);gap:48px;align-items:stretch}
   #work .project-navigation,#work .project-content{min-width:0}
   #work .project-navigation{display:flex;flex-direction:column}
   #work .project-list{display:flex;flex-direction:column;flex:1;padding:0;font-family:inherit;align-items:stretch;justify-content:space-between}
@@ -162,6 +162,7 @@
   #work .project-controls button:hover{background:rgba(45,212,191,.07)}
   #work .project-controls button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   @media(max-width:480px){#work .project-content{padding:24px 20px}}
+  @media(max-width:800px){#work .project-list{overflow-x:visible}#work .project-choice{min-width:0;grid-template-columns:32px minmax(0,1fr) 16px;height:auto;min-height:72px}#work .project-select{grid-template-columns:32px minmax(0,1fr)}#work .project-choice-copy{min-width:0}#work .project-choice-name{white-space:normal;overflow-wrap:anywhere}}
   .ai-badge{font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--accent);border:1px solid var(--accent);border-radius:2px;padding:2px 6px;margin-left:10px;vertical-align:middle;display:inline-block}
   .aiops{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:4px}
   .ai-card{border:1px solid var(--line);border-radius:4px;padding:24px 22px;position:relative;overflow:hidden;transition:border-color .3s,transform .3s}
@@ -472,6 +473,10 @@
   buttons.forEach((button,index)=>button.closest('.project-choice').addEventListener('click',event=>{
     if(event.target.closest('.project-arrow')) return;
     select(index);
+  }));
+  const projectHover=matchMedia('(hover:hover) and (pointer:fine)');
+  buttons.forEach((button,index)=>button.closest('.project-choice').addEventListener('pointerenter',event=>{
+    if(event.pointerType==='mouse'&&projectHover.matches) select(index);
   }));
   root.querySelectorAll('[data-project-step]').forEach(button=>button.addEventListener('click',()=>select(active+Number(button.dataset.projectStep))));
 })();
