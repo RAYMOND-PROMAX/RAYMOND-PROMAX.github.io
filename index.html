@@ -101,7 +101,7 @@
   /* —— 精选项目 —— */
   #work{width:100%;margin-left:0}
   .wrap .aiops,#work .work-layout{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:32px}
-  #work .work-layout{display:grid;grid-template-columns:minmax(max-content,1fr) minmax(0,1fr);gap:48px;align-items:stretch}
+  #work .work-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;align-items:stretch}
   #work .project-navigation,#work .project-content{min-width:0}
   #work .project-navigation{display:flex;flex-direction:column}
   #work .project-list{display:flex;flex-direction:column;flex:1;padding:0;font-family:inherit;align-items:stretch;justify-content:space-between}
@@ -127,8 +127,10 @@
   #work .project-card-identity{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
   #work .project-number,#work .project-meta{font-family:var(--mono);font-size:12px}
   #work .project-number{color:var(--accent)}
-  #work .project-choice:hover,#work .project-choice:has(.project-select[aria-pressed="true"]){color:var(--accent);background:rgba(45,212,191,.022)}
-  #work .project-select:focus-visible,#work .project-detail-link:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  #work .project-choice:has(.project-select[aria-pressed="true"]){color:var(--accent);background:rgba(45,212,191,.022)}
+  #work .project-select:focus-visible{outline:none;background:rgba(45,212,191,.035)}
+  #work .project-detail-link:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  @media(hover:hover) and (pointer:fine){#work .project-choice:hover{background:rgba(45,212,191,.035)}}
   #work .project-content{display:grid;border-left:1px solid var(--line);padding:0;min-height:360px}
   #work .project-panel{grid-area:1 / 1;display:flex;flex-direction:column;min-width:0;max-width:700px;opacity:1;visibility:visible;transition:opacity 250ms ease;overflow-wrap:break-word}
   #work .project-panel[aria-hidden="true"]{opacity:0;visibility:hidden;pointer-events:none}
@@ -163,6 +165,17 @@
   #work .project-controls button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   @media(max-width:480px){#work .project-content{padding:24px 20px}}
   @media(max-width:800px){#work .project-list{overflow-x:visible}#work .project-choice{min-width:0;grid-template-columns:32px minmax(0,1fr) 16px;height:auto;min-height:72px}#work .project-select{grid-template-columns:32px minmax(0,1fr)}#work .project-choice-copy{min-width:0}#work .project-choice-name{white-space:normal;overflow-wrap:anywhere}}
+  #work .project-navigation{--wheel-step:80px;position:relative;height:calc(var(--wheel-step) * 5);align-self:center;overflow:hidden}
+  #work .project-list{position:absolute;inset:0;display:block}
+  #work .project-choice{position:absolute;top:calc(50% - (var(--wheel-step) - 8px) / 2);height:calc(var(--wheel-step) - 8px);min-height:0;opacity:var(--wheel-opacity,1);transform:translateY(var(--wheel-y,0px));transition:transform 400ms cubic-bezier(.4,0,.2,1),opacity 400ms ease,color 250ms ease,background 250ms ease;grid-template-columns:32px minmax(0,1fr) 36px}
+  #work .project-select{grid-template-columns:32px minmax(0,1fr)}
+  #work .project-choice-copy{min-width:0}
+  #work .project-choice-name{white-space:normal;overflow-wrap:anywhere}
+  #work .project-panel{transform:translateY(0);transition:opacity 250ms ease,transform 250ms ease,visibility 0s}
+  #work .project-panel[aria-hidden="true"]{transform:translateY(8px);transition:opacity 250ms ease,transform 250ms ease,visibility 0s 250ms}
+  #work .project-controls button:disabled{opacity:.35;cursor:default}
+  @media(max-width:800px){#work .project-choice{grid-template-columns:32px minmax(0,1fr) 36px}}
+  @media(prefers-reduced-motion:reduce){#work .project-list,#work .project-choice,#work .project-panel{transition:none}#work .project-panel{transform:none}}
   .ai-badge{font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--accent);border:1px solid var(--accent);border-radius:2px;padding:2px 6px;margin-left:10px;vertical-align:middle;display:inline-block}
   .aiops{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:4px}
   .ai-card{border:1px solid var(--line);border-radius:4px;padding:24px 22px;position:relative;overflow:hidden;transition:border-color .3s,transform .3s}
@@ -459,7 +472,39 @@
   const panels=[...root.querySelectorAll('.project-panel')];
   const link=root.querySelector('.project-detail-link');
   const count=root.querySelector('.project-count');
+  const navigation=root.querySelector('.project-navigation');
+  const list=root.querySelector('.project-list');
+  const choices=buttons.map(button=>button.closest('.project-choice'));
+  const reducedMotion=matchMedia('(prefers-reduced-motion:reduce)');
+  const positions=new Map();
+  const animations=new Map();
   let active=0;
+  let cooldownUntil=0;
+  function positionWheel(){
+    const step=Math.max(80,...choices.map(choice=>choice.querySelector('.project-choice-copy').scrollHeight+12));
+    navigation.style.setProperty('--wheel-step',step+'px');
+    choices.forEach((choice,i)=>{
+      // 相对中心取最短循环距离：五项始终占据 -2、-1、0、1、2。
+      const half=Math.floor(choices.length/2);
+      const position=((i-active+half+choices.length)%choices.length)-half;
+      const previous=positions.get(choice);
+      animations.get(choice)?.cancel();
+      const opacity=1-Math.abs(position)*.18;
+      choice.style.setProperty('--wheel-y',position*step+'px');
+      choice.style.setProperty('--wheel-opacity',String(opacity));
+      // 跨越首尾的项目从视窗外换边，避免穿过中心项目。
+      if(previous!==undefined&&Math.abs(previous-position)>2&&!reducedMotion.matches){
+        const edge=Math.sign(previous)*3*step;
+        animations.set(choice,choice.animate([
+          {transform:'translateY('+previous*step+'px)',opacity:1-Math.abs(previous)*.18,offset:0},
+          {transform:'translateY('+edge+'px)',opacity:0,offset:.49},
+          {transform:'translateY('+(-edge)+'px)',opacity:0,offset:.5},
+          {transform:'translateY('+position*step+'px)',opacity,offset:1}
+        ],{duration:400,easing:'ease-in-out'}));
+      }
+      positions.set(choice,position);
+    });
+  }
   function select(index){
     active=(index+panels.length)%panels.length;
     buttons.forEach((item,i)=>item.setAttribute('aria-pressed',String(i===active)));
@@ -469,16 +514,37 @@
     });
     link.setAttribute('href','projects/project-'+(active+1)+'.html');
     count.textContent=String(active+1).padStart(2,'0')+' / 05';
+    positionWheel();
   }
-  buttons.forEach((button,index)=>button.closest('.project-choice').addEventListener('click',event=>{
-    if(event.target.closest('.project-arrow')) return;
-    select(index);
-  }));
-  const projectHover=matchMedia('(hover:hover) and (pointer:fine)');
-  buttons.forEach((button,index)=>button.closest('.project-choice').addEventListener('pointerenter',event=>{
-    if(event.pointerType==='mouse'&&projectHover.matches) select(index);
-  }));
-  root.querySelectorAll('[data-project-step]').forEach(button=>button.addEventListener('click',()=>select(active+Number(button.dataset.projectStep))));
+  choices.forEach((choice,index)=>{
+    choice.addEventListener('click',event=>{
+      if(event.button!==0||event.target.closest('a')||index===active) return;
+      cooldownUntil=performance.now()+450;
+      select(index);
+    });
+  });
+  let wheelTime=0;
+  navigation.addEventListener('wheel',event=>{
+    if(event.ctrlKey||event.shiftKey||event.altKey||event.metaKey||event.deltaX||!event.deltaY) return;
+    const now=performance.now();
+    const gap=now-wheelTime;
+    wheelTime=now;
+    // WheelEvent 没有设备类型：仅接受整行步进或常见的 100/120px 离散刻度。
+    // 触摸板也可能生成相同数据；高精度鼠标的小数步进则可能被过滤。
+    const amount=Math.abs(event.deltaY);
+    const discrete=event.deltaMode===1&&Number.isInteger(amount)||
+      event.deltaMode===0&&Number.isInteger(amount)&&(amount%100===0||amount%120===0);
+    if(!discrete) return;
+    event.preventDefault();
+    if(now<cooldownUntil||gap<180) return;
+    cooldownUntil=now+450;
+    select(active+Math.sign(event.deltaY));
+  },{passive:false});
+  const observer=new ResizeObserver(positionWheel);
+  observer.observe(list);
+  choices.forEach(choice=>observer.observe(choice.querySelector('.project-choice-copy')));
+  root.querySelectorAll('[data-project-step]').forEach(button=>{button.disabled=true;});
+  select(0);
 })();
 </script>
 <script>
